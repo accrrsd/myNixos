@@ -1,0 +1,16 @@
+{ pkgs, ... }:
+
+{
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
+    git
+    neovim
+    zig
+    wezterm
+    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    fira-code
+    wl-clipboard
+  ];
+}
+
