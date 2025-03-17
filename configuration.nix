@@ -2,15 +2,9 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [ 
       ./hardware-configuration.nix
-      ./modules/boot.nix
-      ./modules/system-packages.nix
-      ./modules/desktop.nix
-      ./modules/sound.nix
-      ./modules/networking.nix
-      ./modules/users.nix
-      ./modules/nvidia.nix
+      ./hosts/default-pc-config.nix
     ];
 
   nix = let
@@ -32,8 +26,5 @@
   };
 
   networking.hostName = "accrrsd-pc";
-  
-  nixpkgs.config.allowUnfree = true;
-
   system.stateVersion = "24.11";
 }

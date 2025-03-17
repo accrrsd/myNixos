@@ -40,7 +40,7 @@
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.production;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     # Nvidia Optimus PRIME. It is a technology developed by Nvidia to optimize
     # the power consumption and performance of laptops equipped with their GPUs.
