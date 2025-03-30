@@ -2,15 +2,16 @@
 
 {
   imports =
-    [ 
+    [
       ./hardware-configuration.nix
-      ./hosts/default-pc-config.nix
+      ./system/pc/default/pc-config.nix
     ];
 
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
+      # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
       # Opinionated: disable global registry
       flake-registry = "";
@@ -25,6 +26,7 @@
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
-  networking.hostName = "accrrsd-pc";
+  # default host name will be overwriten when build with home manager
+  networking.hostName = lib.mkDefault "nixos";
   system.stateVersion = "24.11";
 }
