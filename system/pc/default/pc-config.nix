@@ -8,15 +8,15 @@
   ../../modules/hardware/region.nix
   ../../modules/hardware/sound.nix
   ../../modules/hardware/networking.nix
-  ../../modules/hardware/nvidia.nix
   ../../modules/hardware/opengl.nix
   ../../modules/hardware/automount.nix
   ../../modules/hardware/printing.nix
   ../../modules/hardware/bluetooth.nix
   ../../modules/hardware/virtualization.nix
+  ../../modules/hardware/systemd.nix
+  
   ../../modules/hardware/sddm.nix
   ../../modules/hardware/plasma.nix
-  ../../modules/app/neovim.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -24,6 +24,10 @@
     wget
     ripgrep
     vscode
+    xdg-desktop-portal
+    xdg-desktop-portal-wlr
+    wl-clipboard
+    wl-clip-persist
   ];
 
   programs.firefox.enable = true;
@@ -31,6 +35,11 @@
   services.printing.enable = true;
   nixpkgs.config.allowUnfree = true;
   security.polkit.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+  };
 
   # Here we create nixos-editors group and allow it to edit nixos folder
   users.groups.nixos-editors = { };

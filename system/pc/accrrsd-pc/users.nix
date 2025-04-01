@@ -7,6 +7,7 @@
     isNormalUser = true;
     description = "accrrsd";
     extraGroups = [ "networkmanager" "wheel" "nixos-editors" ];
+    shell = pkgs.zsh;
   };
 
   home-manager = {

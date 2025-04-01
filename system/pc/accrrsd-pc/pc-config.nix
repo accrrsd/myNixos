@@ -9,6 +9,10 @@
   ../../modules/app/steam.nix
   ../../modules/app/razer-peripherals.nix
   ../../modules/hardware/autoclean.nix
+  ../../modules/hardware/nvidia.nix
+  # System wide zsh, needed for accrrsd
+  ../../modules/app/zsh.nix
+  ../../modules/app/neovim.nix
   ];
   
   environment.systemPackages = with pkgs; [
@@ -19,19 +23,16 @@
   chromium
   nodejs
   dolphin
+  htop
+  inputs.zen-browser.packages."${system}".default
   ];
+
+  # even more avaiable packages!
+  services.flatpak.enable = true;
 
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
-
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-  };
-
-  # xdg.portal.enable = true;
-  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk  pkgs.xdg-desktop-portal-hyprland];
 }

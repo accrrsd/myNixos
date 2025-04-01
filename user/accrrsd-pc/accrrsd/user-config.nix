@@ -5,17 +5,24 @@
   home.stateVersion = "24.11";
 
   imports = [
-    ./app/ssh.nix
+    ./app/ssh/ssh.nix
+    ./app/hyprland/hyprland.nix
+    ./app/waybar/waybar.nix
+    ./app/ohmyposh/ohmyposh.nix
   ];
 
   home.username = "accrrsd";
   home.homeDirectory = "/home/accrrsd";
 
-  programs.git.userName = "Daniel";
-  programs.git.userEmail = "accrrsd@bk.ru";
+  programs.git = {
+    enable = true;
+    userName = "Daniel";
+    userEmail = "accrrsd@bk.ru";
+  };
 
   home.packages = with pkgs; [
-    htop
+    swww
+    cava
   ];
 
   # auto update changed services

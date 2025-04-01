@@ -8,6 +8,5 @@
     wezterm
     (nerdfonts.override { fonts = [ "FiraCode" ]; })
     fira-code
-    wl-clipboard
   ];
 }
