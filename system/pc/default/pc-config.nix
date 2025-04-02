@@ -14,6 +14,7 @@
   ../../modules/hardware/bluetooth.nix
   ../../modules/hardware/virtualization.nix
   ../../modules/hardware/systemd.nix
+  #../../modules/hardware/swap.nix
   
   ../../modules/hardware/sddm.nix
   ../../modules/hardware/plasma.nix
@@ -28,6 +29,8 @@
     xdg-desktop-portal-wlr
     wl-clipboard
     wl-clip-persist
+    fastfetch
+    cliphist
   ];
 
   programs.firefox.enable = true;

@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   wayland.windowManager.hyprland = {
     enable = true;
@@ -9,7 +9,10 @@
     # Fix slow startup
     exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
     exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-
+    
+    # fixes cursor in some apps
+    exec-once = hyprctl setcursor '' + config.gtk.cursorTheme.name + " " + builtins.toString config.gtk.cursorTheme.size + ''
+    
     exec-once = swww-daemon
     exec-once = dunst
     exec-once = waybar
@@ -27,23 +30,32 @@
     exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
     env = QT_QPA_PLATFORMTHEME,qt5ct   # for Qt apps
 
-    #env = XCURSOR_SIZE,24
+    env = XCURSOR_SIZE,24
+    #env = HYPRCURSOR_THEME,
     #env = HYPRCURSOR_SIZE,24
 
     # needed for fix flickering with electon
     env = ELECTRON_OZONE_PLATFORM_HINT,auto
 
+    # stole if from https://github.com/librephoenix/nixos-config/blob/main/user/wm/hyprland/hyprland.nix
+    env = XDG_CURRENT_DESKTOP,Hyprland
+    env = XDG_SESSION_DESKTOP,Hyprland
+    env = GDK_BACKEND,wayland,x11,*
+    env = QT_QPA_PLATFORM,wayland;xcb
+    env = QT_AUTO_SCREEN_SCALE_FACTOR,1
+    env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
+    env = CLUTTER_BACKEND,wayland
+
     # nvidia specific trash from hyprland wiki, maybe its not needed, cuase we on nixos https://wiki.hyprland.org/0.41.2/Nvidia/
-    #env = LIBVA_DRIVER_NAME,nvidia
-    #env = XDG_SESSION_TYPE,wayland
-    #env = GBM_BACKEND,nvidia-drm
-    #env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-    #env = NVD_BACKEND,direct
+    env = LIBVA_DRIVER_NAME,nvidia
+    env = XDG_SESSION_TYPE,wayland
+    env = GBM_BACKEND,nvidia-drm
+    env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+    env = NVD_BACKEND,direct
   
     # IDK
     #env = __GL_VRR_ALLOWED,1;
     #env = WLR_RENDERER_ALLOW_SOFTWARE,1;
-    #env = CLUTTER_BACKEND,wayland;
 
     $terminal = wezterm #kitty
     $fileManager = dolphin
@@ -66,9 +78,9 @@
     general {
       gaps_in = 3
       gaps_out = 7
-      border_size = 2
+      border_size = 4
 
-      resize_on_border = true
+      resize_on_border = false
       layout = dwindle
     }
 
@@ -81,9 +93,8 @@
 
       blur {
         enabled = true
-        size = 15
+        size = 30
         passes = 3
-        vibrancy = 0.016
         new_optimizations = on
       }
     }

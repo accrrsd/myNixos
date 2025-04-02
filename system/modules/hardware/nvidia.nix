@@ -35,8 +35,6 @@
     # Only available from driver 515.43.04+
     open = false;
 
-    powerManagement.enable = true;
-
     # Enable the Nvidia settings menu,
   	# accessible via `nvidia-settings`.
     nvidiaSettings = true;

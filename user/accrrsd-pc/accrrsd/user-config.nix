@@ -9,21 +9,22 @@
     ./app/hyprland/hyprland.nix
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
+    ./app/cursor/cursor.nix
   ];
 
   home.username = "accrrsd";
   home.homeDirectory = "/home/accrrsd";
+
+  home.packages = with pkgs; [
+    swww
+    cava
+  ];
 
   programs.git = {
     enable = true;
     userName = "Daniel";
     userEmail = "accrrsd@bk.ru";
   };
-
-  home.packages = with pkgs; [
-    swww
-    cava
-  ];
 
   # auto update changed services
   systemd.user.startServices = true;

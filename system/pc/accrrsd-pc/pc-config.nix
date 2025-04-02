@@ -26,7 +26,7 @@
   htop
   inputs.zen-browser.packages."${system}".default
   ];
-
+  
   # even more avaiable packages!
   services.flatpak.enable = true;
 

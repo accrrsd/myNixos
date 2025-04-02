@@ -1,9 +1,4 @@
-{ ... }:
 {
-  # make via home.file instead of nix syntax or extraConfig because i want to experement with it without rebuild.
-  home.file.".config/waybar/config".text = ''
-  
-    {
     "layer": "top",
     "position": "bottom",
     "modules-left": [
@@ -346,7 +341,3 @@
       "tooltip-format-disconnected": "MPD (disconnected)"
     }
   }
-
-    
-  '';
-}

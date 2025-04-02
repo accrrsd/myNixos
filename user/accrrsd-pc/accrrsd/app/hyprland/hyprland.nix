@@ -11,6 +11,5 @@
     kitty
     brightnessctl
     vlc
-    cliphist
   ];
 }

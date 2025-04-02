@@ -1,8 +1,4 @@
-{ ... }:
-{
-  home.file.".config/waybar/style.css".text = ''
-  
-    * {
+* {
     border: none;
     font-size: 14px;
     font-family: "JetBrainsMono Nerd Font,JetBrainsMono NF" ;
@@ -102,7 +98,4 @@ window#waybar {
         background-color: #ffffff;
         color: #000000;
     }
-}
-  
-  '';
 }

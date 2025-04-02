@@ -4,8 +4,8 @@
     ./waybar-config.nix
     ./waybar-style.nix
   ];
-  
-  home.packages = with pkgs; [
-    waybar
-  ];
+
+  programs.waybar = {
+    enable = true;
+  };
 }
