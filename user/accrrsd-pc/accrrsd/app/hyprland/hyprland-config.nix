@@ -10,8 +10,9 @@
     exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
     exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
     
+    # not used because i use stylix cursors
     # fixes cursor in some apps
-    exec-once = hyprctl setcursor '' + config.gtk.cursorTheme.name + " " + builtins.toString config.gtk.cursorTheme.size + ''
+    #exec-once = hyprctl setcursor '' + config.gtk.cursorTheme.name + " " + builtins.toString config.gtk.cursorTheme.size + ''
     
     exec-once = swww-daemon
     exec-once = dunst
@@ -30,14 +31,31 @@
     exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
     env = QT_QPA_PLATFORMTHEME,qt5ct   # for Qt apps
 
-    env = XCURSOR_SIZE,24
-    #env = HYPRCURSOR_THEME,
-    #env = HYPRCURSOR_SIZE,24
+    # not needed cause use stylix cursor size
+    #env = XCURSOR_SIZE,24
+    #env = QT_CURSOR_SIZE,24
+
+    # find in internet
+    #env = XCURSOR_SIZE,32
+    #env = XCURSOR_THEME,catppuccin-mocha-light-cursors
+    #env = QT_CURSOR_THEME,catppuccin-mocha-light-cursors
+    #env = QT_CURSOR_SIZE,32
+    #env = QT_QPA_PLATFORMTHEME,qt5ct
+    #env = QT_STYLE_OVERRIDE,kvantum
+    #env = SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/ssh-agent.socket
+    #env = XDG_SESSION_TYPE,wayland
+    #env = MOZ_ENABLE_WAYLAND,1
+    #env = QT_QPA_PLATFORM,wayland
+    #env = ECORE_EVAS_ENGINE,wayland_egl
+    #env = ELM_DISPLAY,wayland
+    #env = GDK_BACKEND,wayland
+    #env = CLUTTER_BACKEND,wayland
+    #env = ELECTRON_OZONE_PLATFORM_HINT,wayland
 
     # needed for fix flickering with electon
     env = ELECTRON_OZONE_PLATFORM_HINT,auto
 
-    # stole if from https://github.com/librephoenix/nixos-config/blob/main/user/wm/hyprland/hyprland.nix
+    # stole it from https://github.com/librephoenix/nixos-config/blob/main/user/wm/hyprland/hyprland.nix
     env = XDG_CURRENT_DESKTOP,Hyprland
     env = XDG_SESSION_DESKTOP,Hyprland
     env = GDK_BACKEND,wayland,x11,*
@@ -144,6 +162,11 @@
     bind = $mod, backspace, exec, pkill -USR1 waybar || waybar
     bind = $mod, S, swapsplit
 
+    # ScreenShots
+    bind = , PRINT, exec, hyprshot -m region --clipboard-only
+    bind = $mod, PRINT, exec, hyprshot -m window --clipboard-only
+    bind = $mod SHIFT, PRINT, exec, hyprshot -m output --clipboard-only
+
     # Window manipulation
     bind = $mod, F,             fullscreen,
     #bind = $mod SHIFT, F,       fakefullscreen,
@@ -152,11 +175,10 @@
     # if need togglesplit - make hotkey
     #bind = something,            togglesplit,
 
-
     # Change window focus
     bind = $mod, up,             movefocus, u
     bind = $mod, right,             movefocus, r
-      bind = $mod, down,             movefocus, l
+    bind = $mod, down,             movefocus, l
     bind = $mod, left,             movefocus, d
 
     # Window movement (for tiled windows)

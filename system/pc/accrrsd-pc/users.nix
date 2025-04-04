@@ -17,6 +17,6 @@
     users = {
       accrrsd = import ../../../user/accrrsd-pc/accrrsd/user-config.nix;
     };
-    backupFileExtension = "backup";
+    backupFileExtension = "hm-backup";
   };
 }

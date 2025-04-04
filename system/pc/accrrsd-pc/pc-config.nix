@@ -22,17 +22,24 @@
   telegram-desktop
   chromium
   nodejs
-  dolphin
   htop
   inputs.zen-browser.packages."${system}".default
+  transmission_4-gtk
   ];
-  
-  # even more avaiable packages!
-  services.flatpak.enable = true;
 
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
+  
+  # even more avaiable packages!
+  services.flatpak.enable = true;
+
+  stylix.enable = true;
+  stylix.image = ../../default-wallpaper.jpg;
+  
+  #stylix.targets.overlays.enable = false;
+  #stylix.image = "${config.home.homeDirectory}/Pictures/red-tree.jpg";
+  #stylix.image = "${config.users.users.username.home}"/Pictures/red-tree.jpg;
 }

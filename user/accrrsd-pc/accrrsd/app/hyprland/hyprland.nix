@@ -5,6 +5,7 @@
   ];
   
   home.packages = with pkgs; [
+    hyprshot
     wofi
     dunst
     wlsunset

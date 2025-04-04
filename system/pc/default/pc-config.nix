@@ -31,6 +31,7 @@
     wl-clip-persist
     fastfetch
     cliphist
+    nix-fast-build
   ];
 
   programs.firefox.enable = true;

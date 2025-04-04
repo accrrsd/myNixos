@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   imports = [
-    ./waybar-config.nix
-    ./waybar-style.nix
+    #./waybar-config.nix
+    #./waybar-style.nix
   ];
 
   programs.waybar = {

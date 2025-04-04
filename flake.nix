@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    #stylix.url = "github:danth/stylix";
+    stylix.url = "github:danth/stylix/release-24.11";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland-plugins = {
@@ -17,14 +17,14 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, hyprland, zen-browser, ... } @ inputs: let
+  outputs = { self, nixpkgs, home-manager, hyprland, zen-browser, stylix, ... } @ inputs: let
     inherit (self) outputs;
   in {
     nixosConfigurations = {
       accrrsd-pc = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs outputs; };
         modules = [
-          #stylix.nixosModules.stylix
+          stylix.nixosModules.stylix
           ./configuration.nix
           ./system/pc/accrrsd-pc/pc-config.nix
         ];
