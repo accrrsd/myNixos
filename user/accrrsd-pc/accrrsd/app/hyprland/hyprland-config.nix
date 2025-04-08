@@ -9,6 +9,9 @@
     # Fix slow startup
     exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
     exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
+    # trash?
+    #exec-once = polkit-agent-helper-1
     
     # not used because i use stylix cursors
     # fixes cursor in some apps
@@ -16,7 +19,9 @@
     
     exec-once = swww-daemon
     exec-once = dunst
-    exec-once = waybar
+
+    # I dont need waybar at start
+    #exec-once = waybar
 
     #exec-once = wl-clipboard-history -t
     exec-once = wl-clip-persist --clipboard regular --display wayland-1
@@ -24,12 +29,11 @@
     exec-once = wl-paste --type text --watch cliphist store
     exec-once = wl-paste --type image --watch cliphist store
 
-    exec = swww img /home/accrrsd/Pictures/red-tree.jpg
-
+    # not needed cause of stylix
     #themes
-    exec = gsettings set org.gnome.desktop.interface gtk-theme "YOUR_DARK_GTK3_THEME"   # for GTK3 apps
-    exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
-    env = QT_QPA_PLATFORMTHEME,qt5ct   # for Qt apps
+    #exec = gsettings set org.gnome.desktop.interface gtk-theme "YOUR_DARK_GTK3_THEME"   # for GTK3 apps
+    #exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
+    #env = QT_QPA_PLATFORMTHEME,qt5ct   # for Qt apps
 
     # not needed cause use stylix cursor size
     #env = XCURSOR_SIZE,24

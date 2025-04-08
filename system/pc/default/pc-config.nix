@@ -21,7 +21,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    git
     wget
     ripgrep
     vscode
@@ -32,6 +31,7 @@
     fastfetch
     cliphist
     nix-fast-build
+    nixpkgs-fmt
   ];
 
   programs.firefox.enable = true;
@@ -43,6 +43,16 @@
   xdg.portal = {
     enable = true;
     wlr.enable = true;
+  };
+
+  programs.git = {
+    enable = true;
+    config = {
+      safe.directory = [
+      # needed everytime, for stylix, apps and general changes
+        "/etc/nixos"
+      ];
+    };
   };
 
   # Here we create nixos-editors group and allow it to edit nixos folder

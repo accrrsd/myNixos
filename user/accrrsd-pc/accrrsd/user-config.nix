@@ -2,12 +2,18 @@
 
 let
   getPkgFromStr = import ../../../functions/getPkgFromStr.nix { inherit lib pkgs; };
-  findWallpaper = import ../../../functions/find-wallpaper.nix {inherit lib; };
-
-  themeData = builtins.fromJSON (builtins.readFile (./. + "/theme/theme.json"));
-
+  themeData = builtins.fromJSON (builtins.readFile (./. + "/theme.json"));
   maybeCursorPkg = getPkgFromStr themeData.cursor.${themeData.polarity}.package;
-  maybeWallpaper = findWallpaper (./. + "/theme/wallpaper");
+
+  wallpaperCfg = themeData.wallpaper or {};
+  hasWallpaper = wallpaperCfg ? path && wallpaperCfg ? hash;
+  
+  fetchRes = lib.optionalAttrs hasWallpaper (builtins.tryEval (
+    builtins.fetchurl {
+      url = "file://${wallpaperCfg.path}";
+      sha256 = wallpaperCfg.hash;
+    }
+  ));
 in
 {
   home.stateVersion = "24.11";
@@ -19,6 +25,7 @@ in
     ./app/ohmyposh/ohmyposh.nix
     # did not use because of stylix cursor
     #./app/cursor/cursor.nix
+    ../../../scripts/home-specific/swww-update.nix
   ];
 
   home.username = "accrrsd";
@@ -36,13 +43,19 @@ in
   };
 
   xdg.enable = true;
+  
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "text/html" = "zen-browser.desktop";
       "inode/directory" = "dolphin.desktop";
+      "text/html" = "zen.desktop";
+      "x-scheme-handler/http" = "zen.desktop";
+      "x-scheme-handler/https" = "zen.desktop";
+      "x-scheme-handler/about" = "zen.desktop";
+      "x-scheme-handler/unknown" = "zen.desktop";
     };
   };
+
   xdg.userDirs = {
     extraConfig = {
       XDG_GAME_DIR = "${config.home.homeDirectory}/Games";
@@ -54,9 +67,22 @@ in
   systemd.user.startServices = true;
 
   stylix = {
-    # disable stylix wallpaper - needed for advanced wallpaper scripts
-    targets.hyprpaper.enable = lib.mkForce false;
-    image = lib.mkIf (maybeWallpaper != null) maybeWallpaper;
+    enable = true;
+    autoEnable = true;
+    targets = {
+      # trying to disable stylix wallpaper - needed for advanced wallpaper scripts
+      hyprpaper.enable = lib.mkForce false;
+      # fixes some apps
+      gnome.enable = true;
+      gtk.enable = true;
+    };
+
+    # does not work without autoenable
+    #targets.qt.enable = true;
+    #targets.kvantum.enable = true;
+    #targets.xresources.enable = true;
+    
+    image = lib.mkIf fetchRes.success fetchRes.value;
 
     polarity = themeData.polarity;
 

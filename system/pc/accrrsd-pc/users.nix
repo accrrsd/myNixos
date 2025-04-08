@@ -17,6 +17,8 @@
     users = {
       accrrsd = import ../../../user/accrrsd-pc/accrrsd/user-config.nix;
     };
+
+    # if home manager bugged - try to delete mimetypes from .config, if not worked - try to rename config to .config.backup
     backupFileExtension = "hm-backup";
   };
 }
