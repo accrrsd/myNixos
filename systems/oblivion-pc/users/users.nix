@@ -11,7 +11,7 @@
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
-      accrrsd = import ./accrrsd/user-config.nix
+      accrrsd = import ./accrrsd/user-config.nix;
     };
 
     # if home manager bugged - try to delete mimetypes from .config, if not worked - try to rename config to .config.backup

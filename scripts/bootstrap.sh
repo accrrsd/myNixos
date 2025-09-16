@@ -44,7 +44,7 @@ if ! git rev-parse --git-dir >/dev/null 2>&1; then
 fi
 
 # Добавляем файл в индекс, игнорируя .gitignore
-git add "$HW_FILE" 2>/dev/null || {
+git add -f "$HW_FILE" 2>/dev/null || {
     echo "❌ Error Could not add $HW_FILE to Git index (maybe not in repo?)"
     exit 1
 }
