@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, stateVersion, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   networking.hostName = "oblivion-pc";
@@ -7,15 +7,19 @@
     HOSTNAME = config.networking.hostName;
   };
 
-
   imports = [
-    ../default/pc-config.nix
+    # must have
+    ./hardware-configuration.nix
+    ../default.nix
     ./users/users.nix
+    
+    # modules specific for a pc
+    ../../system-modules/hardware/amd-gpu.nix
 
     # system-wide apps
-    ../system-modules/app/steam.nix
-    ../system-modules/app/razer-peripherals.nix
-    ../system-modules/app/zsh.nix
+    ../../system-modules/app/steam.nix
+    ../../system-modules/app/razer-peripherals.nix
+    ../../system-modules/app/zsh.nix
   ];
 
   # specific for pc, and needed only if not uefi.
@@ -34,14 +38,11 @@
     inputs.zen-browser.packages."${pkgs.system}".default
   ];
 
+  # system wide because of SDDM
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
 
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "accrrsd";
-
-  system.stateVersion = stateVersion;
-
+  system.stateVersion = "25.05";
 }

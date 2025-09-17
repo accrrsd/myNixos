@@ -14,9 +14,8 @@
   {
     nixosConfigurations = {
       oblivion-pc = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; stateVersion = "25.05"; };
+        specialArgs = { inherit inputs; };
         system = "x86_64-linux";
-        pkgs = import nixpkgs { system = "x86_64-linux"; };
         modules = [
           ./pc-config.nix
           inputs.home-manager.nixosModules.home-manager

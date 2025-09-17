@@ -1,17 +1,17 @@
-{ lib, config, pkgs, stateVersion, ... }:
+{ lib, config, pkgs, ... }:
 {
   imports = [
     ./app/ssh/ssh.nix
-    ./app/hyprland/hyprland.nix
-    ./app/waybar/waybar.nix
+    # ./app/hyprland/hyprland.nix
+    # ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
   ];
 
   home = {
     username = "accrrsd";
     homeDirectory = "/home/accrrsd";
-    stateVersion = stateVersion;
-  }
+    stateVersion = "25.05";
+  };
 
   home.packages = with pkgs; [
     swww
