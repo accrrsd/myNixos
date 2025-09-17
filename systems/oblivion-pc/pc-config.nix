@@ -35,6 +35,7 @@
     htop
     transmission_4-gtk
     linux-wallpaperengine
+    wezterm
     inputs.zen-browser.packages."${pkgs.system}".default
   ];
 

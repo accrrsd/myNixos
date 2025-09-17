@@ -9,12 +9,21 @@ if [[ ! -v HOSTNAME ]]; then
     exit 1
 fi
 
+HOSTNAME="${1:-$HOSTNAME}"
 CONFIG_DIR="/nixosConfig"
 HOST_DIR="$CONFIG_DIR/systems/$HOSTNAME"
 HW_FILE="$HOST_DIR/hardware-configuration.nix"
 
 echo "=== 1️⃣ Preparing flake: temporarily adding hardware config to Git index ==="
 cd "$HOST_DIR"
+
+# Copy hardware-confuguration
+if [[ ! -f "$HW_FILE" ]]; then
+    echo "➡️ Copying /etc/nixos/hardware-configuration.nix → $HW_FILE"
+    sudo cp /etc/nixos/hardware-configuration.nix "$HW_FILE"
+    sudo chown "$CURRENT_USER:$GROUP" "$HW_FILE"
+    sudo chmod 644 "$HW_FILE"
+fi
 
 if ! git rev-parse --git-dir >/dev/null 2>&1; then
     echo "❌ Error: $HOST_DIR is not a Git repository. Flake requires Git for self-reference."

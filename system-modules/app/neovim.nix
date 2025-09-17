@@ -7,7 +7,7 @@
     zig
     wezterm
     lazygit
-    (nerdfonts.override { fonts = [ "FiraCode" ]; })
+    nerd-fonts.fira-code
     fira-code
   ];
 }
