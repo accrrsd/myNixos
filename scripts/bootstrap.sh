@@ -10,12 +10,11 @@ clear
 
 CONFIG_DIR="/nixosConfig"
 GROUP="nixos-editors"
-GIT_REPO_PATH="${1}"  # Обязательный аргумент
+GIT_REPO_PATH="${1}"
 HOSTNAME="${2:-default-pc}"
 HOST_DIR="$CONFIG_DIR/systems/$HOSTNAME"
 HW_FILE="$HOST_DIR/hardware-configuration.nix"
 
-# === Проверка обязательных аргументов ===
 if [[ -z "${GIT_REPO_PATH:-}" ]]; then
     echo "❌ Error: GIT_REPO_PATH (first argument) is required" >&2
     exit 1

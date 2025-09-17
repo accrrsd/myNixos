@@ -2,8 +2,8 @@
 {
   imports = [
     ./app/ssh/ssh.nix
-    # ./app/hyprland/hyprland.nix
-    # ./app/waybar/waybar.nix
+    ./app/hyprland/hyprland.nix
+    ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
   ];
 

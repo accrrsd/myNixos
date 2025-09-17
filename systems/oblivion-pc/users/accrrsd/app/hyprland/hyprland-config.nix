@@ -13,7 +13,6 @@
     
     # not used because i use stylix cursors
     # fixes cursor in some apps
-    #exec-once = hyprctl setcursor '' + config.gtk.cursorTheme.name + " " + builtins.toString config.gtk.cursorTheme.size + ''
     
     exec-once = swww-daemon
     exec-once = dunst
@@ -76,11 +75,6 @@
     # IDK
     #env = __GL_VRR_ALLOWED,1;
     #env = WLR_RENDERER_ALLOW_SOFTWARE,1;
-
-    $terminal = wezterm #kitty
-    $fileManager = dolphin
-    $browser = firefox
-    $menu = wofi
 
     monitor=DP-1,3440x1440@144.00,auto,1
 
@@ -150,7 +144,11 @@
       workspace_swipe = false
     }
 
-    $mod = SUPER
+    $terminal = wezterm #kitty
+    $fileManager = dolphin
+    $browser = firefox
+    $menu = wofi
+    $mod = ALT
 
     bind = $mod, Q, exec, $terminal
     bind = $mod, W, killactive,

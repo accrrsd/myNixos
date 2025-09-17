@@ -20,6 +20,7 @@
     ../../system-modules/app/steam.nix
     ../../system-modules/app/razer-peripherals.nix
     ../../system-modules/app/zsh.nix
+    ../../system-modules/app/neovim.nix
   ];
 
   # specific for pc, and needed only if not uefi.
@@ -28,7 +29,6 @@
   environment.systemPackages = with pkgs; [
     vscode
     git
-    lazygit
     telegram-desktop
     chromium
     nodejs
