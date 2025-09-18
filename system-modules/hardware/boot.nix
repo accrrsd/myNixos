@@ -6,7 +6,8 @@ in
 {
   boot.loader.grub = {
     enable = true;
-    useOSProber = true;
+    # dual boot
+    useOSProber = lib.mkDefault false;
     efiSupport = isUefi;
     device = lib.mkDefault (
       if isUefi then "nodev"

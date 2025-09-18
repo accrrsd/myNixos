@@ -81,13 +81,15 @@
     input {
       kb_layout = us,ru
       follow_mouse = 2
-      kb_options = grp:alt_shift_toggle
+      #kb_options = grp:alt_shift_toggle
 
       sensitivity = -0.1 # -1.0 - 1.0, 0 means no modification.
 
       accel_profile = flat
       force_no_accel = 1
     }
+
+    bindrlt = ALT SHIFT, Alt_L, exec, hyprctl switchxkblayout all next
 
     general {
       gaps_in = 3
@@ -188,10 +190,10 @@
     bind = $mod SHIFT, right,       movewindow, r
 
     # resize window
-    bind = $mod ALT, left,         resizeactive, -200 0
-    bind = $mod ALT, down,         resizeactive, 0 200
-    bind = $mod ALT, up,         resizeactive, 0 -200
-    bind = $mod ALT, right,         resizeactive, 200 0
+    #bind = $mod ALT, left,         resizeactive, -200 0
+    #bind = $mod ALT, down,         resizeactive, 0 200
+    #bind = $mod ALT, up,         resizeactive, 0 -200
+    #bind = $mod ALT, right,         resizeactive, 200 0
 
     # Move/resize windows with mod + LMB/RMB and dragging
     bindm = $mod, mouse:272,    movewindow
