@@ -17,9 +17,22 @@
         specialArgs = { inherit inputs; };
         system = "x86_64-linux";
         modules = [
-          ./pc-config.nix
+          ./hardware-configuration.nix
+          ../pc-config.nix
           inputs.home-manager.nixosModules.home-manager
         ];
+      };
+    };
+
+    # allows use home-manager command without rebuild-swtich. (allow rebuild user only stuff)
+    homeConfigurations = {
+      accrrsd = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+        # import user as command home manager, e.g home-manager --flake
+        modules = [
+          ../users/accrrsd/user-config.nix
+        ];
+        extraSpecialArgs = { inherit inputs; };
       };
     };
   };

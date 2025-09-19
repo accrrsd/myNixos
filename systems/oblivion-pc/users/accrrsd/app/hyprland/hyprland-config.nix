@@ -8,19 +8,18 @@
     exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
     exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-    # trash?
-    #exec-once = polkit-agent-helper-1
+    exec-once = systemctl --user start hyprpolkitagent
     
     # not used because i use stylix cursors
-    # fixes cursor in some apps
     
+    # wallpapers
     exec-once = swww-daemon
+    # notification service
     exec-once = dunst
 
     # I dont need waybar at start
     #exec-once = waybar
 
-    #exec-once = wl-clipboard-history -t
     exec-once = wl-clip-persist --clipboard regular --display wayland-1
     
     exec-once = wl-paste --type text --watch cliphist store
@@ -35,23 +34,6 @@
     # not needed cause use stylix cursor size
     #env = XCURSOR_SIZE,24
     #env = QT_CURSOR_SIZE,24
-
-    # find in internet
-    #env = XCURSOR_SIZE,32
-    #env = XCURSOR_THEME,catppuccin-mocha-light-cursors
-    #env = QT_CURSOR_THEME,catppuccin-mocha-light-cursors
-    #env = QT_CURSOR_SIZE,32
-    #env = QT_QPA_PLATFORMTHEME,qt5ct
-    #env = QT_STYLE_OVERRIDE,kvantum
-    #env = SSH_AUTH_SOCK,$XDG_RUNTIME_DIR/ssh-agent.socket
-    #env = XDG_SESSION_TYPE,wayland
-    #env = MOZ_ENABLE_WAYLAND,1
-    #env = QT_QPA_PLATFORM,wayland
-    #env = ECORE_EVAS_ENGINE,wayland_egl
-    #env = ELM_DISPLAY,wayland
-    #env = GDK_BACKEND,wayland
-    #env = CLUTTER_BACKEND,wayland
-    #env = ELECTRON_OZONE_PLATFORM_HINT,wayland
 
     # needed for fix flickering with electon
     env = ELECTRON_OZONE_PLATFORM_HINT,auto
@@ -76,11 +58,13 @@
     #env = __GL_VRR_ALLOWED,1;
     #env = WLR_RENDERER_ALLOW_SOFTWARE,1;
 
+    # monitors
     monitor=DP-1,3440x1440@144.00,auto,1
 
     input {
       kb_layout = us,ru
       follow_mouse = 2
+      # dont need it, cause we use binding for layout changes
       #kb_options = grp:alt_shift_toggle
 
       sensitivity = -0.1 # -1.0 - 1.0, 0 means no modification.
@@ -88,7 +72,8 @@
       accel_profile = flat
       force_no_accel = 1
     }
-
+    
+    # layout change on alt shift
     bindrlt = ALT SHIFT, Alt_L, exec, hyprctl switchxkblayout all next
 
     general {
@@ -102,8 +87,8 @@
 
     decoration {
       rounding = 10
-      active_opacity = 0.8
-      inactive_opacity = 0.8
+      active_opacity = 0.7
+      inactive_opacity = 0.7
       dim_inactive = false
       dim_strength = 0.4
 
@@ -180,8 +165,8 @@
     # Change window focus
     bind = $mod, up,             movefocus, u
     bind = $mod, right,             movefocus, r
-    bind = $mod, down,             movefocus, l
-    bind = $mod, left,             movefocus, d
+    bind = $mod, down,             movefocus, d
+    bind = $mod, left,             movefocus, l
 
     # Window movement (for tiled windows)
     bind = $mod SHIFT, left,       movewindow, l

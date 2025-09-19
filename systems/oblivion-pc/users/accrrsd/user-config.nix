@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 {
   imports = [
-    ./app/ssh/ssh.nix
+    ./app/ssh.nix
     ./app/hyprland/hyprland.nix
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix

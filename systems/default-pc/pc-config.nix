@@ -3,7 +3,6 @@
 {
   imports = [
     ../default.nix
-    ./hardware-configuration.nix
   ];
 
   users.users.test = {

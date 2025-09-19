@@ -8,8 +8,6 @@
   };
 
   imports = [
-    # must have
-    ./hardware-configuration.nix
     ../default.nix
     ./users/users.nix
     
@@ -37,6 +35,7 @@
     linux-wallpaperengine
     wezterm
     inputs.zen-browser.packages."${pkgs.system}".default
+    niri
   ];
 
   # system wide because of SDDM

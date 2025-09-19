@@ -17,6 +17,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs outputs ; };
+    # import user as system-home manager, e.g sudo nixos-rebuild --flake
     users = {
       accrrsd = import ./accrrsd/user-config.nix;
     };

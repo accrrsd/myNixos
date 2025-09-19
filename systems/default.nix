@@ -32,6 +32,8 @@
     fastfetch
     cliphist
     nixpkgs-fmt
+    # allows use home-manager command without rebuild-swtich. (allow rebuild user only stuff)
+    home-manager
   ];
 
   users.groups.nixos-editors = {};
