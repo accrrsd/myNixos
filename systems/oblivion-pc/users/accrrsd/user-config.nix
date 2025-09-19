@@ -5,6 +5,7 @@
     ./app/hyprland/hyprland.nix
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
+    ../../../../user-modules/virtualSound.nix
   ];
 
   home = {
@@ -22,6 +23,12 @@
     enable = true;
     userName = "Daniel";
     userEmail = "accrrsd@bk.ru";
+  };
+
+  # example of user usage virtualSound
+  programs.virtualSurround = {
+    enable = true;
+    hrtfPath = ../../../../src/sound/A3D.wav;
   };
 
   xdg.enable = true;
