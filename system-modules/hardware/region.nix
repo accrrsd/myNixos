@@ -16,7 +16,7 @@
   };
   services.timesyncd.enable = true;
 
-  # Раскладка клавиатуры:
+  #keyboard layout
   services.xserver.xkb = {
     layout = "us";
     variant = "";

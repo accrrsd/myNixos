@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
-
 set -euo pipefail
 
 clear
-
-if [[ ! -v HOSTNAME ]]; then
-    echo "[!] Error: HOSTNAME environment variable is not set" >&2
-    exit 1
-fi
 
 HOSTNAME="${1:-$HOSTNAME}"
 CONFIG_DIR="/nixosConfig"
 HOST_DIR="$CONFIG_DIR/systems/$HOSTNAME"
 FLAKE_DIR="$HOST_DIR/flake"
 HW_FILE="$FLAKE_DIR/hardware-configuration.nix"
+ORIGINAL_DIR="$(pwd)"
+
+if [[ ! -v HOSTNAME ]]; then
+    echo "[!] Error: HOSTNAME environment variable (or 1st argument) is not set" >&2
+    exit 1
+fi
 
 cleanup() {
     if [[ -f "$HW_FILE" ]] && git rev-parse --git-dir >/dev/null 2>&1; then
-        git reset "$HW_FILE" 2>/dev/null && echo "[✓] Reset $HW_FILE from index" || \
-        echo "[!] Warning: Could not reset $HW_FILE from index — probably wasn't added. Ignoring."
+        git reset "$HW_FILE" 2>/dev/null
     fi
+    cd "$ORIGINAL_DIR"
 }
 
 trap cleanup EXIT
@@ -32,7 +32,6 @@ cd "$FLAKE_DIR"
 if [[ ! -f "$HW_FILE" ]]; then
     echo "[→] Copying /etc/nixos/hardware-configuration.nix → $HW_FILE"
     sudo cp /etc/nixos/hardware-configuration.nix "$HW_FILE"
-    # Исправление: используем $USER и группу по умолчанию, если CURRENT_USER/GROUP не заданы
     sudo chown "${CURRENT_USER:-$USER}:${GROUP:-$(id -gn)}" "$HW_FILE"
     sudo chmod 644 "$HW_FILE"
 fi

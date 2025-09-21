@@ -1,14 +1,14 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.programs.virtualSurround;
+  cfg = config.user-modules.virtualSurround;
 
   virtualSurroundConfig =
     (import ../src/sound/sink-virtual-surround-7.1-hesuvi.nix) {
       hrtfPath = cfg.hrtfPath;
     };
 in {
-  options.programs.virtualSurround = {
+  options.user-modules.virtualSurround = {
     enable = lib.mkEnableOption "Enable PipeWire 7.1 → stereo HRTF virtual sink";
 
     hrtfPath = lib.mkOption {

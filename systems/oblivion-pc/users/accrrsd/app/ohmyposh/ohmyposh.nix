@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 {
+  # HERE and not in user-modules cause it REQUIERS zhs per user.
+  
   # redefine system-wide zsh, needed for oh-my-posh
   programs.zsh = {
     enable = true;

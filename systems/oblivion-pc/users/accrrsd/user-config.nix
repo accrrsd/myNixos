@@ -6,6 +6,7 @@
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
     ../../../../user-modules/virtualSound.nix
+    ../../../../user-modules/wezterm.nix
   ];
 
   home = {
@@ -25,10 +26,14 @@
     userEmail = "accrrsd@bk.ru";
   };
 
+  # already enabled by import, needed only for dotfiles
+  # programs.wezterm.extraConfig = builtins.readFile ./dotfiles/wezterm.lua;
+  xdg.configFile."wazterm/wazterm.lua".source = ./dotfiles/wezterm.lua;
+
   # example of user usage virtualSound
-  programs.virtualSurround = {
+  user-modules.virtualSurround = {
     enable = true;
-    hrtfPath = ../../../../src/sound/A3D.wav;
+    hrtfPath = ../../../../src/sound/razer.wav;
   };
 
   xdg.enable = true;

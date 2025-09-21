@@ -25,8 +25,6 @@
     git
     wget
     ripgrep
-    xdg-desktop-portal
-    xdg-desktop-portal-wlr
     wl-clipboard
     wl-clip-persist
     fastfetch

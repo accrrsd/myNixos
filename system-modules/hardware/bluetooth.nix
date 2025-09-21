@@ -1,19 +1,17 @@
 { pkgs, ... }: {
   hardware.bluetooth = {
     enable = true;
+    powerOnBoot = true;
     settings = {
       General = {
-        #Enable = "Source,Sink,Media,Socket,HID";
-        JustWorksRepairing = "always";
+        Enable = "Source,Sink,Media,Socket,HID";
+        Experimental = true;
       };
     };
   };
   services.blueman.enable = true;
-  #hardware.enableRedistributableFirmware = true;
-
-  # For zmk keyboard
-  boot.kernelModules = [ "hid_zmk" ];
-  services.udev.extraRules = ''
-    SUBSYSTEM=="input", ATTRS{id/vendor}=="zmk", MODE="0666", GROUP="input"
-  '';
+  environment.systemPackages = with pkgs; [
+    bluez-tools
+    bluetuith # can transfer files via OBEX
+  ];
 }
