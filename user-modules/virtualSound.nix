@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+# can be found on https://airtable.com/appayGNkn3nSuXkaz/shruimhjdSakUPg2m/tbloLjoZKWJDnLtTc
+
 let
   cfg = config.user-modules.virtualSurround;
 

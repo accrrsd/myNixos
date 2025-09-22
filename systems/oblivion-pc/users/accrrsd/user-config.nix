@@ -28,12 +28,12 @@
 
   # already enabled by import, needed only for dotfiles
   # programs.wezterm.extraConfig = builtins.readFile ./dotfiles/wezterm.lua;
-  xdg.configFile."wazterm/wazterm.lua".source = ./dotfiles/wezterm.lua;
+  xdg.configFile."wezterm/wezterm.lua".source = ./dotfiles/wezterm.lua;
 
   # example of user usage virtualSound
   user-modules.virtualSurround = {
     enable = true;
-    hrtfPath = ../../../../src/sound/razer.wav;
+    hrtfPath = ../../../../src/sound/SteamAudio.wav;
   };
 
   xdg.enable = true;

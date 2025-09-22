@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -36,20 +36,24 @@
 
   users.groups.nixos-editors = {};
 
-  programs.firefox.enable = true;
-  services.xserver.enable = true;
-  nixpkgs.config.allowUnfree = true;
-  security.polkit.enable = true;
-  services.flatpak.enable = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  programs.firefox.enable = lib.mkDefault  true;
+  services.xserver.enable = lib.mkDefault true;
+  nixpkgs.config.allowUnfree = lib.mkDefault  true;
+  security.polkit.enable = lib.mkDefault  true;
+  services.flatpak.enable = lib.mkDefault  true;
+  nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
 
   xdg.portal = {
-    enable = true;
-    wlr.enable = true;
+    enable = lib.mkDefault true;
+    wlr.enable = lib.mkDefault true;
   };
 
   programs.git = {
-    enable = true;
-    config.safe.directory = [ "/nixosConfig" ];
+    enable = lib.mkDefault true;
+    config.safe.directory = lib.mkDefault [ "/nixos-config" ];
+  };
+
+  environment.sessionVariables = {
+    HOSTNAME = config.networking.hostName;
   };
 }

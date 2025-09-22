@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
+# usage example: ./smart-rebuild.sh [pc-name] (optional)
+
 set -euo pipefail
 
 clear
 
 HOSTNAME="${1:-$HOSTNAME}"
-CONFIG_DIR="/nixosConfig"
+CONFIG_DIR="/nixos-config"
 HOST_DIR="$CONFIG_DIR/systems/$HOSTNAME"
 FLAKE_DIR="$HOST_DIR/flake"
 HW_FILE="$FLAKE_DIR/hardware-configuration.nix"

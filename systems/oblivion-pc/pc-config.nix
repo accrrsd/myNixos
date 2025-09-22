@@ -3,10 +3,6 @@
 {
   networking.hostName = "oblivion-pc";
 
-  environment.sessionVariables = {
-    HOSTNAME = config.networking.hostName;
-  };
-
   imports = [
     ../default.nix
     ./users/users.nix
@@ -21,6 +17,8 @@
     ../../system-modules/app/razer-peripherals.nix
     ../../system-modules/app/zsh.nix
     ../../system-modules/app/neovim.nix
+
+    ../../system-modules/app/hyprland.nix
   ];
 
   # specific for pc, and needed only if not uefi.
@@ -37,6 +35,7 @@
     linux-wallpaperengine
     inputs.zen-browser.packages."${pkgs.system}".default
     niri
+    emote
   ];
 
   system-modules.diskMount = {
@@ -59,12 +58,7 @@
     size=16*1024; # 16 gb
     enableZram = true;
   };
-
-  # system wide because of SDDM
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
+  
 
   system.stateVersion = "25.05";
 }

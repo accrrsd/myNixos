@@ -7,8 +7,8 @@
     syntaxHighlighting.enable = true;
 
     shellAliases = {
-      nrebuild = "sudo /nixosConfig/scripts/setup/smart-rebuild.sh";
-      hswitch = "/nixosConfig/scripts/setup/home-switch.sh";
+      nrebuild = "sudo /nixos-config/scripts/setup/smart-rebuild.sh";
+      hswitch = "/nixos-config/scripts/setup/home-switch.sh";
       soundRestart = "systemctl --user restart pipewire";
     };
   };

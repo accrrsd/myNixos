@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-
-# usage example: ./bootstrap.sh path/to/git/folder default-pc
+# usage example: ./bootstrap.sh <path/to/git/folder> [default-pc] (optional)
 # make sure your pc has correct boot.loader.device!
 
 set -euo pipefail
 
 clear
 
-CONFIG_DIR="/nixosConfig"
-GROUP="nixos-editors"
 GIT_REPO_PATH="${1}"
 HOSTNAME="${2:-default-pc}"
+
+CONFIG_DIR="/nixos-config"
+GROUP="nixos-editors"
 HOST_DIR="$CONFIG_DIR/systems/$HOSTNAME"
 FLAKE_DIR="$HOST_DIR/flake"
 HW_FILE="$FLAKE_DIR/hardware-configuration.nix"
@@ -62,6 +62,11 @@ if [[ ! -d "$CONFIG_DIR" ]]; then
 else
     echo "[✓] CONFIG_DIR '$CONFIG_DIR' already exists — skipping repo sync."
 fi
+
+# make other scripts executable
+for script in "./"*.sh; do
+    chmod +x "$script"
+done
 
 echo ""
 # Copy hardware-configuration

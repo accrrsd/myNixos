@@ -1,8 +1,10 @@
 { inputs, pkgs, ... }:
 {
-  imports = [
-    ./hyprland-config.nix
-  ];
+  wayland.windowManager.hyprland = {
+    enable = true;
+    systemd.enable = true;
+    extraConfig = builtins.readFile ./hyperland.conf;
+  };
   
   home.packages = with pkgs; [
     hyprshot
