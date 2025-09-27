@@ -25,15 +25,12 @@
   boot.loader.grub.device = "/dev/sdb";
 
   environment.systemPackages = with pkgs; [
-    vscode
-    git
     telegram-desktop
     chromium
     nodejs
     htop
-    transmission_4-gtk
+    qbittorrent
     linux-wallpaperengine
-    inputs.zen-browser.packages."${pkgs.system}".default
     niri
     emote
   ];
@@ -59,6 +56,5 @@
     enableZram = true;
   };
   
-
   system.stateVersion = "25.05";
 }

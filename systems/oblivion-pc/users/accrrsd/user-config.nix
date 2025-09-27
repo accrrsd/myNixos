@@ -1,10 +1,12 @@
-{ lib, config, pkgs, ... }:
+{ lib, inputs, config, pkgs, ... }:
 {
   imports = [
     ./app/ssh.nix
     ./app/hyprland/hyprland.nix
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
+
+    (import ../../../../user-modules/stylix.nix {inherit inputs lib pkgs; themePath = ./theme.json; })
     ../../../../user-modules/virtualSound.nix
     ../../../../user-modules/wezterm.nix
   ];
@@ -42,11 +44,11 @@
     enable = true;
     defaultApplications = {
       "inode/directory" = "dolphin.desktop";
-      "text/html" = "zen.desktop";
-      "x-scheme-handler/http" = "zen.desktop";
-      "x-scheme-handler/https" = "zen.desktop";
-      "x-scheme-handler/about" = "zen.desktop";
-      "x-scheme-handler/unknown" = "zen.desktop";
+      "text/html" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/about" = "firefox.desktop";
+      "x-scheme-handler/unknown" = "firefox.desktop";
     };
   };
 

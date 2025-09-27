@@ -29,7 +29,7 @@
     wl-clip-persist
     fastfetch
     cliphist
-    nixpkgs-fmt
+    nixfmt-rfc-style
     # allows use home-manager command without rebuild-swtich. (allow rebuild user only stuff)
     home-manager
   ];

@@ -1,0 +1,19 @@
+{
+  "wallpaper": {
+    "path": "/home/accrrsd/Pictures/green-city.png",
+    "hash": "0vwx5pihkd8y6v5wvzf3w99jijylql01rnqbd1s51hnvqphl24yi"
+  },
+  "polarity": "dark",
+  "cursor": {
+    "dark": {
+      "name": "Bibata-Modern-Classic",
+      "size": 22,
+      "package": "pkgs.bibata-cursors"
+    },
+    "light": {
+      "name": "Bibata-Modern-Ice",
+      "size": 22,
+      "package": "pkgs.bibata-cursors"
+    }
+  }
+}

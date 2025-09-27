@@ -21,7 +21,7 @@ fi
 
 GRUB_LINE=$(grep -E 'boot\.loader\.grub\.device' /etc/nixos/configuration.nix || true)
 if [[ -z "$GRUB_LINE" ]]; then
-  echo "[!] Error: boot.loader.grub.device not found in /etc/nixos/configuration.nix, probably using UEFI"
+  echo "[→] Warning: boot.loader.grub.device not found in /etc/nixos/configuration.nix, probably using UEFI"
 fi
 
 echo "===Creating $USER_NAME@$PC_NAME with GRUB:$GRUB_LINE ==="
