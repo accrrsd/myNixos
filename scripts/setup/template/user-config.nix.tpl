@@ -2,8 +2,8 @@
 
 {
   home = {
-    username = "test";
-    homeDirectory = "/home/test";
+    username = "{{USER_NAME}}";
+    homeDirectory = "/home/{{USER_NAME}}";
     stateVersion = "{{NIXPKGS_VERSION}}";
   };
   

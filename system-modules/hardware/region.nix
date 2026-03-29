@@ -15,6 +15,7 @@
     LC_TIME = "ru_RU.UTF-8";
   };
   services.timesyncd.enable = true;
+  time.hardwareClockInLocalTime = true;
 
   #keyboard layout
   services.xserver.xkb = {

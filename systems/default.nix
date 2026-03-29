@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../system-modules/hardware/boot.nix
+    #../system-modules/hardware/grub-boot.nix
     ../system-modules/hardware/region.nix
     ../system-modules/hardware/sound.nix
     ../system-modules/hardware/networking.nix
@@ -16,6 +16,10 @@
     ../system-modules/hardware/plasma.nix
     ../system-modules/hardware/autoclean.nix
   ];
+
+  # use systemd as default loader
+  boot.loader.systemd-boot.enable = lib.mkDefault true;
+  boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
   networking.hostName = lib.mkDefault "default";
   system.stateVersion = lib.mkDefault "25.05";

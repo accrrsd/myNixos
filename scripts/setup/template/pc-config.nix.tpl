@@ -2,6 +2,7 @@
 
 {
   networking.hostName = "{{PC_NAME}}";
+  system.stateVersion = "{{NIXPKGS_VERSION}}";
 
   imports = [
     ../default.nix
@@ -9,6 +10,4 @@
   ];
 
   {{GRUB_LINE}}
-
-  system.stateVersion = "{{NIXPKGS_VERSION}}";
 }

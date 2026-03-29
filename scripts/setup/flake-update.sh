@@ -5,6 +5,6 @@ set -euo pipefail
 
 clear
 
-HOSTNAME="${1:-$HOSTNAME}"
+TARGET_HOST="${1:-$HOSTNAME}"
 
-nix flake update --flake "/nixos-config/systems/${HOSTNAME}/flake"
+nix flake update --flake "/nixos-config/systems/${TARGET_HOST}/flake"

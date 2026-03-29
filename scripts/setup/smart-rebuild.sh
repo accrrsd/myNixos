@@ -1,57 +1,28 @@
 #!/usr/bin/env bash
-# usage example: ./smart-rebuild.sh [pc-name] (optional)
+# usage: ./smart-rebuild.sh [hostname]
 
 set -euo pipefail
 
 clear
 
-HOSTNAME="${1:-$HOSTNAME}"
-CONFIG_DIR="/nixos-config"
-HOST_DIR="$CONFIG_DIR/systems/$HOSTNAME"
+CONFIG_ROOT="/nixos-config"
+TARGET_HOST="${1:-$HOSTNAME}"
+HOST_DIR="$CONFIG_ROOT/systems/$TARGET_HOST"
 FLAKE_DIR="$HOST_DIR/flake"
-HW_FILE="$FLAKE_DIR/hardware-configuration.nix"
-ORIGINAL_DIR="$(pwd)"
 
-if [[ ! -v HOSTNAME ]]; then
-    echo "[!] Error: HOSTNAME environment variable (or 1st argument) is not set" >&2
+if [[ -z "$TARGET_HOST" ]]; then
+    echo "[!] Error: HOSTNAME is not set. Pass as argument or export it." >&2
     exit 1
 fi
 
-cleanup() {
-    if [[ -f "$HW_FILE" ]] && git rev-parse --git-dir >/dev/null 2>&1; then
-        git reset "$HW_FILE" 2>/dev/null
-    fi
-    cd "$ORIGINAL_DIR"
-}
 
-trap cleanup EXIT
-
-echo "=== [1] Preparing flake: temporarily adding hardware config to Git index ==="
-
-cd "$FLAKE_DIR"
-
-# Copy hardware-configuration if missing
-if [[ ! -f "$HW_FILE" ]]; then
-    echo "[→] Copying /etc/nixos/hardware-configuration.nix → $HW_FILE"
-    sudo cp /etc/nixos/hardware-configuration.nix "$HW_FILE"
-    sudo chown "${CURRENT_USER:-$USER}:${GROUP:-$(id -gn)}" "$HW_FILE"
-    sudo chmod 644 "$HW_FILE"
-fi
-
-# Verify it's a git repo
-if ! git rev-parse --git-dir >/dev/null 2>&1; then
-    echo "[!] Error: $FLAKE_DIR is not a Git repository. Flake requires Git for self-reference."
+if [[ ! -d "$FLAKE_DIR" ]]; then
+    echo "[!] Error: Flake directory not found: $FLAKE_DIR" >&2
     exit 1
 fi
 
-# Add hardware config to index temporarily
-git add -f "$HW_FILE" 2>/dev/null || {
-    echo "[!] Error: Could not add $HW_FILE to Git index"
-    exit 1
-}
-
-echo "=== [2] Rebuild with flakes ==="
-
-sudo nixos-rebuild switch --flake .#"$HOSTNAME"
+# === Применение ===
+echo "=== Rebuilding NixOS for '$TARGET_HOST' ==="
+sudo nixos-rebuild switch --flake "$FLAKE_DIR#$TARGET_HOST"
 
 echo "[✓] Rebuild completed successfully"

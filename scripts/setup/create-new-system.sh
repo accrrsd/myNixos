@@ -32,12 +32,13 @@ render_template() {
   sed \
     -e "s|{{PC_NAME}}|$PC_NAME|g" \
     -e "s|{{USER_NAME}}|$USER_NAME|g" \
-    -e "s|{{GRUB_LINE}}|$GRUB_LINE|g"
+    -e "s|{{GRUB_LINE}}|$GRUB_LINE|g" \
+    -e "s|{{NIXPKGS_VERSION}|$NIXPKGS_VERSION|g"
 }
 
 render_template < "$TEMPLATE_DIR/flake.nix.tpl" > "$FLAKE_DIR/flake.nix"
 render_template < "$TEMPLATE_DIR/pc-config.nix.tpl" > "$NEW_SYSTEM_DIR/pc-config.nix"
-render_template < "$TEMPLATE_DIR/users.nix.tpl" > "$NEW_SYSTEM_DIR/users.nix"
+render_template < "$TEMPLATE_DIR/users.nix.tpl" > "$NEW_SYSTEM_DIR/users/users.nix"
 render_template < "$TEMPLATE_DIR/user-config.nix.tpl" > "$USERS_DIR/user-config.nix"
 
 echo "[✓] Done. New config was created in $NEW_SYSTEM_DIR"
