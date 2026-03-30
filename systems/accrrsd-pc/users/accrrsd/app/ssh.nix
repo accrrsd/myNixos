@@ -3,6 +3,7 @@
 {
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = true;
     extraConfig = ''
       Host github.com
         IdentityFile ~/.ssh/id_rsa

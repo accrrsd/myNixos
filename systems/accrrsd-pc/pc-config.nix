@@ -20,6 +20,15 @@
     ../../system-modules/app/hyprland.nix
   ];
 
+  
+  # works only if hyprland in flakse
+  #programs.hyprland.extraConfig = ''
+    #monitor=HDMI-A-1,5120x1440@144.00,auto,1 
+  #'';
+
+
+
+
   boot.kernelParams = [
     "nvidia.NVreg_ValidateModes=0"
     "nvidia.NVreg_EnableModeValidation=1"
@@ -55,5 +64,9 @@
     emote
     obsidian
     vlc
+    discord
+
+    # app image manager
+    gearlever
   ];
 }

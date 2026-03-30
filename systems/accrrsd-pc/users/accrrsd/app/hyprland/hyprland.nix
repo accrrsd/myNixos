@@ -8,10 +8,12 @@
   
   home.packages = with pkgs; [
     hyprshot
-    wofi
+    rofi
+    #wofi
+    #rofi-wayland
+    #wlsunset
     dunst
-    wlsunset
-    kitty
     brightnessctl
+    wl-gammarelay-rs
   ];
 }

@@ -6,7 +6,7 @@
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
     
-    ../../../../user-modules/wezterm.nix
+    #../../../../user-modules/wezterm.nix
   ];
 
 
@@ -14,6 +14,14 @@
     username = "accrrsd";
     homeDirectory = "/home/accrrsd";
     stateVersion = "25.11";
+  };
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 20;
   };
   
   # auto update changed services
@@ -32,7 +40,7 @@
 
   # already enabled by import, needed only for dotfiles
   # programs.wezterm.extraConfig = builtins.readFile ./dotfiles/wezterm.lua;
-  xdg.configFile."wezterm/wezterm.lua".source = ./dotfiles/wezterm.lua;
+  #xdg.configFile."wezterm/wezterm.lua".source = ./dotfiles/wezterm.lua;
 
   xdg.enable = true;
   
