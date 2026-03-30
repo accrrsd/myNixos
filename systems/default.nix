@@ -21,6 +21,9 @@
   boot.loader.systemd-boot.enable = lib.mkDefault true;
   boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
+  # wayland fixes
+  programs.xwayland.enable = true;
+
   networking.hostName = lib.mkDefault "default";
   system.stateVersion = lib.mkDefault "25.05";
 

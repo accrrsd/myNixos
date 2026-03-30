@@ -10,6 +10,8 @@
 
     ../../system-modules/hardware/nvidia.nix
     ../../system-modules/hardware/disk-mount.nix
+    # docker stuff
+    ../../system-modules/hardware/virtualization.nix
 
     # system-wide apps
     ../../system-modules/app/steam.nix
@@ -76,10 +78,12 @@
     emote
     obsidian
     vlc
+
+    obs-studio
     
     # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle
-
-    # app image manager
-    gearlever
+    
+    # java
+    jdk
   ];
 }
