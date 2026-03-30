@@ -7,10 +7,12 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # add declarative flatpak packages
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nix-flatpak, home-manager, ... }@inputs:
   {
     nixosConfigurations.accrrsd-pc = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
@@ -19,7 +21,7 @@
         ./hardware-configuration.nix
         ../pc-config.nix
         inputs.home-manager.nixosModules.home-manager
-
+        inputs.nix-flatpak.nixosModules.nix-flatpak
         inputs.zapret-discord-youtube.nixosModules.default
         {
           services.zapret-discord-youtube = {
@@ -49,7 +51,10 @@
       accrrsd = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         # import user as command home manager, e.g home-manager switch --flake
-        modules = [ ../users/accrrsd/user-config.nix ];
+        modules = [ 
+          ../users/accrrsd/user-config.nix
+          inputs.nix-flatpak.homeManagerModules.nix-flatpak
+        ];
         extraSpecialArgs = { inherit inputs; };
       };
     };

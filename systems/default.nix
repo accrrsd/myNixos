@@ -44,7 +44,13 @@
   services.xserver.enable = lib.mkDefault true;
   nixpkgs.config.allowUnfree = lib.mkDefault  true;
   security.polkit.enable = lib.mkDefault  true;
-  services.flatpak.enable = lib.mkDefault  true;
+  services.flatpak = lib.mkDefault {
+    enable = true;
+    remotes = [{
+      name = "flathub";
+      location = "https://flathub.org/repo/flathub.flatpakrepo";
+    }];
+  };
   nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
 
   xdg.portal = {

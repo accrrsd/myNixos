@@ -5,6 +5,10 @@
     ./app/hyprland/hyprland.nix
     ./app/waybar/waybar.nix
     ./app/ohmyposh/ohmyposh.nix
+    ./app/kitty.nix
+
+    # enable flatpack for user pckgs
+    #inputs.nix-flatpak.homeManagerModules.default 
     
     #../../../../user-modules/wezterm.nix
   ];
@@ -31,6 +35,11 @@
     swww
     cava
   ];
+
+  # example of flatpack usage
+  #services.flatpak.packages = [
+
+  #];
 
   programs.git = {
     enable = true;

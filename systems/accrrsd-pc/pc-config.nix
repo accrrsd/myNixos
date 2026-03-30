@@ -26,9 +26,6 @@
     #monitor=HDMI-A-1,5120x1440@144.00,auto,1 
   #'';
 
-
-
-
   boot.kernelParams = [
     "nvidia.NVreg_ValidateModes=0"
     "nvidia.NVreg_EnableModeValidation=1"
@@ -53,6 +50,21 @@
   hardware.nvidia.open = true;
 
 
+  # app image stuff
+  programs.appimage.enable = true;
+  programs.appimage.binfmt = true;
+  programs.appimage.package = pkgs.appimage-run.override 
+  {
+    extraPkgs = pkgs: 
+    [
+      pkgs.icu
+      pkgs.libxcrypt-legacy
+      pkgs.python312
+      pkgs.python312Packages.torch
+    ]; 
+  };
+
+
   environment.systemPackages = with pkgs; [
     telegram-desktop
     chromium
@@ -64,7 +76,8 @@
     emote
     obsidian
     vlc
-    discord
+    
+    # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle
 
     # app image manager
     gearlever
