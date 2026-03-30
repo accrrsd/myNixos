@@ -36,6 +36,9 @@
     "video=HDMI-A-1:5120x1440@144e"
   ];
 
+  # takes 10 gb to update, holy!
+  #nixpkgs.config.cudaSupport = true;
+
   system-modules.diskMount = {
     enable = true;
     disks = [
@@ -79,11 +82,20 @@
     obsidian
     vlc
 
+    nix-index
+
     obs-studio
+    nvidia-vaapi-driver
     
     # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle
     
     # java
     jdk
   ];
+
+  # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
+
+  programs.obs-studio.package = (pkgs.obs-studio.override {
+    cudaSupport = true;
+  });
 }

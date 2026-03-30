@@ -3,6 +3,7 @@
 {
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = lib.mkDefault ["nvidia"];
+  nixpkgs.config.nvidia.acceptLicense = true;
 
   # Enable access to nvidia from containers (Docker, Podman)
   hardware.nvidia-container-toolkit.enable = lib.mkDefault true;
