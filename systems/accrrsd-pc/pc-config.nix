@@ -81,20 +81,22 @@
     emote
     obsidian
     vlc
-
-    nix-index
-
-    obs-studio
-    nvidia-vaapi-driver
     
-    # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle
+    # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle. Can be found in discover (KDE) or using flake nix-flatpak
     
     # java
+    # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
     jdk
+    nix-index
+
   ];
 
-  # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
+  # use flake flatpak for declarative packages
+  services.flatpak.packages = [
+    "com.discordapp.Discord"
+  ];
 
+  programs.obs-studio.enable = true;
   programs.obs-studio.package = (pkgs.obs-studio.override {
     cudaSupport = true;
   });

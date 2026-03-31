@@ -8,6 +8,11 @@
   # Enable access to nvidia from containers (Docker, Podman)
   hardware.nvidia-container-toolkit.enable = lib.mkDefault true;
 
+  environment.systemPackages = with pkgs; [
+    # allow use nvdec/nvenc encoders
+    nvidia-vaapi-driver
+  ];
+
   hardware.nvidia = {
 
     # Modesetting is required.
