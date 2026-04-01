@@ -7,6 +7,9 @@
     ./app/ohmyposh/ohmyposh.nix
     ./app/kitty.nix
 
+    ../../../../user-modules/pywal
+    ../../../../user-modules/rofi
+
     # enable flatpack for user pckgs
     #inputs.nix-flatpak.homeManagerModules.default 
     
