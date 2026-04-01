@@ -15,7 +15,7 @@
 
     # system-wide apps
     ../../system-modules/app/steam.nix
-    #../../system-modules/app/razer-peripherals.nix
+    ../../system-modules/app/razer-peripherals.nix
     ../../system-modules/app/zsh.nix
     ../../system-modules/app/neovim.nix
 
@@ -69,8 +69,9 @@
     ]; 
   };
 
+  programs.amnezia-vpn.enable = true;
+
   environment.systemPackages = with pkgs; [
-    amnezia-vpn
     telegram-desktop
     # chromium - cant sync with google account.
     google-chrome

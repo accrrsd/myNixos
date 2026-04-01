@@ -2,9 +2,9 @@
 
 {
   environment.systemPackages = with pkgs; [
-  openrazer-daemon
-  polychromatic
-  openrgb-with-all-plugins
+    openrazer-daemon
+    polychromatic
+    openrgb-with-all-plugins
   ];
 
   services.hardware.openrgb.enable = true;

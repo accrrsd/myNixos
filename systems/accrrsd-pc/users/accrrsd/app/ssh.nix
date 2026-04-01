@@ -1,12 +1,17 @@
 { config, pkgs, ... }:
 
 {
+  services.ssh-agent.enable = true;
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = true;
     extraConfig = ''
-      Host github.com
+      Host *
+        AddKeysToAgent yes 
         IdentityFile ~/.ssh/id_rsa
+
+      Host github.com
         IdentitiesOnly yes
     '';
   };
