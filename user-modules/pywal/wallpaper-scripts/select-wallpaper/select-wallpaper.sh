@@ -8,7 +8,7 @@ wall_dirs=(
     "$HOME/Pictures/Wallpapers"
 )
 
-cacheDir="$HOME/.cache/jp/"
+cacheDir="$HOME/.cache/wallpapers/"
 monitor_res=250
 rofi_theme="$HOME/.config/rofi/wall_select.rasi"
 
