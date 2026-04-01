@@ -84,6 +84,8 @@
     obsidian
     vlc
 
+    gimp
+
     zerotierone
     
     # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle. Can be found in discover (KDE) or using flake nix-flatpak

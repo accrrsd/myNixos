@@ -39,6 +39,8 @@
     nixfmt-rfc-style
     # allows use home-manager command without rebuild-swtich. (allow rebuild user only stuff)
     home-manager
+    # documents, wallpapers, etc folders.
+    xdg-user-dirs
   ];
 
   users.groups.nixos-editors = {};
