@@ -56,9 +56,17 @@
   };
   nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
 
+  # xdg assosiation
+  xdg.menus.enable = true;
+  xdg.mime.enable = true;
+
   xdg.portal = {
     enable = lib.mkDefault true;
     wlr.enable = lib.mkDefault true;
+    extraPortals = lib.mkDefault [ 
+      # pkgs.xdg-desktop-portal-gtk - not needed (for now)
+      # pkgs.xdg-desktop-portal-kde # - many dependencies
+    ];
   };
 
   programs.git = {

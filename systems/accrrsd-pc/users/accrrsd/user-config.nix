@@ -56,7 +56,7 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "inode/directory" = "dolphin.desktop";
+      "inode/directory" = "org.kde.dolphin.desktop";
       "text/html" = "firefox.desktop";
       "x-scheme-handler/http" = "firefox.desktop";
       "x-scheme-handler/https" = "firefox.desktop";
@@ -71,5 +71,8 @@
       XDG_GAME_SAVE_DIR = "${config.home.homeDirectory}/Games/Saves";
     };
   };
+
+  # idk, if it needed.
+  xdg.configFile."menus/applications.menu".text = builtins.readFile ../../../../src/utils/application.menu;
 
 }

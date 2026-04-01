@@ -69,10 +69,11 @@
     ]; 
   };
 
-
   environment.systemPackages = with pkgs; [
+    amnezia-vpn
     telegram-desktop
-    chromium
+    # chromium - cant sync with google account.
+    google-chrome
     nodejs
     htop
     qbittorrent
@@ -81,6 +82,8 @@
     emote
     obsidian
     vlc
+
+    zerotierone
     
     # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle. Can be found in discover (KDE) or using flake nix-flatpak
     
