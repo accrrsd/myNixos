@@ -4,8 +4,8 @@
   networking.hostName = "oblivion-pc";
 
   imports = [
-    ../default.nix
-    ./users/users.nix
+    ../general.nix
+    ./users
     
     # modules specific for a pc
     ../../system-modules/hardware/amd-gpu.nix

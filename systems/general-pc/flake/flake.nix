@@ -10,12 +10,12 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {
-    nixosConfigurations.default-pc = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.general-pc = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
         ./hardware-configuration.nix
-        ../pc-config.nix
+        ../.
         inputs.home-manager.nixosModules.home-manager
       ];
     };
@@ -24,7 +24,7 @@
       test = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         # import user as command home manager, e.g home-manager switch --flake
-        modules = [../users/test/user-config.nix];
+        modules = [../users/test];
         extraSpecialArgs = { inherit inputs; };
       };
     };

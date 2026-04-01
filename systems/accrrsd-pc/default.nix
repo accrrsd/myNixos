@@ -5,8 +5,8 @@
   system.stateVersion = "25.11";
 
   imports = [
-    ../default.nix
-    ./users/users.nix
+    ../general.nix
+    ./users
 
     ../../system-modules/hardware/nvidia.nix
     ../../system-modules/hardware/disk-mount.nix

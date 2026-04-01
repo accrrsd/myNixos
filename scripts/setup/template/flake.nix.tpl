@@ -16,7 +16,7 @@
       system = "x86_64-linux";
       modules = [
         ./hardware-configuration.nix
-        ../pc-config.nix
+        ../.
         inputs.home-manager.nixosModules.home-manager
       ];
     };
@@ -25,7 +25,7 @@
       {{USER_NAME}} = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         # import user as command home manager, e.g home-manager switch --flake
-        modules = [ ../users/{{USER_NAME}}/user-config.nix ];
+        modules = [ ../users/{{USER_NAME}} ];
         extraSpecialArgs = { inherit inputs; };
       };
     };

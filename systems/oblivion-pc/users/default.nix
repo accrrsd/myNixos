@@ -31,7 +31,7 @@
     extraSpecialArgs = { inherit inputs outputs; };
     # import user as system-home manager, e.g sudo nixos-rebuild --flake
     users = {
-      accrrsd = import ./accrrsd/user-config.nix;
+      accrrsd = import ./accrrsd;
     };
 
     # if home manager bugged - try to delete mimetypes from .config, if not worked - try to rename config to .config.backup

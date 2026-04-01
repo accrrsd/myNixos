@@ -12,7 +12,7 @@
     extraSpecialArgs = { inherit inputs outputs ; };
     # import user as system-home manager, e.g sudo nixos-rebuild --flake
     users = {
-      test = import ./test/user-config.nix;
+      test = import ./test;
     };
 
     # if home manager bugged - try to delete mimetypes from .config, if not worked - try to rename config to .config.backup

@@ -19,7 +19,7 @@
       system = "x86_64-linux";
       modules = [
         ./hardware-configuration.nix
-        ../pc-config.nix
+        ../.
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-flatpak.nixosModules.nix-flatpak
         inputs.zapret-discord-youtube.nixosModules.default
@@ -52,7 +52,7 @@
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         # import user as command home manager, e.g home-manager switch --flake
         modules = [ 
-          ../users/accrrsd/user-config.nix
+          ../users/accrrsd
           inputs.nix-flatpak.homeManagerModules.nix-flatpak
         ];
         extraSpecialArgs = { inherit inputs; };

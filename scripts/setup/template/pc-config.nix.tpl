@@ -5,8 +5,8 @@
   system.stateVersion = "{{NIXPKGS_VERSION}}";
 
   imports = [
-    ../default.nix
-    ./users/users.nix
+    ../general.nix
+    ./users
   ];
 
   {{GRUB_LINE}}

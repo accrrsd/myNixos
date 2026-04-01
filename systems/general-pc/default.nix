@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ../default.nix
-    ./users/users.nix
+    ../general.nix
+    ./users
   ];
 
   # needed only in BIOS pc (not uefi) You should check your /etc/nixos/configuration.nix for current device.

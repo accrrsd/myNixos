@@ -11,7 +11,7 @@
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
-      {{USER_NAME}} = import ./users/{{USER_NAME}}/user-config.nix;
+      {{USER_NAME}} = import ./users/{{USER_NAME}};
     };
   };
 }

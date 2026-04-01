@@ -13,7 +13,7 @@
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
-      accrrsd = import ./accrrsd/user-config.nix;
+      accrrsd = import ./accrrsd;
     };
 
     backupFileExtension = "hm-backup";

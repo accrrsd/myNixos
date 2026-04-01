@@ -13,7 +13,7 @@ readonly REPO_BRANCH="main"
 readonly CONFIG_DIR="/nixos-config"
 
 # Arguments: hostname first (more common), repo path second (rare)
-HOSTNAME="${1:-default-pc}"
+HOSTNAME="${1:-general-pc}"
 GIT_REPO_PATH="${2:-}"
 GROUP="nixos-editors"
 
