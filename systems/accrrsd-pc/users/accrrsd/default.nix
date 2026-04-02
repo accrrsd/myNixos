@@ -16,7 +16,6 @@
     #../../../../user-modules/wezterm.nix
   ];
 
-
   home = {
     username = "accrrsd";
     homeDirectory = "/home/accrrsd";

@@ -21,7 +21,6 @@
 
     ../../system-modules/app/hyprland.nix
   ];
-
   
   # works only if hyprland in flakse
   #programs.hyprland.extraConfig = ''
@@ -71,6 +70,9 @@
 
   programs.amnezia-vpn.enable = true;
 
+  # install niri via programs. so sddm can see it.
+  programs.niri.enable = true;
+
   environment.systemPackages = with pkgs; [
     telegram-desktop
     # chromium - cant sync with google account.
@@ -79,7 +81,6 @@
     htop
     qbittorrent
     linux-wallpaperengine
-    niri
     emote
     obsidian
     vlc

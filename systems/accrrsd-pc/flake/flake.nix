@@ -7,15 +7,21 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # add declarative flatpak packages
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
   };
 
-  outputs = { self, nixpkgs, nix-flatpak, home-manager, ... }@inputs:
-  {
+  outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, home-manager, ... }@inputs:
+  let
+    pkgsUnstable = import nixpkgs-unstable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
+  in {
     nixosConfigurations.accrrsd-pc = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs pkgsUnstable; };
       system = "x86_64-linux";
       modules = [
         ./hardware-configuration.nix
@@ -55,7 +61,7 @@
           ../users/accrrsd
           inputs.nix-flatpak.homeManagerModules.nix-flatpak
         ];
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs pkgsUnstable; };
       };
     };
   };
