@@ -83,6 +83,7 @@
     emote
     obsidian
     vlc
+    activitywatch
 
     gimp
 

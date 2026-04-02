@@ -35,7 +35,7 @@ done | shuf | rofi -wayland -dmenu -theme "$rofi_theme" -theme-str "element-icon
 
 [[ -n "$wall_selection" ]] || exit 1
 
-swww img "$wall_selection" --transition-step 10 --transition-fps 30 --transition-type center &
+swww img "$wall_selection" --transition-step 10 --transition-fps 30 --transition-type any &
 wal -i "$wall_selection" &
 sleep 0.2
 

@@ -5,6 +5,7 @@
   xdg.configFile."waybar/style.css".source = lib.mkDefault ./style.css;
 
   programs.waybar.enable=true;
+  programs.waybar.package = pkgs.waybar;
 
   home.packages = with pkgs; [
     nerd-fonts.fira-code
