@@ -1,10 +1,11 @@
 { lib, inputs, config, pkgs, ... }:
 {
   imports = [
-    ./app/ssh.nix
-    ./app/hyprland/hyprland.nix
-    ./app/waybar/waybar.nix
-    ./app/ohmyposh/ohmyposh.nix
+    ../../../../user-shared/accrrsd/app/hyprland
+    ../../../../user-shared/accrrsd/app/waybar
+    ../../../../user-shared/accrrsd/app/ohmyposh
+    ../../../../user-shared/accrrsd/app/ssh.nix
+    ../../../../user-shared/accrrsd/app/kitty.nix
 
     (import ../../../../user-modules/stylix.nix {inherit inputs lib pkgs; themePath = ./theme.json; })
     ../../../../user-modules/virtualSound.nix

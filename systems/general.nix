@@ -31,7 +31,7 @@
     (writeShellScriptBin "nrebuild" (builtins.readFile ../scripts/setup/smart-rebuild.sh))
     (writeShellScriptBin "hswitch" (builtins.readFile ../scripts/setup/home-switch.sh))
     (writeShellScriptBin "nupdate" (builtins.readFile ../scripts/setup/flake-update.sh))
-    
+    tree # use that command to get folder structure
     vscode
     git
     wget
