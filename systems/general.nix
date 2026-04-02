@@ -26,7 +26,7 @@
 
   networking.hostName = lib.mkDefault "default";
   system.stateVersion = lib.mkDefault "25.05";
-
+  
   environment.systemPackages = with pkgs; [
     (writeShellScriptBin "nrebuild" (builtins.readFile ../scripts/setup/smart-rebuild.sh))
     (writeShellScriptBin "hswitch" (builtins.readFile ../scripts/setup/home-switch.sh))
@@ -47,6 +47,7 @@
     xdg-user-dirs
   ];
 
+  # create nixos-editors group, must have to work with /nixos-config without sudo
   users.groups.nixos-editors = {};
 
   programs.firefox.enable = lib.mkDefault  true;
