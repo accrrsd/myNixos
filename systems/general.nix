@@ -28,6 +28,10 @@
   system.stateVersion = lib.mkDefault "25.05";
 
   environment.systemPackages = with pkgs; [
+    (writeShellScriptBin "nrebuild" (builtins.readFile ../scripts/setup/smart-rebuild.sh))
+    (writeShellScriptBin "hswitch" (builtins.readFile ../scripts/setup/home-switch.sh))
+    (writeShellScriptBin "nupdate" (builtins.readFile ../scripts/setup/flake-update.sh))
+    
     vscode
     git
     wget
