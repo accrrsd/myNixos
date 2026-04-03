@@ -20,9 +20,10 @@
     ../../system-modules/app/neovim.nix
 
     ../../system-modules/app/hyprland.nix
+    ../../system-modules/app/niri.nix
   ];
   
-  # works only if hyprland in flakse
+  # works only if hyprland in flake
   #programs.hyprland.extraConfig = ''
     #monitor=HDMI-A-1,5120x1440@144.00,auto,1 
   #'';
@@ -53,7 +54,6 @@
   # for newer cards is better to have open, but if it sause errors - can be disabled to false (default)
   hardware.nvidia.open = true;
 
-
   # app image stuff
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
@@ -69,9 +69,6 @@
   };
 
   programs.amnezia-vpn.enable = true;
-
-  # install niri via programs. so sddm can see it.
-  programs.niri.enable = true;
 
   environment.systemPackages = with pkgs; [
     telegram-desktop
