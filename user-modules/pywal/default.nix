@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; (import ./wallpaper-scripts { inherit pkgs; }) ++ [
+  home.packages = with pkgs; (import ./scripts { inherit pkgs; }) ++ [
     pywal
     pywalfox-native
     swww

@@ -7,7 +7,7 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # for unstable packages usage - pkgsUnstable
+    # for unstable packages usage - pkgsUnstable (for example matugen)
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # add declarative flatpak packages
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";

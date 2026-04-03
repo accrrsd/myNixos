@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, outputs, ... }: {
+{ config, pkgs, inputs, pkgsUnstable, outputs, ... }: {
 
   users.users.accrrsd = {
     isNormalUser = true;
@@ -12,7 +12,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = { inherit inputs pkgsUnstable outputs; };
     users = {
       accrrsd = import ./accrrsd;
     };

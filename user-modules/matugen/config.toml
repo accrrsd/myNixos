@@ -1,0 +1,30 @@
+[config]
+reload_apps = true
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland.conf.in"
+output_path = "~/.config/hypr/colors.conf"
+post_hook = "hyprctl restart"
+
+[templates.rofi]
+input_path = "~/.config/matugen/templates/rofi.rasi.in"
+output_path = "~/.config/rofi/colors.rasi"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/colors.css.in"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "pkill -SIGUSR2 waybar"
+
+[templates.gtk4]
+input_path = "~/.config/matugen/templates/gtk.css.in"
+output_path = "~/.config/gtk-4.0/colors.css"
+
+[templates.kitty]
+input_path = "~/.config/matugen/templates/kitty.conf.in"
+output_path = "~/.config/kitty/themes/Matugen.conf"
+# check out kitty.nix - it already use Matugen
+post_hook = "pkill -USR1 kitty"
+
+[templates.color-scheme]
+input_path = "~/.config/matugen/templates/matugen.colors.in"
+output_path = "~/.local/share/color-schemes/Matugen.colors"

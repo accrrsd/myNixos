@@ -7,7 +7,10 @@
     ../../../../user-shared/accrrsd/app/ssh.nix
     ../../../../user-shared/accrrsd/app/kitty.nix
 
-    ../../../../user-modules/pywal
+    #../../../../user-modules/pywal
+
+    ../../../../user-modules/matugen
+
     ../../../../user-modules/rofi
 
     # enable flatpack for user pckgs
