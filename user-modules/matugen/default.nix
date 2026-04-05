@@ -1,7 +1,7 @@
 { config, pkgs, inputs, pkgsUnstable, lib, ... }: {
 
   # uses unstable pkgs
-  home.packages = (with pkgsUnstable; [matugen]);
+  home.packages = (with pkgsUnstable; [matugen]) ++ (with pkgs; [swww rofi]) ++ (import ./scripts { inherit pkgs; });
 
   xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink ./config.toml;
   xdg.configFile."matugen/templates".source = config.lib.file.mkOutOfStoreSymlink ./templates;

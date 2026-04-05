@@ -1,0 +1,20 @@
+@import "./colors.rasi"
+
+* {
+    theme-bg:            @surface-dim;
+    theme-fg:            @on-surface;
+    
+
+    theme-bg-alt:        @surface-container-high;
+    theme-fg-alt:        @on-surface-variant;
+
+    theme-accent:        @primary;
+    theme-on-accent:     @on-primary;
+    
+    theme-selected:      @primary-container;
+    theme-selected-fg:   @on-primary-container; 
+    theme-urgent:        @error;
+    theme-active:        @tertiary;
+    
+    theme-border:        @outline-variant;
+}

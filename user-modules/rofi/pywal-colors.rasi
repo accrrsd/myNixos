@@ -1,0 +1,19 @@
+@import "~/.cache/wal/color-rofi"
+
+* {
+    theme-bg:            @background;
+    theme-fg:            @foreground;
+    
+    theme-bg-alt:        @color8;
+    theme-fg-alt:        @color7;
+    
+    theme-accent:        @color4;
+    theme-on-accent:     @background;
+    
+    theme-selected:      @color4;
+    theme-selected-fg:   @foreground;
+    theme-urgent:        @color1;
+    theme-active:        @color2;
+    
+    theme-border:        @color4;
+}

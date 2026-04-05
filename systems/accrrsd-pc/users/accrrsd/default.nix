@@ -1,11 +1,12 @@
 { lib, inputs, config, pkgs, ... }:
 {
   imports = [
-    ../../../../user-shared/accrrsd/app/hyprland
+    ../../../../user-modules/hyprland
+    ../../../../user-modules/zsh
+    ../../../../user-modules/kitty.nix
+
     ../../../../user-shared/accrrsd/app/waybar
-    ../../../../user-shared/accrrsd/app/ohmyposh
     ../../../../user-shared/accrrsd/app/ssh.nix
-    ../../../../user-shared/accrrsd/app/kitty.nix
 
     #../../../../user-modules/pywal
 
@@ -15,9 +16,12 @@
 
     # enable flatpack for user pckgs
     #inputs.nix-flatpak.homeManagerModules.default 
-    
-    #../../../../user-modules/wezterm.nix
   ];
+
+  # as config use created dotfiles
+  wayland.windowManager.hyprland.extraConfig = ''monitor=HDMI-A-1,5120x1440@144.00,auto,1'' + import ../../../../user-shared/accrrsd/dotfiles/hyprland/default.nix { colorPreset = "matugen"; };
+
+  user-modules.rofi.colorScheme = "matugen";
 
   home = {
     username = "accrrsd";
@@ -51,10 +55,6 @@
     settings.user.name = "Daniel";
     settings.user.email = "accrrsd@bk.ru";
   };
-
-  # already enabled by import, needed only for dotfiles
-  # programs.wezterm.extraConfig = builtins.readFile ./dotfiles/wezterm.lua;
-  #xdg.configFile."wezterm/wezterm.lua".source = ./dotfiles/wezterm.lua;
 
   xdg.enable = true;
   

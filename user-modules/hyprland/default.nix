@@ -1,17 +1,14 @@
-{ inputs, pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
-    extraConfig = builtins.readFile ./hyperland.conf;
+    extraConfig = lib.mkDefault (builtins.readFile ./hyperland.conf);
   };
   
   home.packages = with pkgs; [
     hyprshot
     rofi
-    #wofi
-    #rofi-wayland
-    #wlsunset
     dunst
     brightnessctl
     wl-gammarelay-rs

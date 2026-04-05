@@ -5,7 +5,6 @@
     git
     neovim
     zig
-    kitty
     lazygit
     nerd-fonts.fira-code
     fira-code

@@ -1,5 +1,3 @@
-// # z0mbi3 -  https://github.com/gh0stzk/dotfiles
-
 configuration {
     modi:                        "drun";
     show-icons:                  true;
@@ -9,16 +7,6 @@ configuration {
     hover-select: true;
     me-select-entry: "";
     me-accept-entry: "MousePrimary";
-}
-
-//----- Global Properties -----//
-@import                          "~/.cache/wal/color-rofi"
-
-* {
-main-bg: @background;
-main-fg: @foreground;
-select-bg: @color3;
-select-fg: @color7;
 }
 
 //----- Main Window -----//
@@ -42,7 +30,7 @@ window {
 mainbox {
     enabled:                     true;
     children:                    [ "listview" ];
-    background-color:            @main-bg;
+    background-color:            @theme-bg;
 }
 
 //----- Listview -----//
@@ -62,7 +50,7 @@ listview {
     fixed-columns:               true;
     cursor:                      "default";
     background-color:            transparent;
-    text-color:                  @main-fg;
+    text-color:                  @theme-fg;
 }
 
 //----- Elements -----//
@@ -75,7 +63,7 @@ element {
     border-radius:               20px;
     cursor:                      pointer;
     background-color:            transparent;
-    text-color:                  @main-fg;
+    text-color:                  @theme-fg;
 }
 
 @media(max-aspect-ratio: 1.8) {
@@ -85,8 +73,8 @@ element {
 }
 
 element selected.normal {
-    background-color:            @select-bg;
-    text-color:                  @select-fg;
+    background-color:            @theme-bg-alt;
+    text-color:                  @theme-fg-alt;
 }
 
 element-icon {
