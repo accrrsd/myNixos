@@ -45,6 +45,7 @@
     home-manager
     # documents, wallpapers, etc folders.
     xdg-user-dirs
+    zip
   ];
 
   # create nixos-editors group, must have to work with /nixos-config without sudo

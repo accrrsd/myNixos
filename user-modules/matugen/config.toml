@@ -13,7 +13,11 @@ output_path = "~/.config/rofi/colors.rasi"
 [templates.waybar]
 input_path = "~/.config/matugen/templates/colors.css.in"
 output_path = "~/.config/waybar/colors.css"
-post_hook = "pkill -SIGUSR2 waybar"
+# post_hook = "pkill -SIGUSR2 waybar" # dont need cause i use script with waybar reset, also command may be wrong.
+
+[templates.gtk3]
+input_path = "~/.config/matugen/templates/gtk.css.in"
+output_path = "~/.config/gtk-3.0/colors.css"
 
 [templates.gtk4]
 input_path = "~/.config/matugen/templates/gtk.css.in"
@@ -28,3 +32,16 @@ post_hook = "pkill -USR1 kitty"
 [templates.color-scheme]
 input_path = "~/.config/matugen/templates/matugen.colors.in"
 output_path = "~/.local/share/color-schemes/Matugen.colors"
+
+[templates.qt5ct]
+input_path = "~/.config/matugen/templates/qtct-colors.conf.in"
+output_path = "~/.config/qt5ct/colors/matugen.conf"
+
+[templates.qt6ct]
+input_path = "~/.config/matugen/templates/qtct-colors.conf.in"
+output_path = "~/.config/qt6ct/colors/matugen.conf"
+
+[templates.pywalfox]
+input_path = "~/.config/matugen/templates/pywalfox.json.in"
+output_path = "~/.cache/wal/colors.json"
+post_hook = "pywalfox update"

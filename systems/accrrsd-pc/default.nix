@@ -36,6 +36,14 @@
     "video=HDMI-A-1:5120x1440@144e"
   ];
 
+  # dual boot, read: https://search.nixos.org/options?channel=unstable&show=boot.loader.systemd-boot.windows.%3Cname%3E.efiDeviceHandle
+  boot.loader.systemd-boot = {
+    edk2-uefi-shell.enable = true;
+    windows."0_Windows".efiDeviceHandle = "HD1c";
+    # dont need 60+ configurations
+    configurationLimit = 5;
+  };
+
   # takes 10 gb to update, holy!
   #nixpkgs.config.cudaSupport = true;
 
@@ -81,6 +89,7 @@
     emote
     obsidian
     vlc
+    yt-dlp
     activitywatch
 
     gimp
