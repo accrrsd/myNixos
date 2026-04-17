@@ -7,12 +7,46 @@
   xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink ./config.toml;
   xdg.configFile."matugen/templates".source = config.lib.file.mkOutOfStoreSymlink ./templates;
 
-  # home.configFile."<path>".source = "${config.programs.matugen.theme.files}/<template_output_path>";
+  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+    [General]
+    theme=matugen
+  '';
 
-  # In some cases like that
-  # programs.gtk = {
-  #   enable = true;
-  #   gtk4.extraCss = "@import url(\"${config.programs.matugen.theme.files}/.config/gtk-4.0/gtk.css\");";
-  #   gtk3.extraCss = "@import url(\"${config.programs.matugen.theme.files}/.config/gtk-3.0/gtk.css\");";
-  # };
+  gtk = {
+    enable = true;
+    gtk3.extraCss = ''@import "colors.css";'';
+    gtk4.extraCss = ''@import "colors.css";'';
+  };
+
+  # if it dint work - there is util named - qtengine
+
+  qt = {
+    enable = true;
+    qt5ctSettings = {
+      Appearance = {
+        color_scheme_path = "${config.home.homeDirectory}/.config/qt5ct/colors/matugen.conf";
+        custom_palette = true;
+        style = "kvantum";
+        icon_theme = "Papirus-Dark";
+        standard_dialogs = "xdgdesktopportal";
+      };
+    };
+    
+    qt6ctSettings = {
+      Appearance = {
+        color_scheme_path = "${config.home.homeDirectory}/.config/qt6ct/colors/matugen.conf";
+        custom_palette = true;
+        style = "kvantum";
+        icon_theme = "Papirus-Dark";
+        standard_dialogs = "xdgdesktopportal";
+      };
+    };
+  };
+
+  # WARNING ! it's disable kde globals file for editing ! - If you need it, u can write script, or write it manually in ./config/kdeglobals
+
+  xdg.configFile."kdeglobals".text = lib.mkAfter ''
+    [UiSettings]
+    ColorScheme=qt6ct
+  '';
 }

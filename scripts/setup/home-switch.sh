@@ -27,7 +27,7 @@ fi
 
 
 echo "=== Applying home-manager for '$TARGET_HOST' ==="
-home-manager switch --flake "$FLAKE_DIR"
+home-manager switch --flake "$FLAKE_DIR" -b hm-backup
 
 # echo "=== Cleaning old generations (keeping 7 days) ==="
 # home-manager expire-generations --keep 7d

@@ -22,6 +22,8 @@
 
     ../../system-modules/app/hyprland.nix
     ../../system-modules/app/niri.nix
+
+    ../../system-modules/hardware/smooth-fonts.nix
   ];
   
   # works only if hyprland in flake
@@ -60,7 +62,7 @@
     ];
   };
 
-  # for newer cards is better to have open, but if it sause errors - can be disabled to false (default)
+  # for newer cards is better to have open, but if it cause errors - can be disabled to false (default)
   hardware.nvidia.open = true;
 
   # app image stuff

@@ -14,6 +14,8 @@
 
     ../../../../user-modules/rofi
 
+    ../../../../user-modules/qt-gtk.nix
+
     # enable flatpack for user pckgs
     #inputs.nix-flatpak.homeManagerModules.default 
   ];
