@@ -9,6 +9,7 @@
       };
     };
   };
+  # if device is not connecterd, remove it (untrust etc) then connect -> trust -> pair
   services.blueman.enable = true;
   environment.systemPackages = with pkgs; [
     bluez-tools
