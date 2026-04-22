@@ -7,22 +7,19 @@
 
     ../../../../user-shared/accrrsd/app/waybar
     ../../../../user-shared/accrrsd/app/ssh.nix
+    ../../../../user-shared/accrrsd/app/hyprland
 
     #../../../../user-modules/pywal
-
     ../../../../user-modules/matugen
-
     ../../../../user-modules/rofi
-
     ../../../../user-modules/qt-gtk.nix
 
     # enable flatpack for user pckgs
-    #inputs.nix-flatpak.homeManagerModules.default 
+    #inputs.nix-flatpak.homeManagerModules.default
   ];
 
-  # as config use created dotfiles
-  wayland.windowManager.hyprland.extraConfig = ''monitor=HDMI-A-1,5120x1440@144.00,auto,1'' + import ../../../../user-shared/accrrsd/dotfiles/hyprland/default.nix { colorPreset = "matugen"; };
-
+  wayland.windowManager.hyprland.extraConfig = ''monitor=HDMI-A-1,5120x1440@144.00,auto,1'';
+  user-shared.hyprland.colorScheme = "matugen";
   user-modules.rofi.colorScheme = "matugen";
 
   home = {
