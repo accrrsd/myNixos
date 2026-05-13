@@ -112,9 +112,9 @@
   ];
 
   # use flake flatpak for declarative packages
-  services.flatpak.packages = [
-    "com.discordapp.Discord"
-  ];
+  #services.flatpak.packages = [
+    #"com.discordapp.Discord"
+  #];
 
   programs.obs-studio.enable = true;
   programs.obs-studio.package = (pkgs.obs-studio.override {
