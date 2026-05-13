@@ -96,10 +96,12 @@
     activitywatch
     antigravity
 
-    gimp
-    
+    # discord for good. Can be worse than flatpak discord, but stable.
+    vesktop
     # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle. Can be found in discover (KDE) or using flake nix-flatpak
     
+    gimp
+
     # java
     # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
     jdk
