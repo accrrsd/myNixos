@@ -96,6 +96,9 @@
     activitywatch
     antigravity
 
+    # wine - for games and windows executable
+    wineWow64Packages.stable
+
     # discord for good. Can be worse than flatpak discord, but stable.
     vesktop
     # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle. Can be found in discover (KDE) or using flake nix-flatpak
