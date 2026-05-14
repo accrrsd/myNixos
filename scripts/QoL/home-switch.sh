@@ -25,7 +25,6 @@ if [[ ! -d "$FLAKE_DIR" ]]; then
     exit 1
 fi
 
-
 echo "=== Applying home-manager for '$TARGET_HOST' ==="
 home-manager switch --flake "$FLAKE_DIR" -b hm-backup
 

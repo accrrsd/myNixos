@@ -4,7 +4,7 @@ reload_apps = true
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland.conf.in"
 output_path = "~/.config/hypr/colors.conf"
-post_hook = "hyprctl restart"
+post_hook = "[ -n \"$HYPRLAND_INSTANCE_SIGNATURE\" ] && hyprctl reload || true"
 
 [templates.rofi]
 input_path = "~/.config/matugen/templates/rofi.rasi.in"

@@ -34,10 +34,10 @@
   # programs.nix-ld.libraries = with pkgs; []
 
   environment.systemPackages = with pkgs; [
-    (writeShellScriptBin "nrebuild" (builtins.readFile ../scripts/setup/smart-rebuild.sh))
-    (writeShellScriptBin "hswitch" (builtins.readFile ../scripts/setup/home-switch.sh))
-    (writeShellScriptBin "nupdate" (builtins.readFile ../scripts/setup/flake-update.sh))
-    (writeShellScriptBin "nsearch" (builtins.readFile ../scripts/QoL/nsearch.sh))
+    (writeShellScriptBin "nrebuild" (builtins.readFile ../scripts/QoL/smart-rebuild.sh))
+    (writeShellScriptBin "hswitch" (builtins.readFile ../scripts/QoL/home-switch.sh))
+    (writeShellScriptBin "nupdate" (builtins.readFile ../scripts/QoL/flake-update.sh))
+    (writeShellScriptBin "nsearch" (builtins.readFile ../scripts/QoL/nix-search.sh))
     # use that command to get folder structure
     tree
     vscode

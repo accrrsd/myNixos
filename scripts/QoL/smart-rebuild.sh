@@ -15,13 +15,11 @@ if [[ -z "$TARGET_HOST" ]]; then
     exit 1
 fi
 
-
 if [[ ! -d "$FLAKE_DIR" ]]; then
     echo "[!] Error: Flake directory not found: $FLAKE_DIR" >&2
     exit 1
 fi
 
-# === Применение ===
 echo "=== Rebuilding NixOS for '$TARGET_HOST' ==="
 sudo nixos-rebuild switch --flake "$FLAKE_DIR#$TARGET_HOST"
 

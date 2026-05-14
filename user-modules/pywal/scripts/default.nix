@@ -1,12 +1,6 @@
 { pkgs, ... }:
 let
-  # change wallpaper
-  change_wallpaper = import ./change-wallpaper.nix pkgs;
-  select_wallpaper = import ./select-wallpaper pkgs;
-  startup = import ./startup.nix pkgs;
+  selectWallpaper = pkgs.writeShellScriptBin "select-wallpaper" (builtins.readFile ./select-wallpaper.sh);
+  startupPywalUi = pkgs.writeShellScriptBin "startup-pywal-ui" (builtins.readFile ./startup-pywal-ui.sh);
 in
-[
-  change_wallpaper
-  select_wallpaper
-  startup
-]
+[ selectWallpaper startupPywalUi ]

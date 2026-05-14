@@ -5,18 +5,19 @@
 
   programs.ssh = {
     enable = true;
-    enableDefaultConfig = true;
-    extraConfig = ''
-      Host *
-        AddKeysToAgent yes 
-        IdentityFile ~/.ssh/id_rsa
-
-      Host github.com
-        IdentitiesOnly yes
-    '';
+    enableDefaultConfig = false;
+    matchBlocks = {
+      "*" = {
+        extraOptions = {
+          "AddKeysToAgent" = "yes";
+        };
+        identityFile = "~/.ssh/id_rsa";
+      };
+      "github.com" = {
+        identitiesOnly = true;
+      };
+    };
   };
-
-  
 
   # for github simple use:    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
   # then paste in github settings, copy by:    cat ~/.ssh/id_rsa.pub | wl-copy
