@@ -20,7 +20,7 @@
     #inputs.nix-flatpak.homeManagerModules.default
   ];
 
-  # wayland.windowManager.hyprland.extraConfig = ''monitor=HDMI-A-1,5120x1440@144.00,auto,1'';
+  wayland.windowManager.hyprland.extraConfig = ''monitor=HDMI-A-1,5120x1440@144.00,auto,1'';
   user-shared.hyprland.colorScheme = "matugen";
   user-modules.rofi.colorScheme = "matugen";
 
