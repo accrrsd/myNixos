@@ -26,12 +26,20 @@
 
   networking.hostName = lib.mkDefault "default";
   system.stateVersion = lib.mkDefault "25.05";
-  
+
+  # Enable nix-ld for running unpatched dynamic binaries
+  # programs.nix-ld.enable = lib.mkDefault true;
+
+  # example of usage default libraries
+  # programs.nix-ld.libraries = with pkgs; []
+
   environment.systemPackages = with pkgs; [
     (writeShellScriptBin "nrebuild" (builtins.readFile ../scripts/setup/smart-rebuild.sh))
     (writeShellScriptBin "hswitch" (builtins.readFile ../scripts/setup/home-switch.sh))
     (writeShellScriptBin "nupdate" (builtins.readFile ../scripts/setup/flake-update.sh))
-    tree # use that command to get folder structure
+    (writeShellScriptBin "nsearch" (builtins.readFile ../scripts/QoL/nsearch.sh))
+    # use that command to get folder structure
+    tree
     vscode
     git
     wget

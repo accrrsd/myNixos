@@ -96,6 +96,16 @@
     activitywatch
     antigravity
 
+    (python3.withPackages (ps: with ps; [
+      # any other python pkgs, or you can install it with venv like this:
+        # python -m venv .venv
+        # source .venv/bin/activate
+        # pip install requests
+      pip
+      requests
+      numpy
+    ]))
+
     # wine - for games and windows executable
     wineWow64Packages.stable
 
