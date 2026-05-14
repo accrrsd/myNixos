@@ -26,11 +26,6 @@
     ../../system-modules/hardware/smooth-fonts.nix
   ];
   
-  # works only if hyprland in flake
-  #programs.hyprland.extraConfig = ''
-    #monitor=HDMI-A-1,5120x1440@144.00,auto,1 
-  #'';
-
   boot.kernelParams = [
     "nvidia.NVreg_ValidateModes=0"
     "nvidia.NVreg_EnableModeValidation=1"
@@ -79,6 +74,7 @@
     ]; 
   };
 
+  # vpn
   programs.amnezia-vpn.enable = true;
 
   environment.systemPackages = with pkgs; [
@@ -98,9 +94,26 @@
 
     (python3.withPackages (ps: with ps; [
       # any other python pkgs, or you can install it with venv like this:
-        # python -m venv .venv
+        # python -m venv --system-site-packages .venv
         # source .venv/bin/activate
         # pip install requests
+
+      # OR in project where you need packages, you can write shell.nix file with something like
+        # { pkgs ? import <nixpkgs> {} }:
+
+        # pkgs.mkShell {
+        #   buildInputs = [
+        #     (pkgs.python3.withPackages (ps: with ps; [
+        #       tkinter
+        #       matplotlib
+        #       numpy
+        #       requests
+        #     ]))
+        #   ];
+        # }
+
+      # and use it via nix-shell (folder)
+
       pip
       requests
       numpy
@@ -126,6 +139,7 @@
     #"com.discordapp.Discord"
   #];
 
+  # obs with good codec
   programs.obs-studio.enable = true;
   programs.obs-studio.package = (pkgs.obs-studio.override {
     cudaSupport = true;

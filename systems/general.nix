@@ -82,6 +82,7 @@
     extraPortals = lib.mkDefault [ 
       # pkgs.xdg-desktop-portal-gtk - not needed (for now)
       # pkgs.xdg-desktop-portal-kde # - many dependencies
+      # pkgs.xdg-desktop-portal-hyprland 
     ];
   };
 
