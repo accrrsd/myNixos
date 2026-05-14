@@ -57,6 +57,8 @@
     ];
   };
 
+  #networking.enableIPv6 = false;
+
   # for newer cards is better to have open, but if it cause errors - can be disabled to false (default)
   hardware.nvidia.open = true;
 
@@ -90,7 +92,8 @@
     vlc
     yt-dlp
     activitywatch
-    antigravity
+
+    # antigravity - replaced with flake version.
 
     (python3.withPackages (ps: with ps; [
       # any other python pkgs, or you can install it with venv like this:

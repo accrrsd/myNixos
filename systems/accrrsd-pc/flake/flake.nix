@@ -12,9 +12,14 @@
     # add declarative flatpak packages
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
+    # use flake version for faster updates and better compatabilty
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, antigravity-nix, home-manager, ... }@inputs:
   let
     pkgsUnstable = import nixpkgs-unstable {
       system = "x86_64-linux";
@@ -29,6 +34,9 @@
         ../.
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-flatpak.nixosModules.nix-flatpak
+        {
+          environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.default ];
+        }
         inputs.zapret-discord-youtube.nixosModules.default
         {
           services.zapret-discord-youtube = {
