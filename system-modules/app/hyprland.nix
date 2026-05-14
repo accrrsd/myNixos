@@ -9,4 +9,6 @@
   environment.systemPackages = with pkgs; [
     hyprpolkitagent
   ];
+
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
 }
