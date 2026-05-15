@@ -42,7 +42,7 @@
     configurationLimit = 5;
   };
 
-  # takes 10 gb to update, holy!
+  # takes eternaty to update, holy!
   #nixpkgs.config.cudaSupport = true;
 
   system-modules.diskMount = {
@@ -56,8 +56,6 @@
       }
     ];
   };
-
-  #networking.enableIPv6 = false;
 
   # for newer cards is better to have open, but if it cause errors - can be disabled to false (default)
   hardware.nvidia.open = true;
@@ -125,10 +123,9 @@
     # wine - for games and windows executable
     wineWow64Packages.stable
 
-    # discord for good. Can be worse than flatpak discord, but stable.
+    # discord for good. Can be worse than flatpak discord, but stable. discord flatpak > vesktop > discord from pkgs.
     vesktop
-    # discord - should use flatpak version for better compatablity, or Vesktop - if discord struggle. Can be found in discover (KDE) or using flake nix-flatpak
-    
+
     gimp
 
     # java
