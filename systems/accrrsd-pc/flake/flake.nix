@@ -12,7 +12,7 @@
     # add declarative flatpak packages
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
-    # use flake version for faster updates and better compatabilty
+    # use flake version for faster updates and better compatabilty. If you have a error like 400 or 429 - use system vpn, or patch like https://github.com/AvenCores/open-antigravity-patcher but for now it dont work.
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,7 +35,7 @@
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-flatpak.nixosModules.nix-flatpak
         {
-          environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.default ];
+          environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.google-antigravity-no-fhs ];
         }
         inputs.zapret-discord-youtube.nixosModules.default
         {
