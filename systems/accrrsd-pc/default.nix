@@ -124,7 +124,7 @@
     wineWow64Packages.stable
 
     # discord for good. Can be worse than flatpak discord, but stable. discord flatpak > vesktop > discord from pkgs.
-    #vesktop
+    vesktop
 
     gimp
 
@@ -135,9 +135,9 @@
   ];
 
   # use flake flatpak for declarative packages
-  services.flatpak.packages = [
-    "com.discordapp.Discord"
-  ];
+  #services.flatpak.packages = [
+   # "com.discordapp.Discord"
+  #];
 
   # obs with good codec
   programs.obs-studio.enable = true;
