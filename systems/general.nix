@@ -79,8 +79,9 @@
   xdg.portal = {
     enable = lib.mkDefault true;
     wlr.enable = lib.mkDefault true;
-    extraPortals = lib.mkDefault [ 
-      # pkgs.xdg-desktop-portal-gtk - not needed (for now)
+    extraPortals = lib.mkDefault [
+      # default fallback portal 
+      pkgs.xdg-desktop-portal-gtk 
       # pkgs.xdg-desktop-portal-kde # - many dependencies
       # pkgs.xdg-desktop-portal-hyprland 
     ];

@@ -19,10 +19,10 @@ in {
       ${lib.optionalString (cfg.colorScheme == "matugen") "source = ~/.config/hypr/color-schemes/hypr-matugen.conf"}
       ${lib.optionalString (cfg.colorScheme == "pywal") "source = ~/.config/hypr/color-schemes/hypr-pywal.conf"}
 
-      source = ~/.config/hypr/config-files/binds.conf
       source = ~/.config/hypr/config-files/env.conf
       source = ~/.config/hypr/config-files/exec.conf
       source = ~/.config/hypr/config-files/rules.conf
+      source = ~/.config/hypr/config-files/binds.conf
       source = ~/.config/hypr/config-files/general.conf
     '';
   };

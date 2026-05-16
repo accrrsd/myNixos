@@ -2,16 +2,15 @@
 
 {
   home.packages = with pkgs; [
-    adw-gtk3                                # Тема GTK3
-    
-    # Конфигураторы (теперь они живут тут)
-    libsForQt5.qt5ct                        # qt5ct
-    kdePackages.qt6ct                       # qt6ct
+    adw-gtk3 # GTK3 theme
 
-    libsForQt5.qtstyleplugin-kvantum        # Kvantum для Qt5
-    kdePackages.qtstyleplugin-kvantum       # Kvantum для Qt6
-    
-    # Дополнительно: чтобы Qt-приложения понимали GTK-цвета
+    libsForQt5.qt5ct # qt5ct
+    kdePackages.qt6ct # qt6ct
+
+    libsForQt5.qtstyleplugin-kvantum # Kvantum for Qt5
+    kdePackages.qtstyleplugin-kvantum # Kvantum for Qt6
+
+    # addition for gtk theme in qt
     qadwaitadecorations
     qadwaitadecorations-qt6
   ];
@@ -22,17 +21,24 @@
     style.name = "kvantum";
   };
 
-  home.sessionVariables = {
-    #QT_QPA_PLATFORM = "wayland";
-    QT_QPA_PLATFORMTHEME = lib.mkForce "qt6ct";
-    QT_STYLE_OVERRIDE = "kvantum";
-  };
-
   gtk = {
     enable = true;
     theme = {
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "adw-gtk3-dark";
     };
   };
 }

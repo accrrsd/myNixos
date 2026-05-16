@@ -18,10 +18,12 @@ output_path = "~/.config/waybar/colors.css"
 [templates.gtk3]
 input_path = "~/.config/matugen/templates/gtk.css.in"
 output_path = "~/.config/gtk-3.0/colors.css"
+# post_hook = "dconf write /org/gnome/desktop/interface/gtk-theme \"'adw-gtk3-dark'\" && dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\""
 
 [templates.gtk4]
 input_path = "~/.config/matugen/templates/gtk.css.in"
 output_path = "~/.config/gtk-4.0/colors.css"
+# post_hook = "dconf write /org/gnome/desktop/interface/gtk-theme \"'adw-gtk3-dark'\" && dconf write /org/gnome/desktop/interface/color-scheme \"'prefer-dark'\""
 
 [templates.color-scheme]
 input_path = "~/.config/matugen/templates/matugen.colors.in"
@@ -53,3 +55,7 @@ post_hook = "pkill -USR1 kitty"
 input_path = "~/.config/matugen/templates/pywalfox.json.in"
 output_path = "~/.cache/wal/colors.json"
 post_hook = "pywalfox update"
+
+[templates.vesktop]
+input_path = "~/.config/matugen/templates/midnight-discord.css"
+output_path = "~/.config/vesktop/themes/midnight-discord.css"
