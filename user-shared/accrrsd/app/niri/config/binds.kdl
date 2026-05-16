@@ -1,0 +1,64 @@
+binds {
+    Alt+Q { spawn "kitty"; }
+    Alt+W { close-window; }
+    Alt+E { spawn "dolphin"; }
+    Alt+T { toggle-window-floating; }
+    Alt+Space { spawn "rofi" "-show" "drun"; }
+    Alt+B { spawn "firefox"; }
+    Alt+V { spawn "bash" "-c" "cliphist list | rofi -dmenu | cliphist decode | wl-copy"; }
+    Alt+Backspace { spawn "bash" "-c" "pkill waybar || waybar"; }
+
+    // Scroll mode mapping (period = right, comma = left)
+    Alt+Period { focus-column-right; }
+    Alt+Comma { focus-column-left; }
+
+    Print { spawn "hyprshot" "-m" "region" "--clipboard-only"; }
+    Alt+Print { spawn "hyprshot" "-m" "window" "--clipboard-only"; }
+    Alt+Shift+Print { spawn "hyprshot" "-m" "output" "--clipboard-only"; }
+
+    Alt+F { maximize-column; }
+    Alt+Shift+F { fullscreen-window; }
+
+    Alt+Up { focus-window-up; }
+    Alt+Right { focus-column-right; }
+    Alt+Down { focus-window-down; }
+    Alt+Left { focus-column-left; }
+
+    Alt+Shift+Left { move-column-left; }
+    Alt+Shift+Down { move-window-down; }
+    Alt+Shift+Up { move-window-up; }
+    Alt+Shift+Right { move-column-right; }
+
+    Alt+1 { focus-workspace 1; }
+    Alt+2 { focus-workspace 2; }
+    Alt+3 { focus-workspace 3; }
+    Alt+4 { focus-workspace 4; }
+    Alt+5 { focus-workspace 5; }
+    Alt+6 { focus-workspace 6; }
+    Alt+7 { focus-workspace 7; }
+    Alt+8 { focus-workspace 8; }
+    Alt+9 { focus-workspace 9; }
+    Alt+0 { focus-workspace 10; }
+
+    Alt+Shift+1 { move-column-to-workspace 1; }
+    Alt+Shift+2 { move-column-to-workspace 2; }
+    Alt+Shift+3 { move-column-to-workspace 3; }
+    Alt+Shift+4 { move-column-to-workspace 4; }
+    Alt+Shift+5 { move-column-to-workspace 5; }
+    Alt+Shift+6 { move-column-to-workspace 6; }
+    Alt+Shift+7 { move-column-to-workspace 7; }
+    Alt+Shift+8 { move-column-to-workspace 8; }
+    Alt+Shift+9 { move-column-to-workspace 9; }
+    Alt+Shift+0 { move-column-to-workspace 10; }
+    
+    Alt+Ctrl+Shift+1 { move-column-to-workspace 1; }
+    Alt+Ctrl+Shift+2 { move-column-to-workspace 2; }
+    Alt+Ctrl+Shift+3 { move-column-to-workspace 3; }
+    Alt+Ctrl+Shift+4 { move-column-to-workspace 4; }
+    Alt+Ctrl+Shift+5 { move-column-to-workspace 5; }
+    Alt+Ctrl+Shift+6 { move-column-to-workspace 6; }
+    Alt+Ctrl+Shift+7 { move-column-to-workspace 7; }
+    Alt+Ctrl+Shift+8 { move-column-to-workspace 8; }
+    Alt+Ctrl+Shift+9 { move-column-to-workspace 9; }
+    Alt+Ctrl+Shift+0 { move-column-to-workspace 10; }
+}

@@ -1,0 +1,20 @@
+spawn-at-startup "systemctl" "--user" "import-environment" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "GTK_THEME"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "DISPLAY" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "GTK_THEME" "QT_QPA_PLATFORMTHEME"
+
+// Dark theme
+spawn-at-startup "dconf" "write" "/org/gnome/desktop/interface/gtk-theme" "'adw-gtk3-dark'"
+spawn-at-startup "dconf" "write" "/org/gnome/desktop/interface/color-scheme" "'prefer-dark'"
+
+spawn-at-startup "systemctl" "--user" "start" "hyprpolkitagent"
+spawn-at-startup "pywalfox" "start"
+
+spawn-at-startup "swww-daemon"
+spawn-at-startup "dunst"
+
+// blue light filter
+spawn-at-startup "sh" "-c" "wl-gammarelay-rs & sleep 2; busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 5000"
+
+// clipboard
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular" "--display" "wayland-1"
+spawn-at-startup "sh" "-c" "wl-paste --type text --watch cliphist store"
+spawn-at-startup "sh" "-c" "wl-paste --type image --watch cliphist store"

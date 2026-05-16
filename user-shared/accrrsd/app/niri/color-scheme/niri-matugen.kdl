@@ -1,0 +1,12 @@
+layout {
+    focus-ring {
+        off
+    }
+    background-color "transparent"
+    border {
+        width 3
+    }
+    shadow {} 
+}
+
+include "~/.config/niri/colors.kdl"
