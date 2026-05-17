@@ -27,12 +27,12 @@
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
+  };
+
+  home.sessionVariables = {
+    GTK_USE_PORTAL = "1"; 
   };
 
   dconf.settings = {
@@ -41,4 +41,13 @@
       gtk-theme = "adw-gtk3-dark";
     };
   };
+
+  # WARNING ! it's disable kde globals file for editing ! - If you need it, u can write script, or write it manually in ./config/kdeglobals
+  xdg.configFile."kdeglobals".text = lib.mkAfter ''
+    [UiSettings]
+    ColorScheme=qt6ct
+  '';
+
+  # also needed as home pkgs
+  xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
 }

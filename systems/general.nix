@@ -76,14 +76,21 @@
   xdg.menus.enable = true;
   xdg.mime.enable = true;
 
+  programs.dconf.enable = true; 
+
+  services.dbus = {
+    enable = true;
+    implementation = "broker"; 
+  };
+  
+  services.xserver.updateDbusEnvironment = true;
+
   xdg.portal = {
     enable = lib.mkDefault true;
-    wlr.enable = lib.mkDefault true;
+    wlr.enable = lib.mkDefault false;
     extraPortals = lib.mkDefault [
       # default fallback portal 
       pkgs.xdg-desktop-portal-gtk 
-      # pkgs.xdg-desktop-portal-kde # - many dependencies
-      # pkgs.xdg-desktop-portal-hyprland 
     ];
   };
 
