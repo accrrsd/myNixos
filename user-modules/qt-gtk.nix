@@ -31,10 +31,6 @@
     gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
   };
 
-  home.sessionVariables = {
-    GTK_USE_PORTAL = "1"; 
-  };
-
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";

@@ -78,18 +78,11 @@
 
   programs.dconf.enable = true; 
 
-  services.dbus = {
-    enable = true;
-    implementation = "broker"; 
-  };
-  
-  services.xserver.updateDbusEnvironment = true;
-
   xdg.portal = {
     enable = lib.mkDefault true;
-    wlr.enable = lib.mkDefault false;
+    wlr.enable = lib.mkDefault true;
     extraPortals = lib.mkDefault [
-      # default fallback portal 
+      # default fallback portal
       pkgs.xdg-desktop-portal-gtk 
     ];
   };

@@ -14,9 +14,9 @@
     ../../../../user-shared/accrrsd/app/niri
 
     #../../../../user-modules/pywal
-    ../../../../user-modules/qt-gtk.nix
     ../../../../user-modules/matugen
     ../../../../user-modules/rofi
+    ../../../../user-modules/qt-gtk.nix
 
     # enable flatpack for user pckgs
     #inputs.nix-flatpak.homeManagerModules.default

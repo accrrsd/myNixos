@@ -19,7 +19,6 @@
   };
 
   # if it dint work - there is util named - qtengine
-
   qt = {
     enable = true;
     qt5ctSettings = {
