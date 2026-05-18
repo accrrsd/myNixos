@@ -36,6 +36,7 @@
         inputs.nix-flatpak.nixosModules.nix-flatpak
         {
           environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.google-antigravity-no-fhs ];
+          #environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.default ];
         }
         inputs.zapret-discord-youtube.nixosModules.default
         {

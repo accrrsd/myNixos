@@ -85,6 +85,7 @@
       # default fallback portal
       pkgs.xdg-desktop-portal-gtk 
     ];
+    config.common.default = lib.mkDefault "*";
   };
 
   programs.git = {
