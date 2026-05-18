@@ -124,7 +124,11 @@
     wineWow64Packages.stable
 
     # discord for good. Can be worse than flatpak discord, but stable. discord flatpak > vesktop > discord from pkgs.
-    vesktop
+    #vesktop
+    (discord.override {
+      # withOpenASAR = true; # can do this here too
+      withVencord = true;
+    })
 
     gimp
 

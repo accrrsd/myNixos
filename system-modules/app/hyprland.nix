@@ -23,7 +23,7 @@
 
   xdg.portal.config = {
     common = {
-      default = [ "gtk" ];    
+      default = [ "gtk" ];
     };
     hyprland = {
       default = [ "hyprland" "gtk" ];
