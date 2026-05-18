@@ -27,21 +27,14 @@
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
+  };
 
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-      gtk-xft-antialias = 1;
-      gtk-xft-hinting = 1;
-      gtk-xft-hintstyle = "hintslight";
-      gtk-xft-rgba = "rgb";
-    };
-    
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-      gtk-xft-antialias = 1;
-      gtk-xft-hinting = 1;
-      gtk-xft-hintstyle = "hintslight";
-      gtk-xft-rgba = "rgb";
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "adw-gtk3-dark";
     };
   };
 
@@ -52,16 +45,6 @@
     "Xft.hintstyle" = "hintslight";
     "Xft.rgba" = "rgb";
     "Xft.lcdfilter" = "lcddefault";
-  };
-
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      color-scheme = "prefer-dark";
-      gtk-theme = "adw-gtk3-dark";
-      font-antialiasing = "rgba";
-      font-hinting = "slight";
-      font-rgba-order = "rgb";
-    };
   };
 
   # WARNING ! it's disable kde globals file for editing ! - If you need it, u can write script, or write it manually in ./config/kdeglobals
