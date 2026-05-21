@@ -48,12 +48,14 @@
     wl-clip-persist
     fastfetch
     cliphist
+    # nix formatter
     nixfmt-rfc-style
     # allows use home-manager command without rebuild-swtich. (allow rebuild user only stuff)
     home-manager
     # documents, wallpapers, etc folders.
     xdg-user-dirs
     zip
+    killall
   ];
 
   # create nixos-editors group, must have to work with /nixos-config without sudo
