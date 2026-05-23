@@ -15,9 +15,17 @@ let
           local cur
           COMPREPLY=()
           cur="${"$"}{COMP_WORDS[COMP_CWORD]}"
+          
           local schemes="tonal-spot fidelity content expressive fruit-salad rainbow neutral monochrome"
+          local modes="light dark"
+
           if [[ ${"$"}{COMP_CWORD} -eq 1 ]] ; then
               COMPREPLY=( $(compgen -W "${"$"}{schemes}" -- "${"$"}{cur}") )
+              return 0
+          fi
+
+          if [[ ${"$"}{COMP_CWORD} -eq 2 ]] ; then
+              COMPREPLY=( $(compgen -W "${"$"}{modes}" -- "${"$"}{cur}") )
               return 0
           fi
       }
@@ -29,7 +37,7 @@ let
       cat << 'EOF' > $out/share/zsh/site-functions/_select-wallpaper
       #compdef select-wallpaper
 
-      local -a schemes
+      local -a schemes modes
       schemes=(
           'tonal-spot:Default Material You palette'
           'fidelity:Matches the source color closely'
@@ -40,8 +48,16 @@ let
           'neutral:Desaturated minimalist palette'
           'monochrome:Shades of a single color'
       )
+      modes=('light:Light theme mode' 'dark:Dark theme mode')
 
-      _describe 'schemes' schemes
+      case $CURRENT in
+          2)
+              _describe 'schemes' schemes
+              ;;
+          3)
+              _describe 'modes' modes
+              ;;
+      esac
       EOF
     '';
   };

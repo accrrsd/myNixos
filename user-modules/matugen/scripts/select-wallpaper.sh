@@ -2,6 +2,12 @@
 set -euo pipefail
 
 SCHEME_NAME="${1:-content}"
+MODE="${2:-dark}"
+
+if [[ "$MODE" != "dark" && "$MODE" != "light" ]]; then
+    echo "Err: Second arg (mode) must be 'light' or 'dark'. Get: '$MODE'" >&2
+    exit 1
+fi
 
 wall_dirs=(
     "/nixos-config/src/predefined-wallpaper"
@@ -37,6 +43,12 @@ done | shuf | rofi -wayland -dmenu -theme "$rofi_theme" -theme-str "element-icon
 
 [[ -n "$wall_selection" ]] || exit 1
 
+swww img "$wall_selection" --transition-step 10 --transition-fps 30 --transition-type any &
+matugen image "$wall_selection" -m "$MODE" --source-color-index 0 -t "scheme-$SCHEME_NAME" & sleep 0.2
+
+exit 0
+
+
 # Possible schemes (without scheme- prefix)
 # tonal-spot  - Default Material You palette. Balanced and soft.
 # fidelity    - Matches the source color as closely as possible.
@@ -46,13 +58,3 @@ done | shuf | rofi -wayland -dmenu -theme "$rofi_theme" -theme-str "element-icon
 # rainbow     - Vivid colors with minimal neutral/gray tones.
 # neutral     - Desaturated, grayscale-heavy, minimalist palette.
 # monochrome  - Shades of a single color for a clean, uniform look.
-
-swww img "$wall_selection" --transition-step 10 --transition-fps 30 --transition-type any &
-matugen image "$wall_selection" --source-color-index 0 -t "scheme-$SCHEME_NAME" & sleep 0.2
-
-if pgrep -x "waybar" > /dev/null; then
-    pkill waybar
-    waybar &
-fi
-
-exit 0
