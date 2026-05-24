@@ -75,7 +75,7 @@ input {
 prefer-no-csd
 
 spawn-at-startup "swww-daemon"
-spawn-at-startup "dunst"
+// spawn-at-startup "dunst"
 spawn-at-startup "wl-gammarelay-rs"
 spawn-sh-at-startup "busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 4500"
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
@@ -281,7 +281,7 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "waybar"
+// spawn-at-startup "waybar"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"

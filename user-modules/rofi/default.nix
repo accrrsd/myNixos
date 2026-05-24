@@ -10,8 +10,8 @@ let
   );
 
   importLine = if cfg.colorScheme == "pywal"
-    then builtins.readFile ./pywal-colors.rasi
-    else builtins.readFile ./matugen-colors.rasi;
+    then builtins.readFile ./pywal-colors.rasi.in
+    else builtins.readFile ./matugen-colors.rasi.in;
 
   processedFiles = lib.listToAttrs (map (fileName: {
     name = "rofi/${fileName}";

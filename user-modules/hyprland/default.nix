@@ -9,7 +9,6 @@
   home.packages = with pkgs; [
     hyprshot
     rofi
-    dunst
     brightnessctl
     wl-gammarelay-rs
   ];

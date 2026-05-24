@@ -9,7 +9,7 @@ spawn-at-startup "systemctl" "--user" "start" "hyprpolkitagent"
 spawn-at-startup "pywalfox" "start"
 
 spawn-at-startup "swww-daemon"
-spawn-at-startup "dunst"
+// spawn-at-startup "dunst"
 
 // blue light filter
 spawn-at-startup "sh" "-c" "wl-gammarelay-rs & sleep 2; busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 5000"

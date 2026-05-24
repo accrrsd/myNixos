@@ -16,10 +16,4 @@
   };
   services.timesyncd.enable = true;
   time.hardwareClockInLocalTime = true;
-
-  #keyboard layout
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
 }

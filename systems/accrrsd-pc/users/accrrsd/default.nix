@@ -7,8 +7,7 @@
     ../../../../user-modules/niri
     ../../../../user-modules/zsh
     ../../../../user-modules/kitty.nix
-
-    ../../../../user-shared/accrrsd/app/waybar
+    
     ../../../../user-shared/accrrsd/app/ssh.nix
     ../../../../user-shared/accrrsd/app/hyprland
     ../../../../user-shared/accrrsd/app/niri

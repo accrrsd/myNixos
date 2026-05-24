@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     rofi
-    dunst
     brightnessctl
     wl-gammarelay-rs
     alacritty

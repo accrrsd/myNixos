@@ -6,7 +6,7 @@ binds {
     Alt+Space { spawn "rofi" "-show" "drun"; }
     Alt+B { spawn "firefox"; }
     Alt+V { spawn "bash" "-c" "cliphist list | rofi -dmenu | cliphist decode | wl-copy"; }
-    Alt+Backspace { spawn "bash" "-c" "pkill waybar || waybar"; }
+    // Alt+Backspace { spawn "bash" "-c" "pkill waybar || waybar"; }
 
     // Scroll mode mapping (period = right, comma = left)
     Alt+Period { focus-column-right; }

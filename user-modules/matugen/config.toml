@@ -38,11 +38,11 @@ input_path = "~/.config/matugen/templates/qtct-colors.conf.in"
 output_path = "~/.config/qt6ct/colors/matugen.conf"
 
 [templates.kvantum_kvconfig]
-input_path = '~/.config/matugen/templates/kvantum-colors.kvconfig'
+input_path = '~/.config/matugen/templates/kvantum-colors.kvconfig.in'
 output_path = '~/.config/Kvantum/matugen/matugen.kvconfig'
 
 [templates.kvantum_svg]
-input_path = '~/.config/matugen/templates/kvantum-colors.svg'
+input_path = '~/.config/matugen/templates/kvantum-colors.svg.in'
 output_path = '~/.config/Kvantum/matugen/matugen.svg'
 
 [templates.kitty]
@@ -57,11 +57,11 @@ output_path = "~/.cache/wal/colors.json"
 post_hook = "pywalfox update"
 
 [templates.vesktop]
-input_path = "~/.config/matugen/templates/midnight-discord.css"
+input_path = "~/.config/matugen/templates/midnight-discord.css.in"
 output_path = "~/.config/vesktop/themes/midnight-discord.css"
 
 [templates.vencord]
-input_path = "~/.config/matugen/templates/midnight-discord.css"
+input_path = "~/.config/matugen/templates/midnight-discord.css.in"
 output_path = "~/.config/Vencord/themes/midnight-discord.css"
 
 [templates.niri]
