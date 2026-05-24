@@ -60,6 +60,10 @@ post_hook = "pywalfox update"
 input_path = "~/.config/matugen/templates/midnight-discord.css"
 output_path = "~/.config/vesktop/themes/midnight-discord.css"
 
+[templates.vencord]
+input_path = "~/.config/matugen/templates/midnight-discord.css"
+output_path = "~/.config/Vencord/themes/midnight-discord.css"
+
 [templates.niri]
 input_path = "~/.config/matugen/templates/niri-colors.kdl.in"
 output_path = "~/.config/niri/colors.kdl"

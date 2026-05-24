@@ -123,12 +123,9 @@
     # wine - for games and windows executable
     wineWow64Packages.stable
 
-    # discord for good. Can be worse than flatpak discord, but stable. discord flatpak > vesktop > discord from pkgs.
-    #vesktop
-    (discord.override {
-      # withOpenASAR = true; # can do this here too
-      withVencord = true;
-    })
+    # dicrod part is kinda tricky. For custom css use vencord or vesktop, but vesktop is bugged. To use vencord you also need to have programs.dicord.enable in home pkgs. 
+    # If not need custom css - u can use default discord, or flatpak verison. So like.. Vencord > flatpak > vesktop > discord from pkgs.
+    vencord
 
     gimp
 
@@ -139,9 +136,9 @@
   ];
 
   # use flake flatpak for declarative packages
-  #services.flatpak.packages = [
-   # "com.discordapp.Discord"
-  #];
+  # services.flatpak.packages = [
+  #  "com.discordapp.Discord"
+  # ];
 
   # obs with good codec
   programs.obs-studio.enable = true;
