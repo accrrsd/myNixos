@@ -7,12 +7,9 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # for unstable packages usage - pkgsUnstable (for example matugen)
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # add declarative flatpak packages
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
-    # use flake version for faster updates and better compatabilty. If you have a error like 400 or 429 - use system vpn, or patch like https://github.com/AvenCores/open-antigravity-patcher but for now it dont work.
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,62 +17,44 @@
     nixcord.url = "github:FlameFlag/nixcord";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, antigravity-nix, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
   let
-    pkgsUnstable = import nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
+    system = "x86_64-linux";
+    overlay-unstable = final: prev: {
+      unstable = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
     };
   in {
     nixosConfigurations.accrrsd-pc = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs pkgsUnstable; };
-      system = "x86_64-linux";
+      inherit system;
+      specialArgs = { inherit inputs; }; 
       modules = [
         ./hardware-configuration.nix
-        ../.
+        ../. 
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-flatpak.nixosModules.nix-flatpak
-        {
-          environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.google-antigravity-no-fhs ];
-          #environment.systemPackages = [ antigravity-nix.packages.x86_64-linux.default ];
-        }
         inputs.zapret-discord-youtube.nixosModules.default
         {
-          services.zapret-discord-youtube = {
-            enable = true;
-            configName = "general(ALT)";  # Или любой конфиг из папки configs (general, general(ALT), general (SIMPLE FAKE) и т.д.)
-            
-            # Game Filter: "null" (отключен), "all" (TCP+UDP), "tcp" (только TCP), "udp" (только UDP)
-            gameFilter = "null";  # или "all", "tcp", "udp"
-            
-            # Добавляем кастомные домены в list-general-user.txt
-            listGeneral = [ "example.com" "test.org" "mysite.net" ];
-            
-            # Добавляем домены в list-exclude-user.txt (исключения)
-            listExclude = [ "ubisoft.com" "origin.com" ];
-            
-            # Добавляем IP адреса в ipset-all.txt
-            ipsetAll = [ "192.168.1.0/24" "10.0.0.1" ];
-            
-            # Добавляем IP адреса в ipset-exclude-user.txt (исключения)
-            ipsetExclude = [ "203.0.113.0/24" ];
-          };
+          nixpkgs.overlays = [ overlay-unstable ];
+          nixpkgs.config.allowUnfree = true;
         }
       ];
     };
 
     homeConfigurations = {
-      accrrsd = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { 
-          system = "x86_64-linux"; 
-          config.allowUnfree = true; 
+      accrrsd = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = [ overlay-unstable ];
         };
-        # import user as command home manager, e.g home-manager switch --flake
+        extraSpecialArgs = { inherit inputs; };
         modules = [ 
           ../users/accrrsd
           inputs.nix-flatpak.homeManagerModules.nix-flatpak
         ];
-        extraSpecialArgs = { inherit inputs pkgsUnstable; };
       };
     };
   };

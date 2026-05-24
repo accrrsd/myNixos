@@ -91,7 +91,8 @@
     yt-dlp
     activitywatch
 
-    # antigravity - replaced with flake version.
+    # antigravity - replaced with flake version because packed verison is bugged and outdated.
+    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-no-fhs
 
     (python3.withPackages (ps: with ps; [
       # any other python pkgs, or you can install it with venv like this:
@@ -134,6 +135,17 @@
     jdk
     nix-index
   ];
+
+  services.zapret-discord-youtube = {
+    enable = true;
+    configName = "general(ALT)";
+    gameFilter = "null";
+    
+    listGeneral = [ "example.com" "test.org" "mysite.net" ];
+    listExclude = [ "ubisoft.com" "origin.com" ];
+    ipsetAll = [ "192.168.1.0/24" "10.0.0.1" ];
+    ipsetExclude = [ "203.0.113.0/24" ];
+  };
 
   # use flake flatpak for declarative packages
   # services.flatpak.packages = [

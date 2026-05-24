@@ -1,8 +1,8 @@
-{ config, pkgs, inputs, pkgsUnstable, lib, ... }: {
+{ config, pkgs, inputs, lib, ... }: {
 
   # for the first time use pywalfox install
   # uses unstable pkgs
-  home.packages = (with pkgsUnstable; [matugen]) ++ (with pkgs; [swww rofi pywalfox-native ]) ++ (import ./scripts { inherit pkgs; });
+  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [swww rofi pywalfox-native ]) ++ (import ./scripts { inherit pkgs; });
 
   xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink ./config.toml;
   xdg.configFile."matugen/templates".source = config.lib.file.mkOutOfStoreSymlink ./templates;
