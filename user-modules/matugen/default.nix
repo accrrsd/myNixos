@@ -6,6 +6,7 @@
 
   xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink ./config.toml;
   xdg.configFile."matugen/templates".source = config.lib.file.mkOutOfStoreSymlink ./templates;
+  xdg.configFile."matugen/post-hook-scripts".source = config.lib.file.mkOutOfStoreSymlink ./post-hook-scripts;
 
   xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
     [General]

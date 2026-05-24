@@ -9,17 +9,11 @@
   environment.systemPackages = with pkgs; [
     kitty
     hyprpolkitagent
+    glib
+    gsettings-desktop-schemas
   ];
 
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
-
-  # All of this commented cause may be overcode.
-
-  # pkgs
-  #glib #gsettings
-  #gsettings-desktop-schemas # for gtk dbus portal
-
-  # xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ]
+  environment.variables.GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
 
   xdg.portal.config = {
     common = {
@@ -30,4 +24,6 @@
       default = [ "hyprland" "gtk" ];
     };
   };
+
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
 }
