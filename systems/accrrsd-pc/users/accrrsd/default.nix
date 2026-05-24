@@ -18,13 +18,11 @@
     ../../../../user-modules/rofi
     ../../../../user-modules/qt-gtk.nix
 
-    # ../../../../user-modules/nixcord.nix
+    ../../../../user-modules/nixcord.nix
 
     # enable flatpack for user pckgs
     #inputs.nix-flatpak.homeManagerModules.default
   ];
-
-  programs.discord.enable = true;
 
   wayland.windowManager.hyprland.extraConfig = ''monitor=HDMI-A-1,5120x1440@144.00,auto,1'';
   user-shared.hyprland.colorScheme = "matugen";

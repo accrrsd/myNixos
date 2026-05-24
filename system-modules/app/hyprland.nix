@@ -7,6 +7,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    kitty
     hyprpolkitagent
   ];
 
@@ -19,11 +20,11 @@
   #gsettings-desktop-schemas # for gtk dbus portal
 
   # xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ]
-  #"org.freedesktop.portal.Settings" = [ "gtk" ];
 
   xdg.portal.config = {
     common = {
-      default = [ "gtk" ];
+      default = [ "hyprland" "gtk" ];
+      "org.freedesktop.portal.Settings" = [ "gtk" ];
     };
     hyprland = {
       default = [ "hyprland" "gtk" ];

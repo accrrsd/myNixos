@@ -123,10 +123,10 @@
     # wine - for games and windows executable
     wineWow64Packages.stable
 
-    # dicrod part is kinda tricky. For custom css use vencord or vesktop, but vesktop is bugged. To use vencord you also need to have programs.dicord.enable in home pkgs. 
+    # dicrod part is kinda tricky. For custom css use vencord or vesktop, but vesktop is bugged. To use vencord you also need to have programs.dicord.enable in home pkgs. Can also use nixcord from flakes. 
     # If not need custom css - u can use default discord, or flatpak verison. So like.. Vencord > flatpak > vesktop > discord from pkgs.
-    vencord
-
+    # discord
+    
     gimp
 
     # java

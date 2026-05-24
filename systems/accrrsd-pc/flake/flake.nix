@@ -17,6 +17,7 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixcord.url = "github:FlameFlag/nixcord";
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, antigravity-nix, home-manager, ... }@inputs:
@@ -71,6 +72,10 @@
           ../users/accrrsd
           inputs.nix-flatpak.homeManagerModules.nix-flatpak
         ];
+        # needed for hm as commangd, but as module it already use nixpkgs.allowUnfree
+        environment.sessionVariables = {
+          NIXPKGS_ALLOW_UNFREE = "1";
+        };
         extraSpecialArgs = { inherit inputs pkgsUnstable; };
       };
     };
