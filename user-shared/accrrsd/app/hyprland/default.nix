@@ -22,8 +22,10 @@ in {
       source = ~/.config/hypr/config-files/env.conf
       source = ~/.config/hypr/config-files/exec.conf
       source = ~/.config/hypr/config-files/rules.conf
-      source = ~/.config/hypr/config-files/binds.conf
       source = ~/.config/hypr/config-files/general.conf
+      source = ~/.config/hypr/config-files/vars.conf
+      source = ~/.config/hypr/config-files/submaps.conf
+      source = ~/.config/hypr/config-files/binds.conf
     '';
   };
 }
