@@ -58,7 +58,7 @@ export default function ScreenBorder(monitor: Gdk.Monitor) {
   const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
 
   // setting
-  const gaps_proporiton = 0.5
+  const gaps_proporiton = 0.33
   
   const hyprRounding = getHyprOption("decoration:rounding", 10)
   const hyprBorder = getHyprOption("general:border_size", 2)
