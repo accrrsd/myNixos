@@ -6,7 +6,10 @@ set -euo pipefail
 
 clear
 
-TARGET_HOST="${1:-$HOSTNAME}"
+TARGET_HOST="${1:-}"
+if [ -z "$TARGET_HOST" ]; then
+    TARGET_HOST="$HOSTNAME"
+fi
 
 if [ $# -gt 0 ]; then
     shift
@@ -15,9 +18,9 @@ fi
 FLAKE_DIR="/nixos-config/systems/${TARGET_HOST}/flake"
 
 if [ $# -gt 0 ]; then
-    echo "Update some packages inside ${TARGET_HOST}: $*"
-    nix flake update --flake "${FLAKE_DIR}" "${@/#/--update-input }"
+    echo "Updating specific inputs inside ${TARGET_HOST}: $*"
+    nix flake update --flake "${FLAKE_DIR}" "$@"
 else
-    echo "Update all packages inside ${TARGET_HOST}..."
+    echo "Updating all inputs inside ${TARGET_HOST}..."
     nix flake update --flake "${FLAKE_DIR}"
 fi

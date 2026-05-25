@@ -11,6 +11,7 @@
     ../../../../user-shared/accrrsd/app/ssh.nix
     ../../../../user-shared/accrrsd/app/hyprland
     ../../../../user-shared/accrrsd/app/niri
+    ../../../../user-shared/accrrsd/app/ags
 
     #../../../../user-modules/pywal
     ../../../../user-modules/matugen
