@@ -1,5 +1,7 @@
 { inputs, pkgs, ... }:
 {
+  # for config reference - use ags init -d <path to src folder> and MAYBE ags types -d <path to src> ? Then rebuild and restart ide.
+  
   # add the home manager module
   imports = [ inputs.ags.homeManagerModules.default ];
 
@@ -13,8 +15,7 @@
 
     # additional packages and executables to add to gjs's runtime
     extraPackages = with pkgs; [
-      inputs.astal.packages.${pkgs.stdenv.hostPlatform.system}.battery
-      fzf
+      
     ];
   };
 }

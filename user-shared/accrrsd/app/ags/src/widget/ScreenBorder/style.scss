@@ -1,0 +1,16 @@
+// Цвета выносим на самый верх, их теперь легко менять
+$border-color: red; 
+
+.screen-border-line {
+  background-color: $border-color;
+}
+
+.screen-border-corner-window {
+  background-color: transparent;
+}
+
+.corner-cutter {
+  background-color: transparent;
+  border-style: solid;
+  border-color: $border-color;
+}
