@@ -1,16 +1,19 @@
-// Цвета выносим на самый верх, их теперь легко менять
-$border-color: red; 
+$bg-color: #{"@theme_bg_color"};
 
 .screen-border-line {
-  background-color: $border-color;
+  background-color: $bg-color;
+  background: $bg-color;
+  box-shadow: none;
+  border: none;
 }
 
 .screen-border-corner-window {
   background-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
-.corner-cutter {
-  background-color: transparent;
-  border-style: solid;
-  border-color: $border-color;
+.corner-canvas {
+  color: $bg-color; 
 }

@@ -1,110 +1,96 @@
 import app from "ags/gtk4/app"
-import { Astal, Gdk } from "ags/gtk4"
+import { Astal, Gdk, Gtk } from "ags/gtk4"
+import { exec } from "ags/process"
+import Cairo from "cairo"
 import style from "./style.scss"
 
+function getHyprOption(option: string, defaultValue: number): number {
+  try {
+    const output = exec(`hyprctl getoption ${option} -j`)
+    const config = JSON.parse(output)
+    return config.int !== undefined ? config.int : defaultValue
+  } catch (e) {
+    return defaultValue
+  }
+}
+
 export default function ScreenBorder(monitor: Gdk.Monitor) {
+  app.apply_css(style)
+
   const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
   
-  // ==========================================
-  // ГЛАВНЫЙ ПУЛЬТ УПРАВЛЕНИЯ РАЗМЕРАМИ
-  // ==========================================
-  const size = 8          // Толщина линий (px)
-  const borderSize = size * 2    // Базовый размер для маржинов углов (px)
-  const innerRadius = "50%"
-  const outerRadius = "0"
-  // ==========================================
+  const hyprRounding = getHyprOption("decoration:rounding", 10)
+  const hyprBorder = getHyprOption("general:border_size", 4)
+  const size = 8
 
-  const doubleBorderSize = borderSize * 4
+  const eraserRadius = hyprRounding + hyprBorder 
+  const boxSize = eraserRadius + size 
 
-  app.apply_css(style)
+  const corners = {
+    "top-left":     { anchor: TOP | LEFT,     cx: boxSize, cy: boxSize },
+    "top-right":    { anchor: TOP | RIGHT,    cx: 0,       cy: boxSize },
+    "bottom-left":  { anchor: BOTTOM | LEFT,  cx: boxSize, cy: 0 },
+    "bottom-right": { anchor: BOTTOM | RIGHT, cx: 0,       cy: 0 },
+  }
 
   function createSide(anchor: Astal.WindowAnchor, isHorizontal: boolean) {
     return (
       <window
         visible
-        class="screen-border-line"
+        class={"screen-border-line"}
         name={`border-line-${anchor}-${monitor.get_description()}`}
         gdkmonitor={monitor}
-        layer={Astal.Layer.TOP}
+        layer={Astal.Layer.OVERLAY}
         exclusivity={Astal.Exclusivity.IGNORE}
         anchor={anchor}
-        widthRequest={isHorizontal ? 1 : size}
-        heightRequest={isHorizontal ? size : 1}
+        widthRequest={isHorizontal ? monitor.get_geometry().width : size}
+        heightRequest={isHorizontal ? size : monitor.get_geometry().height}
       />
     )
   }
 
-  function createCorner(anchor: Astal.WindowAnchor, className: string, customCss: string) {
+const cornerElements = Object.entries(corners).map(([name, { anchor, cx, cy }]) => {
+    const da = new Gtk.DrawingArea()
+    da.set_content_width(boxSize)
+    da.set_content_height(boxSize)
+
+    da.get_style_context().add_class("corner-canvas")
+    
+    da.set_draw_func((_self, cr, w, h) => {
+      const context = _self.get_style_context()
+      const gdkColor = context.get_color()
+      cr.setSourceRGBA(gdkColor.red, gdkColor.green, gdkColor.blue, gdkColor.alpha)
+
+      cr.rectangle(0, 0, w, h)
+      cr.fill()
+
+      cr.setOperator(Cairo.Operator.CLEAR)
+      cr.newSubPath()
+      cr.arc(cx, cy, eraserRadius, 0, 2 * Math.PI)
+      cr.fill()
+    })
+
     return (
       <window
         visible
-        class={`screen-border-corner-window ${className}`}
-        name={`border-corner-${className}-${monitor.get_description()}`}
+        class={"screen-border-corner-window"}
+        name={`border-corner-${name}-${monitor.get_description()}`}
         gdkmonitor={monitor}
-        layer={Astal.Layer.TOP}
-        exclusivity={Astal.Exclusivity.IGNORE}
+        namespace={`corner-${name}`}
         anchor={anchor}
-        widthRequest={doubleBorderSize}
-        heightRequest={doubleBorderSize}
+        exclusivity={Astal.Exclusivity.IGNORE}
+        layer={Astal.Layer.OVERLAY}
       >
-        <box 
-          class="corner-cutter" 
-          widthRequest={doubleBorderSize} 
-          heightRequest={doubleBorderSize}
-          // Прокидываем сгенерированный CSS прямо в инлайн-стиль виджета
-          css={customCss} 
-        />
+        {da}
       </window>
     )
-  }
-
-  // Генерируем специфичный CSS для каждого угла на основе TS-переменных
-  const c = {
-    topLeft: `
-      border-width: ${size * 2}px;
-      margin-top: -${size}px;
-      margin-left: -${size}px;
-      margin-bottom: -${borderSize}px;
-      margin-right: -${borderSize}px;
-      border-radius: ${innerRadius} ${outerRadius} 0 ${outerRadius};
-    `,
-    topRight: `
-      border-width: ${size * 2}px;
-      margin-top: -${size}px;
-      margin-right: -${size}px;
-      margin-bottom: -${borderSize}px;
-      margin-left: -${borderSize}px;
-      border-radius: ${outerRadius} ${innerRadius} ${outerRadius} 0;
-    `,
-    bottomRight: `
-      border-width: ${size * 2}px;
-      margin-bottom: -${size}px;
-      margin-right: -${size}px;
-      margin-top: -${borderSize}px;
-      margin-left: -${borderSize}px;
-      border-radius: 0 ${outerRadius} ${innerRadius} ${outerRadius};
-    `,
-    bottomLeft: `
-      border-width: ${size * 2}px;
-      margin-bottom: -${size}px;
-      margin-left: -${size}px;
-      margin-top: -${borderSize}px;
-      margin-right: -${borderSize}px;
-      border-radius: ${outerRadius} 0 ${outerRadius} ${innerRadius};
-    `
-  }
+  })
 
   return [
-    // Линии (они автоматически подхватят переменную `size`)
     createSide(TOP | LEFT | RIGHT, true),
     createSide(BOTTOM | LEFT | RIGHT, true),
     createSide(LEFT | TOP | BOTTOM, false),
     createSide(RIGHT | TOP | BOTTOM, false),
-
-    // Углы с динамическим CSS
-    createCorner(TOP | LEFT, "top-left", c.topLeft),
-    createCorner(TOP | RIGHT, "top-right", c.topRight),
-    createCorner(BOTTOM | RIGHT, "bottom-right", c.bottomRight),
-    createCorner(BOTTOM | LEFT, "bottom-left", c.bottomLeft),
+    ...cornerElements,
   ]
 }
