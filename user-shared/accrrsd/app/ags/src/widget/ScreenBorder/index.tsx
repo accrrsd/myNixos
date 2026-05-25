@@ -62,7 +62,7 @@ export default function ScreenBorder(monitor: Gdk.Monitor) {
   
   const hyprRounding = getHyprOption("decoration:rounding", 10)
   const hyprBorder = getHyprOption("general:border_size", 2)
-  const gaps = Object.fromEntries(Object.entries(getHyprGapsOut()).map(([key, value]) => [key, value * gaps_proporiton])) as unknown as GapsOut
+  const gaps = Object.fromEntries(Object.entries(getHyprGapsOut()).map(([key, value]) => [key, Math.round(value * gaps_proporiton)])) as unknown as GapsOut
 
   const eraserRadius = hyprRounding + hyprBorder 
 
