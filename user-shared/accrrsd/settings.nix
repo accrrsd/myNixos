@@ -8,6 +8,8 @@
   # auto update changed services
   systemd.user.startServices = true;
 
+  news.display = "silent";
+
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
