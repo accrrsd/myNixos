@@ -25,6 +25,8 @@
   };
 
   xdg.enable = true;
+
+  # for google as browser - use google-chrome-stable.desktop
   
   xdg.mimeApps = {
     enable = true;

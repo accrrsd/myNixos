@@ -92,7 +92,7 @@
     activitywatch
 
     # antigravity - replaced with flake version because packed verison is bugged and outdated.
-    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-no-fhs
+    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
 
     (python3.withPackages (ps: with ps; [
       # any other python pkgs, or you can install it with venv like this:
