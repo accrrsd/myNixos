@@ -2,6 +2,8 @@
 
 let
   cfg = config.user-shared.niri;
+  niri-matuge-content = builtins.readFile ./color-scheme/niri-matugen.kdl;
+  niri-pywal-content = builtins.readFile ./color-scheme/niri-pywal.kdl;
 in {
   options.user-shared.niri = {
     colorScheme = lib.mkOption {
@@ -18,17 +20,27 @@ in {
 
   config = {
     xdg.configFile."niri/config-files".source = ./config;
-    xdg.configFile."niri/color-schemes".source = ./color-scheme;
+    
+    # needed because stable niri is less than 26.06 and dont have absolute paths
+    xdg.configFile."niri/color-schemes/niri-matugen.kdl".text = ''
+      ${niri-matuge-content}
+      include "${config.xdg.configHome}/niri/colors.kdl"
+    '';
+    
+    xdg.configFile."niri/color-schemes/niri-pywal.kdl".text = ''
+      ${niri-pywal-content}
+      include "${config.xdg.configHome}/niri/colors.kdl"
+    '';
 
     xdg.configFile."niri/config.kdl".text = ''
-      ${lib.optionalString (cfg.colorScheme == "matugen") ''include "~/.config/niri/color-schemes/niri-matugen.kdl"''}
-      ${lib.optionalString (cfg.colorScheme == "pywal") ''include "~/.config/niri/color-schemes/niri-pywal.kdl"''}
+      ${lib.optionalString (cfg.colorScheme == "matugen") ''include "${config.xdg.configHome}/niri/color-schemes/niri-matugen.kdl"''}
+      ${lib.optionalString (cfg.colorScheme == "pywal") ''include "${config.xdg.configHome}/niri/color-schemes/niri-pywal.kdl"''}
       
-      include "~/.config/niri/config-files/env.kdl"
-      include "~/.config/niri/config-files/exec.kdl"
-      include "~/.config/niri/config-files/rules.kdl"
-      include "~/.config/niri/config-files/general.kdl"
-      include "~/.config/niri/config-files/binds.kdl"
+      include "${config.xdg.configHome}/niri/config-files/env.kdl"
+      include "${config.xdg.configHome}/niri/config-files/exec.kdl"
+      include "${config.xdg.configHome}/niri/config-files/rules.kdl"
+      include "${config.xdg.configHome}/niri/config-files/general.kdl"
+      include "${config.xdg.configHome}/niri/config-files/binds.kdl"
       
       ${cfg.extraConfig}
     '';

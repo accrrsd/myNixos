@@ -30,7 +30,8 @@
   user-shared.niri.colorScheme = "matugen";
   user-shared.niri.extraConfig = ''
     output "HDMI-A-1" {
-        mode "5120x1440@144.00"
+        mode "5120x1440@143.999"
+        scale 1.0
     }
   '';
 
@@ -43,3 +44,4 @@
   # example of flatpack usage
   #services.flatpak.packages = [];
 }
+

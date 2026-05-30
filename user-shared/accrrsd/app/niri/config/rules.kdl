@@ -1,21 +1,24 @@
+// Make file picker windows floating
 window-rule {
     match title=r#"^(Open File|Open|Save|Save As|Export|Import|Choose File|Rename)"#
     open-floating true
 }
 
+// Float desktop portal dialogs (case insensitive regex matching)
 window-rule {
-    match app-id="xdg-desktop-portal-gtk"
+    match app-id=r#"(?i)xdg-desktop-portal-gtk"#
+    match app-id=r#"(?i)xdg-desktop-portal-hyperland"#
     open-floating true
 }
 
-window-rule {
-    match app-id="xdg-desktop-portal-hyperland"
-    open-floating true
-}
-
+// Float rofi menus
 window-rule {
     match app-id="rofi"
-    // dim and blur are not currently fully customizable as window rules in Niri, 
-    // but Niri automatically handles layer shell surfaces nicely.
+    open-floating true
+}
+
+// Make AmneziaVPN window floating (automatically centers in Niri)
+window-rule {
+    match title="AmneziaVPN"
     open-floating true
 }

@@ -1,0 +1,8 @@
+layout {
+    background-color "#{background.strip}"
+
+    border {
+        active-gradient from="#{color1.strip}" to="#{color5.strip}" angle=100
+        inactive-color "#{color0.strip}"
+    }
+}

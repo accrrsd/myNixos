@@ -1,5 +1,12 @@
 layout {
-    gaps 10 // roughly matching gaps_out 7 and gaps_in 3
+    gaps 10
+
+    struts {
+        left 20
+        right 20
+        top 20
+        bottom 20
+    }
 
     preset-column-widths {
         proportion 0.33333
@@ -9,7 +16,12 @@ layout {
 
     default-column-width { proportion 0.5; }
 
+    border {
+        on
+        width 4
+    }
 }
+
 
 input {
     keyboard {
@@ -20,12 +32,27 @@ input {
     }
     mouse {
         accel-profile "flat"
+        accel-speed 0.0
     }
+    mod-key "Alt"
 }
 
-// Window rounding and opacity
+// Window rounding and opacity (matching active_opacity/inactive_opacity and rounding from Hyprland)
 window-rule {
     geometry-corner-radius 10
     clip-to-geometry true
     draw-border-with-background false
+    opacity 0.9
+}
+
+// Custom animations translated from Hyprland's bezier curves
+animations {
+    window-open {
+        duration-ms 350
+        curve "cubic-bezier" 0.05 0.9 0.1 1.05
+    }
+    window-close {
+        duration-ms 200
+        curve "cubic-bezier" 0.3 -0.3 0 1
+    }
 }
