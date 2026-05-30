@@ -1,7 +1,7 @@
 { inputs, config, pkgs, ... }:
 
 {
-  networking.hostName = "accrrsd-pc";
+  networking.hostName = "accrrsd-pc-nix";
   system.stateVersion = "25.11";
 
   imports = [
