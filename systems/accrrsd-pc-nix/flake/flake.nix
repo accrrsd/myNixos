@@ -29,7 +29,7 @@
       };
     };
   in {
-    nixosConfigurations.accrrsd-pc = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.accrrsd-pc-nix = nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = { inherit inputs; }; 
       modules = [
