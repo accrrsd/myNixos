@@ -382,11 +382,11 @@
         "zapret-flowseal": "zapret-flowseal"
       },
       "locked": {
-        "lastModified": 1779994034,
-        "narHash": "sha256-rDNAp9IoScJ83ZD23+clu/3YjeFdT0poqzmf4sPAbio=",
+        "lastModified": 1780265315,
+        "narHash": "sha256-akozC33JwGQM1S5R5dS2sG/Wsh9k0AVfHgszBySiY/o=",
         "owner": "kartavkun",
         "repo": "zapret-discord-youtube",
-        "rev": "f7e8d6767a8f26ee726150c247c675f9061e8bd4",
+        "rev": "9d8c3110075117a7d9c0f73395fc3eafa6b76222",
         "type": "github"
       },
       "original": {
