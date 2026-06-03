@@ -150,9 +150,12 @@
   };
 
   # use flake flatpak for declarative packages
-  # services.flatpak.packages = [
-  #  "com.discordapp.Discord"
-  # ];
+  services.flatpak.packages = [
+    # you can use flatseal to allow usage of /mnt/ files
+    "org.prismlauncher.PrismLauncher"
+    # flatpak access settings
+    "com.github.tchx84.Flatseal"
+  ];
 
   # obs with good codec
   programs.obs-studio.enable = true;
