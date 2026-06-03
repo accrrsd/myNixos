@@ -124,7 +124,7 @@
     # wine - for games and windows executable
     wineWow64Packages.stable
 
-    # dicrod part is kinda tricky. For custom css use vencord or vesktop, but vesktop is bugged. To use vencord you also need to have programs.dicord.enable in home pkgs. Can also use nixcord from flakes. 
+    # dicrod part is kinda tricky. For custom css use vencord or vesktop, but vesktop is bugged. To use vencord you can use nixcord from flakes. 
     # If not need custom css - u can use default discord, or flatpak verison. So like.. Vencord > flatpak > vesktop > discord from pkgs.
     # discord
     
@@ -140,7 +140,7 @@
   # ? also can be used as $HOME/zapret-configs/install.sh
   services.zapret-discord-youtube = {
     enable = true;
-    configName = "general";
+    configName = "general(ALT)";
     gameFilter = "null";
     
     listGeneral = [ "example.com" "test.org" "mysite.net" ];
