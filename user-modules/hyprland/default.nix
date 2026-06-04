@@ -8,7 +8,6 @@
 
   home.packages = with pkgs; [
     hyprshot
-    rofi
     brightnessctl
     wl-gammarelay-rs
   ];

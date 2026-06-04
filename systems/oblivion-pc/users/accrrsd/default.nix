@@ -10,6 +10,10 @@
     (import ../../../../user-modules/stylix.nix {inherit inputs lib pkgs; themePath = ./theme.json; })
     ../../../../user-modules/virtualSound.nix
     ../../../../user-modules/wezterm.nix
+
+    ../../../../user-modules/neovim.nix
+    ../../../../user-modules/wayland-utils.nix
+    ../../../../user-modules/general-packages.nix
   ];
 
   home = {
@@ -19,8 +23,14 @@
   };
 
   home.packages = with pkgs; [
-    swww
     cava
+    telegram-desktop
+    chromium
+    nodejs
+    htop
+    qbittorrent
+    linux-wallpaperengine
+    emote
   ];
 
   programs.git = {

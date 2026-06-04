@@ -2,7 +2,6 @@
 { pkgs, lib, ... }:
 {
   home.packages = with pkgs; [
-    rofi
     brightnessctl
     wl-gammarelay-rs
     alacritty

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -41,51 +46,49 @@
     (writeShellScriptBin "nsearch" (builtins.readFile ../scripts/QoL/nix-search.sh))
     # use that command to get folder structure
     tree
-    vscode
     wget
-    ripgrep
-    wl-clipboard
-    wl-clip-persist
-    fastfetch
-    cliphist
-    # nix formatter
-    nixfmt-rfc-style
     # allows use home-manager command without rebuild-swtich. (allow rebuild user only stuff)
     home-manager
     # documents, wallpapers, etc folders.
     xdg-user-dirs
     zip
     killall
+    nix-index
   ];
 
   # create nixos-editors group, must have to work with /nixos-config without sudo
-  users.groups.nixos-editors = {};
+  users.groups.nixos-editors = { };
 
-  programs.firefox.enable = lib.mkDefault  true;
+  programs.firefox.enable = lib.mkDefault true;
   services.xserver.enable = lib.mkDefault true;
-  nixpkgs.config.allowUnfree = lib.mkDefault  true;
-  security.polkit.enable = lib.mkDefault  true;
+  nixpkgs.config.allowUnfree = lib.mkDefault true;
+  security.polkit.enable = lib.mkDefault true;
   services.flatpak = lib.mkDefault {
     enable = true;
-    remotes = [{
-      name = "flathub";
-      location = "https://flathub.org/repo/flathub.flatpakrepo";
-    }];
+    remotes = [
+      {
+        name = "flathub";
+        location = "https://flathub.org/repo/flathub.flatpakrepo";
+      }
+    ];
   };
-  nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = lib.mkDefault [
+    "nix-command"
+    "flakes"
+  ];
 
   # xdg assosiation
   xdg.menus.enable = true;
   xdg.mime.enable = true;
 
-  programs.dconf.enable = true; 
+  programs.dconf.enable = true;
 
   xdg.portal = {
     enable = lib.mkDefault true;
     wlr.enable = lib.mkDefault true;
     extraPortals = lib.mkDefault [
       # default fallback portal
-      pkgs.xdg-desktop-portal-gtk 
+      pkgs.xdg-desktop-portal-gtk
     ];
     config.common.default = lib.mkDefault "*";
   };

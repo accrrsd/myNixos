@@ -18,7 +18,6 @@
     ../../system-modules/app/steam.nix
     ../../system-modules/app/razer-peripherals.nix
     ../../system-modules/app/zsh.nix
-    ../../system-modules/app/neovim.nix
 
     ../../system-modules/app/hyprland.nix
     ../../system-modules/app/niri.nix
@@ -78,62 +77,6 @@
   programs.amnezia-vpn.enable = true;
 
   environment.systemPackages = with pkgs; [
-    telegram-desktop
-    # chromium - cant sync with google account.
-    google-chrome
-    nodejs
-    htop
-    qbittorrent
-    linux-wallpaperengine
-    emote
-    obsidian
-    vlc
-    yt-dlp
-    activitywatch
-
-    # antigravity - replaced with flake version because packed verison is bugged and outdated.
-    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
-
-    (python3.withPackages (ps: with ps; [
-      # any other python pkgs, or you can install it with venv like this:
-        # python -m venv --system-site-packages .venv
-        # source .venv/bin/activate
-        # pip install requests
-
-      # OR in project where you need packages, you can write shell.nix file with something like
-        # { pkgs ? import <nixpkgs> {} }:
-
-        # pkgs.mkShell {
-        #   buildInputs = [
-        #     (pkgs.python3.withPackages (ps: with ps; [
-        #       tkinter
-        #       matplotlib
-        #       numpy
-        #       requests
-        #     ]))
-        #   ];
-        # }
-
-      # and use it via nix-shell (folder)
-
-      pip
-      requests
-      numpy
-    ]))
-
-    # wine - for games and windows executable
-    wineWow64Packages.stable
-
-    # dicrod part is kinda tricky. For custom css use vencord or vesktop, but vesktop is bugged. To use vencord you can use nixcord from flakes. 
-    # If not need custom css - u can use default discord, or flatpak verison. So like.. Vencord > flatpak > vesktop > discord from pkgs.
-    # discord
-    
-    gimp
-
-    # java
-    # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
-    jdk
-    nix-index
   ];
 
 

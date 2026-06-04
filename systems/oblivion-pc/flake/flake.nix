@@ -11,6 +11,7 @@
       url = "github:nix-community/stylix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -23,6 +24,7 @@
           ./hardware-configuration.nix
           ../.
           inputs.home-manager.nixosModules.home-manager
+          inputs.nix-flatpak.nixosModules.nix-flatpak
         ];
       };
     };

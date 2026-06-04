@@ -16,7 +16,6 @@
     ../../system-modules/app/steam.nix
     ../../system-modules/app/razer-peripherals.nix
     ../../system-modules/app/zsh.nix
-    ../../system-modules/app/neovim.nix
 
     ../../system-modules/app/hyprland.nix
   ];
@@ -25,14 +24,6 @@
   boot.loader.grub.device = "/dev/sdb";
 
   environment.systemPackages = with pkgs; [
-    telegram-desktop
-    chromium
-    nodejs
-    htop
-    qbittorrent
-    linux-wallpaperengine
-    niri
-    emote
   ];
 
   system-modules.diskMount = {
