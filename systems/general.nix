@@ -42,7 +42,6 @@
     # use that command to get folder structure
     tree
     vscode
-    git
     wget
     ripgrep
     wl-clipboard
@@ -94,6 +93,7 @@
   programs.git = {
     enable = lib.mkDefault true;
     config.safe.directory = lib.mkDefault [ "/nixos-config" ];
+    lfs.enable = lib.mkDefault true;
   };
 
   environment.sessionVariables = {
