@@ -1,14 +1,11 @@
 import { For, createState } from "ags"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
-import app from "ags/gtk4/app"
 import AstalApps from "gi://AstalApps"
 import Graphene from "gi://Graphene"
-import style from "./style.scss"
 
 const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
 
 export default function Applauncher() {
-  app.apply_css(style)
   let contentbox: Gtk.Box
   let searchentry: Gtk.Entry
   let win: Astal.Window
@@ -65,7 +62,7 @@ export default function Applauncher() {
     <window
       $={(ref) => (win = ref)}
       name="launcher"
-      anchor={TOP | BOTTOM | LEFT | RIGHT}
+      anchor={0}
       exclusivity={Astal.Exclusivity.IGNORE}
       keymode={Astal.Keymode.EXCLUSIVE}
       onNotifyVisible={({ visible }) => {
