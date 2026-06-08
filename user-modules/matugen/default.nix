@@ -4,9 +4,9 @@
   # uses unstable pkgs
   home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [swww pywalfox-native ]) ++ (import ./scripts { inherit pkgs; });
 
-  xdg.configFile."matugen/config.toml".source = config.lib.file.mkOutOfStoreSymlink ./config.toml;
-  xdg.configFile."matugen/templates".source = config.lib.file.mkOutOfStoreSymlink ./templates;
-  xdg.configFile."matugen/post-hook-scripts".source = config.lib.file.mkOutOfStoreSymlink ./post-hook-scripts;
+  xdg.configFile."matugen/config.toml".source = ./config.toml;
+  xdg.configFile."matugen/templates".source = ./templates;
+  xdg.configFile."matugen/post-hook-scripts".source = ./post-hook-scripts;
 
   xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
     [General]
