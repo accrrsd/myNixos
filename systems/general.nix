@@ -62,6 +62,9 @@
   programs.firefox.enable = lib.mkDefault true;
   services.xserver.enable = lib.mkDefault true;
   nixpkgs.config.allowUnfree = lib.mkDefault true;
+  environment.etc."nixpkgs/config.nix".text = ''
+    { allowUnfree = true; }
+  '';
   security.polkit.enable = lib.mkDefault true;
   services.flatpak = lib.mkDefault {
     enable = true;

@@ -4,8 +4,16 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.dates = "weekly";
 
-  nix.gc.automatic = true;
-  nix.gc.dates = "daily";
-  nix.gc.options = "--delete-older-than 7d";
-  nix.settings.auto-optimise-store = true;
+  nix.settings = {
+    keep-outputs = true;
+    keep-derivations = true;
+    auto-optimise-store = true;
+  };
+
+  # disabled for test reasons
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
+  };
 }
