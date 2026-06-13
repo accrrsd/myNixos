@@ -35,16 +35,22 @@
       modules = [
         ./hardware-configuration.nix
         ../. 
+        # nixos module version of HM
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-flatpak.nixosModules.nix-flatpak
         inputs.zapret-discord-youtube.nixosModules.default
         {
           nixpkgs.overlays = [ overlay-unstable ];
           nixpkgs.config.allowUnfree = true;
+          # add module to home manager as nixos module
+          home-manager.sharedModules = [
+            inputs.nix-flatpak.homeManagerModules.nix-flatpak
+          ];
         }
       ];
     };
 
+    # standalone (hswitch) verison of HM
     homeConfigurations = {
       accrrsd = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
