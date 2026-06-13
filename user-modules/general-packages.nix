@@ -3,6 +3,6 @@
     vscode
     ripgrep
     fastfetch
-    nixfmt-rfc-style
+    nixfmt
   ];
 }

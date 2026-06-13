@@ -2,7 +2,7 @@
 
   # for the first time use pywalfox install
   # uses unstable pkgs
-  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [swww pywalfox-native ]) ++ (import ./scripts { inherit pkgs; });
+  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [ awww pywalfox-native ]) ++ (import ./scripts { inherit pkgs; });
 
   xdg.configFile."matugen/config.toml".source = ./config.toml;
   xdg.configFile."matugen/templates".source = ./templates;

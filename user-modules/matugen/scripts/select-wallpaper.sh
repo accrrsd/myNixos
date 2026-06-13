@@ -43,7 +43,7 @@ done | shuf | rofi -wayland -dmenu -theme "$rofi_theme" -theme-str "element-icon
 
 [[ -n "$wall_selection" ]] || exit 1
 
-swww img "$wall_selection" --transition-step 10 --transition-fps 30 --transition-type any &
+awww img "$wall_selection" --transition-step 10 --transition-fps 30 --transition-type any &
 matugen image "$wall_selection" -m "$MODE" --source-color-index 0 -t "scheme-$SCHEME_NAME" & sleep 0.2
 
 exit 0

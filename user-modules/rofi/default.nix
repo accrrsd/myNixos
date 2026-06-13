@@ -8,10 +8,10 @@ let
     lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".rasi" name)
       (builtins.readDir themeDir)
   );
-
-  importLine = if cfg.colorScheme == "pywal"
-    then builtins.readFile ./pywal-colors.rasi.in
-    else builtins.readFile ./matugen-colors.rasi.in;
+  
+  importLine = if cfg.useMatugen 
+    then "${builtins.readFile ./matugen-colors.rasi.in}" 
+    else "";
 
   processedFiles = lib.listToAttrs (map (fileName: {
     name = "rofi/${fileName}";
@@ -22,10 +22,10 @@ let
 in
 {
   options.user-modules.rofi = {
-    colorScheme = lib.mkOption {
-      type = lib.types.enum [ "pywal" "matugen" ];
-      default = "pywal";
-      description = "Color scheme for rofi.";
+    useMatugen = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Use matugen theming";
     };
 
     themeDir = lib.mkOption {

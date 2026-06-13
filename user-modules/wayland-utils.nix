@@ -5,7 +5,7 @@
     cliphist
     brightnessctl
     wl-gammarelay-rs
-    swww
+    awww
     hyprshot
   ];
 }

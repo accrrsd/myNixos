@@ -1,7 +1,7 @@
 Пофиксить маунт дельфина (нужно чтобы он автомаутил)
-Настроить AGS
-Перенести пакеты из system-wide в user-wide, ради чистоты конфигурации и производительности.
 Пофиксить application menu для qt
+
+Настроить AGS
 Сделать темы для разных приложений, вроде godot, steam, vscode, попробовать сделать тему для vk
 
 Так как сейчас plasma ломает мне кайф QT+GTK, то можно прочитать про это тут https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications

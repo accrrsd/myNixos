@@ -18,7 +18,6 @@
     ../../../../user-shared/accrrsd/app/niri
     ../../../../user-shared/accrrsd/app/ags
 
-    #../../../../user-modules/pywal
     ../../../../user-modules/matugen
     ../../../../user-modules/rofi
     ../../../../user-modules/qt-gtk.nix
@@ -31,10 +30,13 @@
     ../../../../user-modules/general-packages.nix
   ];
 
-  wayland.windowManager.hyprland.extraConfig = "monitor=HDMI-A-1,5120x1440@144.00,auto,1";
-  user-shared.hyprland.colorScheme = "matugen";
+  # hyprland
+  user-shared.hyprland.configType = "lua";
+  user-shared.hyprland.useMatugen = true;
+  wayland.windowManager.hyprland.extraConfig = ''hl.monitor({output="HDMI-A-1",mode="5120x1440@144.00", position="0x0", scale=1.0})'';
 
-  user-shared.niri.colorScheme = "matugen";
+  # niri
+  user-shared.niri.useMatugen = true;
   user-shared.niri.extraConfig = ''
     output "HDMI-A-1" {
         mode "5120x1440@143.999"
@@ -42,7 +44,9 @@
     }
   '';
 
-  user-modules.rofi.colorScheme = "matugen";
+  # rofi
+  user-modules.rofi.useMatugen = true;
+
   home.stateVersion = "25.11";
 
   home.packages = with pkgs; [
@@ -73,10 +77,12 @@
     # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
     jdk
 
-    ngrok
-    lmstudio
+    # ngrok
+    # lmstudio
   ];
 
   # example of flatpack usage
-  #services.flatpak.packages = [];
+  services.flatpak.packages = [
+    "org.prismlauncher.PrismLauncher"
+  ];
 }

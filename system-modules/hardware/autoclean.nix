@@ -10,9 +10,9 @@
     auto-optimise-store = true;
   };
 
-  # disabled for test reasons
+  # disabled because gc brake session with start up!
   nix.gc = {
-    automatic = true;
+    automatic = false;
     dates = "daily";
     options = "--delete-older-than 7d";
   };

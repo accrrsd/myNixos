@@ -6,15 +6,13 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
-        extraOptions = {
-          "AddKeysToAgent" = "yes";
-        };
-        identityFile = "~/.ssh/id_rsa";
+        AddKeysToAgent = "yes";
+        IdentityFile = "~/.ssh/id_rsa";
       };
       "github.com" = {
-        identitiesOnly = true;
+        IdentitiesOnly = "yes";
       };
     };
   };

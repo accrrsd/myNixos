@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-swww-daemon &
+awww-daemon &
 change_wallpaper &
 sleep 0.1
 waybar &

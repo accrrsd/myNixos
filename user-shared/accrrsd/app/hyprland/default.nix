@@ -4,10 +4,16 @@ let
   cfg = config.user-shared.hyprland;
 in {
   options.user-shared.hyprland = {
-    colorScheme = lib.mkOption {
-      type = lib.types.enum [ "" "pywal" "matugen" ];
-      default = "";
-      description = "Which color engine to use";
+    useMatugen = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Use matugen theming";
+    };
+
+    configType = lib.mkOption {
+      type = lib.types.enum [ "lua" "hyprconf" ];
+      default = "hyprconf";
+      description = "Which config scheme to use"; 
     };
   };
 
@@ -15,17 +21,32 @@ in {
     xdg.configFile."hypr/config-files".source = ./config;
     xdg.configFile."hypr/color-schemes".source = ./color-scheme;
 
-    wayland.windowManager.hyprland.extraConfig = ''
-      ${lib.optionalString (cfg.colorScheme == "matugen") "source = ~/.config/hypr/color-schemes/hypr-matugen.conf"}
-      ${lib.optionalString (cfg.colorScheme == "pywal") "source = ~/.config/hypr/color-schemes/hypr-pywal.conf"}
+    wayland.windowManager.hyprland.configType = cfg.configType;
 
-      source = ~/.config/hypr/config-files/env.conf
-      source = ~/.config/hypr/config-files/exec.conf
-      source = ~/.config/hypr/config-files/rules.conf
-      source = ~/.config/hypr/config-files/general.conf
-      source = ~/.config/hypr/config-files/vars.conf
-      source = ~/.config/hypr/config-files/submaps.conf
-      source = ~/.config/hypr/config-files/binds.conf
-    '';
+    wayland.windowManager.hyprland.extraConfig = 
+      lib.optionalString (cfg.configType == "lua") ''
+        ${lib.optionalString cfg.useMatugen "require('color-schemes/hypr-matugen')"}
+
+        require("config-files/lua/env")
+        require("config-files/lua/exec")
+        require("config-files/lua/rules")
+        require("config-files/lua/general")
+        require("config-files/lua/vars")
+        require("config-files/lua/submaps")
+        require("config-files/lua/binds")
+      '' 
+      +
+      lib.optionalString (cfg.configType == "hyprconf") ''
+        ${lib.optionalString cfg.useMatugen "source = ~/.config/hypr/color-schemes/hypr-matugen.conf"}
+
+        source = ~/.config/hypr/config-files/hyprconf/env.conf
+        source = ~/.config/hypr/config-files/hyprconf/exec.conf
+        source = ~/.config/hypr/config-files/hyprconf/rules.conf
+        source = ~/.config/hypr/config-files/hyprconf/general.conf
+        source = ~/.config/hypr/config-files/hyprconf/vars.conf
+        source = ~/.config/hypr/config-files/hyprconf/submaps.conf
+        source = ~/.config/hypr/config-files/hyprconf/binds.conf
+      '';
   };
 }
+
