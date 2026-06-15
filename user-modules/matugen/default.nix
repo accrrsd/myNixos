@@ -1,8 +1,10 @@
 { config, pkgs, inputs, lib, ... }: {
 
-  # for the first time use pywalfox install
+  # for the first time use pywalfox install, if missies firefox profile, use something like:
+  # pywalfox install --profile-path ~/.config/mozilla/firefox
+  
   # uses unstable pkgs
-  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [ awww pywalfox-native ]) ++ (import ./scripts { inherit pkgs; });
+  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [ awww ]) ++ [ pkgs.oldpkgs.pywalfox-native ] ++ (import ./scripts { inherit pkgs; });
 
   xdg.configFile."matugen/config.toml".source = ./config.toml;
   xdg.configFile."matugen/templates".source = ./templates;

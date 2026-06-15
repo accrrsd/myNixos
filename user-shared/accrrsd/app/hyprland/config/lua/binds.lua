@@ -1,6 +1,6 @@
 -- Global keybindings
 hl.bind(mod .. " + Q", hl.dsp.exec_cmd(terminal))
-hl.bind(mod .. " + W", hl.dsp.window.kill())
+hl.bind(mod .. " + W", hl.dsp.window.close())
 hl.bind(mod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mod .. " + T", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + SPACE", hl.dsp.exec_cmd(menu .. " -show drun"))

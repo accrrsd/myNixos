@@ -33,7 +33,12 @@
   # hyprland
   user-shared.hyprland.configType = "lua";
   user-shared.hyprland.useMatugen = true;
-  wayland.windowManager.hyprland.extraConfig = ''hl.monitor({output="HDMI-A-1",mode="5120x1440@144.00", position="0x0", scale=1.0})'';
+  # offset 800x taken by eye. In differend monitor setup it should be more meth based, like 840x
+  wayland.windowManager.hyprland.extraConfig = ''
+  hl.monitor({output="HDMI-A-1",mode="5120x1440@144.00", position="0x0", scale=1.0})
+  hl.monitor({output="DP-3",mode="3440x1440@144.00", position="800x-1440", scale=1.0})
+  hl.workspace_rule({ workspace = "10", monitor = "DP-3", default = true, persistent = true })
+  '';
 
   # niri
   user-shared.niri.useMatugen = true;
