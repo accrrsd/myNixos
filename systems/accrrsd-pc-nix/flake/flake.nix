@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    old-nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-old.url = "github:NixOS/nixpkgs/nixos-25.11";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,11 +20,11 @@
     ags.url = "github:aylur/ags";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, old-nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-old, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
     overlay-old = final: prev: {
-      oldpkgs = import old-nixpkgs {
+      oldpkgs = import nixpkgs-old {
         inherit system;
         config.allowUnfree = true;
       };

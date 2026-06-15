@@ -17,6 +17,7 @@
     # system-wide apps
     ../../system-modules/app/steam.nix
     ../../system-modules/app/razer-peripherals.nix
+    ../../system-modules/app/rgb-control.nix
     ../../system-modules/app/zsh.nix
 
     ../../system-modules/app/hyprland.nix
