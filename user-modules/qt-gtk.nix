@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   home.packages = with pkgs; [
@@ -15,6 +15,8 @@
     qadwaitadecorations-qt6
   ];
 
+  # todo possible something like https://www.reddit.com/r/NixOS/comments/1sjb556/gtk_theme_suggestions/ would fix QT theming with KDE - need to check out.
+
   qt = {
     enable = true;
     platformTheme.name = "qtct";
@@ -28,13 +30,20 @@
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
-    gtk4.theme = null;
-    #gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
-    #gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
+    # gtk 3-4 fix nix 26v
+    gtk3 = {
+      enable = true;
+      theme = config.gtk.theme;
+    };
+    gtk4 = {
+      enable = true;
+      theme = config.gtk.theme;
+    };
   };
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
+      # is color-scheme really needed? I affraid of matugen conflict, but if matugen light work - its ok.
       color-scheme = "prefer-dark";
       gtk-theme = "adw-gtk3-dark";
     };

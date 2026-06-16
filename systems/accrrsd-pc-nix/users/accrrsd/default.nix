@@ -24,7 +24,7 @@
 
     ../../../../user-modules/nixcord.nix
 
-    ../../../../user-modules/neovim.nix
+    # ../../../../user-modules/neovim.nix
     ../../../../user-modules/wayland-utils.nix
     ../../../../user-modules/general-packages.nix
   ];
@@ -81,8 +81,12 @@
     # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
     jdk
 
+    # ai stuff
+    ollama
+    sillytavern
+    # ngrok - allows live tunneling, for exapmle - use local ai proxi 
     ngrok
-    lmstudio
+    #lmstudio
   ];
 
   # example of flatpack usage
