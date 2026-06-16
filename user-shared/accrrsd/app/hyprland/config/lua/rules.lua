@@ -12,6 +12,7 @@ hl.window_rule({ match = { class = "xdg-desktop-portal-gtk" }, float = true, cen
 hl.window_rule({ match = { class = "Xdg-desktop-portal-gtk" }, float = true, center = true })
 hl.window_rule({ match = { class = "xdg-desktop-portal-hyperland" }, float = true, center = true })
 hl.window_rule({ match = { class = "Xdg-desktop-portal-hyperland" }, float = true, center = true })
+hl.window_rule({ match = { class = "^(steam_app_.*)$" }, float = true, center = true })
 
 -- render unfocused to fix lags in some apps
 hl.window_rule({ match = { class = "^(godot)$" }, render_unfocused = true })

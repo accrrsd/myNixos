@@ -48,5 +48,5 @@
   };
 
   # idk, if it needed.
-  xdg.configFile."menus/applications.menu".text = builtins.readFile ../../src/utils/application.menu;
+  # xdg.configFile."menus/applications.menu".text = builtins.readFile ../../src/utils/application.menu;
 }
