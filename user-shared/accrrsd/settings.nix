@@ -40,6 +40,9 @@
     };
   };
 
+  # fix hm problem with mimeapps
+  # xdg.configFile."mimeapps.list".force = true
+
   xdg.userDirs = {
     extraConfig = {
       XDG_GAME_DIR = "${config.home.homeDirectory}/Games";

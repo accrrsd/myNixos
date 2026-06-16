@@ -20,16 +20,15 @@
     gtk4.extraCss = ''@import "colors.css";'';
   };
 
-  # if it dint work - there is util named - qtengine
   qt = {
     enable = true;
     qt5ctSettings = {
       Appearance = {
         color_scheme_path = "${config.home.homeDirectory}/.config/qt5ct/colors/matugen.conf";
         custom_palette = true;
-        style = "kvantum";
-        icon_theme = "Papirus-Dark";
-        standard_dialogs = "xdgdesktopportal";
+        #standard_dialogs = "xdgdesktopportal";
+        #style = "kvantum";
+        #icon_theme = "Papirus-Dark";
       };
     };
     
@@ -37,9 +36,9 @@
       Appearance = {
         color_scheme_path = "${config.home.homeDirectory}/.config/qt6ct/colors/matugen.conf";
         custom_palette = true;
-        style = "kvantum";
-        icon_theme = "Papirus-Dark";
-        standard_dialogs = "xdgdesktopportal";
+        #standard_dialogs = "xdgdesktopportal";
+        #style = "kvantum";
+        #icon_theme = "Papirus-Dark";
       };
     };
   };

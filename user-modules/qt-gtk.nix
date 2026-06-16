@@ -4,22 +4,21 @@
   home.packages = with pkgs; [
     adw-gtk3 # GTK3 theme
 
-    libsForQt5.qt5ct # qt5ct
-    kdePackages.qt6ct # qt6ct
+    # libsForQt5.qt5ct # qt5ct
+    # kdePackages.qt6ct # qt6ct
 
-    libsForQt5.qtstyleplugin-kvantum # Kvantum for Qt5
-    kdePackages.qtstyleplugin-kvantum # Kvantum for Qt6
+    # libsForQt5.qtstyleplugin-kvantum # Kvantum for Qt5
+    # kdePackages.qtstyleplugin-kvantum # Kvantum for Qt6
 
     # addition for gtk theme in qt
-    qadwaitadecorations
-    qadwaitadecorations-qt6
+    # qadwaitadecorations
+    # qadwaitadecorations-qt6
   ];
 
-  # todo possible something like https://www.reddit.com/r/NixOS/comments/1sjb556/gtk_theme_suggestions/ would fix QT theming with KDE - need to check out.
-
+  # KISS. Qt theming is insane. PlatformTheme - something like backend, when style is frontend. 
   qt = {
     enable = true;
-    platformTheme.name = "qtct";
+    platformTheme.name = "kde";
     style.name = "kvantum";
   };
 
@@ -34,18 +33,20 @@
     gtk3 = {
       enable = true;
       theme = config.gtk.theme;
+      colorScheme = "dark";
     };
     gtk4 = {
       enable = true;
       theme = config.gtk.theme;
+      colorScheme = "dark";
     };
   };
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       # is color-scheme really needed? I affraid of matugen conflict, but if matugen light work - its ok.
+      gtk-theme = config.gtk.theme.name;
       color-scheme = "prefer-dark";
-      gtk-theme = "adw-gtk3-dark";
     };
   };
 

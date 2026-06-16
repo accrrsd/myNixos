@@ -84,9 +84,9 @@
     # ai stuff
     ollama
     sillytavern
-    # ngrok - allows live tunneling, for exapmle - use local ai proxi 
+    lmstudio
+    # allows live tunneling, for exapmle - use local ai proxi 
     ngrok
-    #lmstudio
   ];
 
   # example of flatpack usage
