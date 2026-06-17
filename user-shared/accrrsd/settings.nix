@@ -41,7 +41,7 @@
   };
 
   # fix hm problem with mimeapps
-  # xdg.configFile."mimeapps.list".force = true
+  xdg.configFile."mimeapps.list".force = true;
 
   xdg.userDirs = {
     extraConfig = {

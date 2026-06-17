@@ -81,12 +81,15 @@
     # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
     jdk
 
-    # ai stuff
-    ollama
-    sillytavern
-    lmstudio
     # allows live tunneling, for exapmle - use local ai proxi 
     ngrok
+    # notify daemon
+    mako
+
+    # ai stuff
+      sillytavern
+      lmstudio
+      (pkgs.llama-cpp.override { cudaSupport = true; })
   ];
 
   # example of flatpack usage
