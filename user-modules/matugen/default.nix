@@ -26,9 +26,6 @@
       Appearance = {
         color_scheme_path = "${config.home.homeDirectory}/.config/qt5ct/colors/matugen.conf";
         custom_palette = true;
-        #standard_dialogs = "xdgdesktopportal";
-        #style = "kvantum";
-        #icon_theme = "Papirus-Dark";
       };
     };
     
@@ -36,10 +33,13 @@
       Appearance = {
         color_scheme_path = "${config.home.homeDirectory}/.config/qt6ct/colors/matugen.conf";
         custom_palette = true;
-        #standard_dialogs = "xdgdesktopportal";
-        #style = "kvantum";
-        #icon_theme = "Papirus-Dark";
       };
     };
   };
+
+    # WARNING ! it's disable kde globals file for editing ! - If you need it, u can write script, or write it manually in ./config/kdeglobals
+  xdg.configFile."kdeglobals".text = lib.mkAfter ''
+    [UiSettings]
+    ColorScheme=qt6ct
+  '';
 }

@@ -13,13 +13,22 @@
     # addition for gtk theme in qt
     # qadwaitadecorations
     # qadwaitadecorations-qt6
+    # qgnomeplatform
   ];
 
   # KISS. Qt theming is insane. PlatformTheme - something like backend, when style is frontend. 
   qt = {
     enable = true;
-    platformTheme.name = "kde";
+    platformTheme.name = "adwaita";
     style.name = "kvantum";
+    qt5ctSettings.Appearance = {
+      standard_dialogs = "xdgdesktopportal";
+      style = config.qt.style.name;
+    };
+    qt6ctSettings.Appearance = {
+      standard_dialogs = "xdgdesktopportal";
+      style = config.qt.style.name;
+    };
   };
 
   gtk = {
@@ -44,7 +53,7 @@
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
-      # is color-scheme really needed? I affraid of matugen conflict, but if matugen light work - its ok.
+      # For all dark stuff - I affraid of matugen conflict, but if matugen light work - its ok.
       gtk-theme = config.gtk.theme.name;
       color-scheme = "prefer-dark";
     };
@@ -58,12 +67,6 @@
     "Xft.rgba" = "rgb";
     "Xft.lcdfilter" = "lcddefault";
   };
-
-  # WARNING ! it's disable kde globals file for editing ! - If you need it, u can write script, or write it manually in ./config/kdeglobals
-  xdg.configFile."kdeglobals".text = lib.mkAfter ''
-    [UiSettings]
-    ColorScheme=qt6ct
-  '';
 
   # also needed as home pkgs
   xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
