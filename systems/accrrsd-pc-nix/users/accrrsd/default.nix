@@ -76,8 +76,10 @@
       ]
     ))
 
+    # gaming
     wineWow64Packages.stable
-    gimp
+    protonup-qt
+
     # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
     jdk
 

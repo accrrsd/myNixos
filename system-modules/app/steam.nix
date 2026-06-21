@@ -1,8 +1,17 @@
 { pkgs, ... }:
 
 {
-  programs.steam.enable = true;
-  #environment.systemPackages = [ pkgs.steam ];
+  programs = {
+    gamemode.enable = true;
+    gamescope = {
+      enable = true;
+      capSysNice = true;
+    };
+    steam = {
+      enable = true;
+      # dosent work for me
+      # gamescopeSession.enable = true;
+    };
+  };
   hardware.graphics.enable32Bit = true;
-  programs.gamemode.enable = true;
 }
