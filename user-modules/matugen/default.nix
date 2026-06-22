@@ -7,7 +7,7 @@
 
   xdg.configFile."matugen/config.toml".source = ./config.toml;
   xdg.configFile."matugen/templates".source = ./templates;
-  xdg.configFile."matugen/post-hook-scripts".source = ./post-hook-scripts;
+  # xdg.configFile."matugen/post-hook-scripts".source = ./post-hook-scripts;
 
   xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
     [General]

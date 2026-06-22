@@ -5,7 +5,7 @@
     gamemode.enable = true;
     gamescope = {
       enable = true;
-      capSysNice = true;
+      # capSysNice = true;
     };
     steam = {
       enable = true;
