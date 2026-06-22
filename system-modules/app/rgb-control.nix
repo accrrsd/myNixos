@@ -12,9 +12,10 @@
     })
   ];
 
-  boot.kernelModules = [ "i2c-dev" ];
-  # Fix openrgb - razer conflict. Force Lian Li O11 Dynamic Razer Edition (all interfaces) to hid-generic.
+  # 1. Force the kernel to use standard hid-generic and avoid special driver initialization
   boot.kernelParams = [ "usbhid.quirks=0x1532:0x0f13:0x00400000" ];
+  
+  boot.kernelModules = [ "i2c-dev" ];
   hardware.i2c.enable = true;
   
   services.hardware.openrgb = { 
