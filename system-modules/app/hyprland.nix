@@ -24,12 +24,13 @@ in
   environment.systemPackages = with pkgs; [
     kitty
     hyprpolkitagent
-    glib
-    gsettings-desktop-schemas
+    # i dont really understand needed it or not. For now its commented.
+    # glib
+    # gsettings-desktop-schemas
     (writeShellScriptBin "hyprExit" hyprExit)
   ];
 
-  environment.variables.GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
+  # environment.variables.GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
 
   xdg.portal.config = {
     common = {

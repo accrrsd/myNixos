@@ -43,12 +43,10 @@
     gtk3 = {
       enable = true;
       theme = config.gtk.theme;
-      colorScheme = "dark";
     };
     gtk4 = {
       enable = true;
       theme = config.gtk.theme;
-      colorScheme = "dark";
     };
   };
 
