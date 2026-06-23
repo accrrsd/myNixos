@@ -45,17 +45,24 @@
   # takes eternaty to update, holy!
   #nixpkgs.config.cudaSupport = true;
 
+  # with windows dualboot sometimes disk can be locked. You can unlock it with:
+  # sudo umount /mnt/hdd1 && sudo ntfsfix -d /dev/sda1 && sudo systemctl restart mnt-hdd1.automount
+
   system-modules.diskMount = {
     enable = true;
     disks = [
       {
         uuid = "0670796770795DFD";
         mountPoint = "/mnt/hdd1";
-        fsType="ntfs";
-        options = [ "nofail" "x-systemd.automount" ];
+        fsType = "ntfs";
+        options = [ 
+          "nofail" 
+          "x-systemd.automount"
+        ];
       }
     ];
   };
+
 
   # for newer cards is better to have open, but if it cause errors - can be disabled to false (default)
   hardware.nvidia.open = true;

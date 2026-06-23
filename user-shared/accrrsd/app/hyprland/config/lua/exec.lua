@@ -7,6 +7,9 @@ hl.on("hyprland.start", function ()
     -- polkit agent
     hl.exec_cmd("systemctl --user start hyprpolkitagent")
 
+    -- openrgb start
+    hl.exec_cmd("~/.config/matugen/post-hook-scripts/openrgb.sh")
+
     -- firefox theming
     hl.exec_cmd("pywalfox start")
     
