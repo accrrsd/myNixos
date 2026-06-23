@@ -3,11 +3,23 @@
   # for the first time use pywalfox install.
   
   # uses unstable pkgs
-  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [ awww ]) ++ [ pkgs.oldpkgs.pywalfox-native ] ++ (import ./scripts { inherit pkgs; });
+  home.packages = [ pkgs.unstable.matugen ] ++ (with pkgs; [ awww pastel ]) ++ [ pkgs.oldpkgs.pywalfox-native ] ++ (import ./scripts { inherit pkgs; });
 
   xdg.configFile."matugen/config.toml".source = ./config.toml;
   xdg.configFile."matugen/templates".source = ./templates;
-  # xdg.configFile."matugen/post-hook-scripts".source = ./post-hook-scripts;
+
+  xdg.configFile."matugen/post-hook-scripts/openrgb.sh" = {
+    text = lib.mkDefault ''
+      #!/usr/bin/env bash
+      if [ -f "$HOME/.cache/matugen/openrgb" ]; then
+        source "$HOME/.cache/matugen/openrgb"
+        # inverse_primary because of hyprland style
+        color=$(pastel darken 0.2 "$inverse_primary" 2>/dev/null | pastel format hex 2>/dev/null)
+        script -q -c "openrgb -c ''${color#\#}" /dev/null
+      fi
+    '';
+    executable = true;
+  };
 
   xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
     [General]
