@@ -156,9 +156,10 @@ export const hyprBorder = getHyprOption("general:border_size", 2)
 export const rawGaps = getHyprGapsOut()
 export const eraserRadius = hyprRounding + hyprBorder
 
-export let GAPS_PROPORTION = configState.peek().gaps_proportion
-export let launcherFont = configState.peek().launcher_font
-export let launcherIconSizeMultiplayer = configState.peek().launcher_icon_size_multiplayer
+const activeConfig = configState.peek()
+export const GAPS_PROPORTION = activeConfig.gaps_proportion
+export const launcherFont = activeConfig.launcher_font
+export const launcherIconSizeMultiplayer = activeConfig.launcher_icon_size_multiplayer
 
 export function computeIconSize(font: string, multiplayer: number): number {
   const match = font.match(/(\d+)(pt|px)/)
@@ -171,9 +172,9 @@ export function computeIconSize(font: string, multiplayer: number): number {
   return 24
 }
 
-export let launcherIconSize = computeIconSize(launcherFont, launcherIconSizeMultiplayer)
-export let heightMode = configState.peek().height_mode
-export let fancySpeed = configState.peek().fancy_speed
+export const launcherIconSize = computeIconSize(launcherFont, launcherIconSizeMultiplayer)
+export const heightMode = activeConfig.height_mode
+export const fancySpeed = activeConfig.fancy_speed
 
 export function computeGaps(proportion: number): GapsOut {
   return {
@@ -184,19 +185,7 @@ export function computeGaps(proportion: number): GapsOut {
   }
 }
 
-export let gaps = computeGaps(GAPS_PROPORTION)
-
-// Update bindings when configuration changes
-configState.subscribe(() => {
-  const newConfig = configState.peek()
-  GAPS_PROPORTION = newConfig.gaps_proportion
-  launcherFont = newConfig.launcher_font
-  launcherIconSizeMultiplayer = newConfig.launcher_icon_size_multiplayer
-  launcherIconSize = computeIconSize(launcherFont, launcherIconSizeMultiplayer)
-  gaps = computeGaps(GAPS_PROPORTION)
-  heightMode = newConfig.height_mode
-  fancySpeed = newConfig.fancy_speed
-})
+export const gaps = computeGaps(GAPS_PROPORTION)
 
 export function createCornerWidget(
   width: number,

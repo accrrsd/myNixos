@@ -17,8 +17,8 @@
     gaps_proportion = 0.33;
     launcher_font = "14pt Hack Nerd Font, sans-serif";
     launcher_icon_size_multiplayer = 1.25;
-    height_mode = "full";
-    fancy_speed = 0.05;
+    height_mode = "fancy";
+    fancy_speed = 0.02;
     commands = {
       c = {
         type = "calc";

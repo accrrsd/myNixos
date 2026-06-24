@@ -1,9 +1,10 @@
-import { For, createState, createComputed } from "ags"
+import { createState, createComputed } from "ags"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
 import AstalApps from "gi://AstalApps"
 import Graphene from "gi://Graphene"
 import app from "ags/gtk4/app"
 import { execAsync } from "ags/process"
+import GLib from "gi://GLib"
 import style from "./style.scss"
 import {
   gaps,
@@ -15,7 +16,9 @@ import {
   configState,
   CommandConfig,
   heightMode,
-  computeIconSize
+  computeIconSize,
+  computeGaps,
+  fancySpeed
 } from "../../settingsParser"
 import { appLauncherPlugins } from "./appLauncherPlugins"
 
@@ -38,6 +41,82 @@ export default function Applauncher() {
   const apps = new AstalApps.Apps()
   const [list, setList] = createState(new Array<LauncherItem>())
   const [selectedIndex, setSelectedIndex] = createState(0)
+
+  let animationTimeoutId: number | null = null
+
+  function updateList(targetItems: LauncherItem[]) {
+    const config = configState.peek()
+    if (config.height_mode !== "fancy") {
+      if (animationTimeoutId !== null) {
+        GLib.source_remove(animationTimeoutId)
+        animationTimeoutId = null
+      }
+      setList(targetItems)
+      return
+    }
+
+    if (animationTimeoutId !== null) {
+      GLib.source_remove(animationTimeoutId)
+      animationTimeoutId = null
+    }
+
+    const targetLength = targetItems.length
+
+    function step() {
+      const current = list.peek()
+      const currentLength = current.length
+      const speed = fancySpeed ?? 0.05
+      const delayMs = Math.round(speed * 1000)
+
+      if (currentLength < targetLength) {
+        // Grow: add next item
+        const nextItem = targetItems[currentLength]
+        setList([...current, nextItem])
+        animationTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
+          step()
+          return GLib.SOURCE_REMOVE
+        })
+      } else if (currentLength > targetLength) {
+        // Shrink: remove last item
+        setList(current.slice(0, -1))
+        animationTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
+          step()
+          return GLib.SOURCE_REMOVE
+        })
+      } else {
+        // Same length: update contents of any that changed
+        let contentChanged = false
+        for (let i = 0; i < currentLength; i++) {
+          if (current[i].id !== targetItems[i].id) {
+            contentChanged = true
+            break
+          }
+        }
+        if (contentChanged) {
+          setList(targetItems)
+        }
+        animationTimeoutId = null
+      }
+    }
+
+    // Before starting the sequential grow/shrink loop, check if any currently visible items
+    // have changed content, and update them immediately so labels/icons change instantly
+    const current = list.peek()
+    const minLen = Math.min(current.length, targetLength)
+    let contentChanged = false
+    for (let i = 0; i < minLen; i++) {
+      if (current[i].id !== targetItems[i].id) {
+        contentChanged = true
+        break
+      }
+    }
+    if (contentChanged) {
+      const updated = [...targetItems.slice(0, minLen), ...current.slice(minLen)]
+      setList(updated)
+    }
+
+    step()
+  }
 
   // Derived state for the current page items (8 items per page)
   const displayedList = createComputed(() => {
@@ -89,12 +168,8 @@ export default function Applauncher() {
 
   function search(text: string) {
     if (text === "") {
-      setList([])
+      updateList([])
       setSelectedIndex(0)
-      if (configState.peek().height_mode === "compact" && win) {
-        win.set_default_size(-1, -1)
-        win.queue_resize()
-      }
       return
     }
 
@@ -120,7 +195,7 @@ export default function Applauncher() {
             }
           }
         })
-        setList(items)
+        updateList(items)
         setSelectedIndex(0)
         return
       }
@@ -134,12 +209,12 @@ export default function Applauncher() {
             queryId,
             currentQueryIdRef,
             win,
-            setList
+            setList: updateList
           })
-          setList(items)
+          updateList(items)
           setSelectedIndex(0)
         } else {
-          setList([])
+          updateList([])
           setSelectedIndex(0)
         }
       } else {
@@ -156,25 +231,33 @@ export default function Applauncher() {
               }
             }
           })
-          setList(items)
+          updateList(items)
           setSelectedIndex(0)
         } else {
-          setList([])
+          updateList([])
           setSelectedIndex(0)
         }
       }
     } else {
       const appResults = apps.fuzzy_query(text)
-      const items: LauncherItem[] = appResults.map((app) => ({
-        id: app.entry || app.name,
-        name: app.name,
-        iconName: app.iconName,
-        action: () => {
-          win.visible = false
-          app.launch()
+      const seen = new Set<string>()
+      const uniqueItems: LauncherItem[] = []
+      for (const app of appResults) {
+        const key = app.entry || app.name
+        if (!seen.has(key)) {
+          seen.add(key)
+          uniqueItems.push({
+            id: key,
+            name: app.name,
+            iconName: app.iconName,
+            action: () => {
+              win.visible = false
+              app.launch()
+            }
+          })
         }
-      }))
-      setList(items)
+      }
+      updateList(uniqueItems)
       setSelectedIndex(0)
     }
   }
@@ -264,11 +347,22 @@ export default function Applauncher() {
       anchor={BOTTOM}
       exclusivity={Astal.Exclusivity.IGNORE}
       keymode={Astal.Keymode.EXCLUSIVE}
+      heightRequest={createComputed(() => {
+        const cfg = configState()
+        const iconSize = computeIconSize(cfg.launcher_font, cfg.launcher_icon_size_multiplayer)
+        const gapsOut = computeGaps(cfg.gaps_proportion)
+        return 8 * (iconSize + 16) + 100 + gapsOut.bottom
+      })}
       onNotifyVisible={({ visible }) => {
         if (visible) {
           searchentry.grab_focus()
           setSelectedIndex(0)
         } else {
+          if (animationTimeoutId !== null) {
+            GLib.source_remove(animationTimeoutId)
+            animationTimeoutId = null
+          }
+          setList([])
           searchentry.set_text("")
         }
       }}
@@ -278,6 +372,7 @@ export default function Applauncher() {
       <box
         orientation={Gtk.Orientation.HORIZONTAL}
         marginBottom={gaps.bottom}
+        valign={Gtk.Align.END}
         class="launcher-window-box"
         css={`font: ${launcherFont};`}
       >
@@ -314,22 +409,51 @@ export default function Applauncher() {
           />
           <Gtk.Separator visible={list((l) => l.length > 0)} />
           <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
-            <For each={displayedList} id={(item) => item.id}>
-              {(item, index) => {
-                const isActive = createComputed(() => localSelectedIndex() === index() ? "suggested" : "")
-                return (
+            {Array.from({ length: 8 }).map((_, i) => {
+              const item = createComputed(() => displayedList()[i] || null)
+              const isActive = createComputed(() => localSelectedIndex() === i ? "suggested" : "")
+              const hasItem = createComputed(() => item() !== null)
+
+              let lastVisibleName = ""
+              let lastVisibleIcon = ""
+
+              const name = createComputed(() => {
+                const currentItem = item()
+                if (currentItem) {
+                  lastVisibleName = currentItem.name
+                }
+                return lastVisibleName
+              })
+
+              const icon = createComputed(() => {
+                const currentItem = item()
+                if (currentItem) {
+                  lastVisibleIcon = currentItem.iconName
+                }
+                return lastVisibleIcon
+              })
+
+              return (
+                <Gtk.Revealer
+                  revealChild={hasItem}
+                  transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
+                  transitionDuration={200}
+                >
                   <button
-                    onClicked={() => launch(item)}
+                    onClicked={() => {
+                      const currentItem = item()
+                      if (currentItem) launch(currentItem)
+                    }}
                     class={isActive}
                   >
                     <box spacing={24}>
-                      <image iconName={item.iconName} pixelSize={launcherIconSize} />
-                      <label label={item.name} maxWidthChars={40} />
+                      <image iconName={icon} pixelSize={launcherIconSize} />
+                      <label label={name} maxWidthChars={40} />
                     </box>
                   </button>
-                )
-              }}
-            </For>
+                </Gtk.Revealer>
+              )
+            })}
             <label
               class="launcher-page-indicator"
               visible={showPageIndicator}
