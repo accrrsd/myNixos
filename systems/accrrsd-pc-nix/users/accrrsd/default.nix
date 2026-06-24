@@ -12,6 +12,7 @@
     ../../../../user-modules/niri
     ../../../../user-modules/zsh
     ../../../../user-modules/kitty.nix
+    ../../../../user-modules/ags
 
     ../../../../user-shared/accrrsd/app/ssh.nix
     ../../../../user-shared/accrrsd/app/hyprland

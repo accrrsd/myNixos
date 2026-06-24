@@ -2,7 +2,7 @@ import app from "ags/gtk4/app"
 import { Astal, Gdk, Gtk } from "ags/gtk4"
 import Cairo from "cairo"
 import style from "./style.scss"
-import { gaps, eraserRadius, createCornerWidget } from "../../settings"
+import { gaps, eraserRadius, createCornerWidget } from "../../settingsParser"
 
 export default function ScreenBorder(monitor: Gdk.Monitor) {
   app.apply_css(style)
