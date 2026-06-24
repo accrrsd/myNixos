@@ -17,11 +17,18 @@
     gaps_proportion = 0.33;
     launcher_font = "14pt Hack Nerd Font, sans-serif";
     launcher_icon_size_multiplayer = 1.25;
+    height_mode = "full";
+    fancy_speed = 0.05;
     commands = {
       c = {
         type = "calc";
         name = "Calculator";
         icon = "accessories-calculator";
+      };
+      t = {
+        type = "time";
+        name = "Time & Date";
+        icon = "preferences-system-time";
       };
       "!" = {
         type = "launch";

@@ -24,6 +24,8 @@ export interface LauncherConfig {
   gaps_proportion: number
   launcher_font: string
   launcher_icon_size_multiplayer: number
+  height_mode: "fancy" | "full"
+  fancy_speed: number
   commands: Record<string, CommandConfig>
 }
 
@@ -33,6 +35,8 @@ export const DEFAULT_CONFIG: LauncherConfig = {
   gaps_proportion: 0.33,
   launcher_font: "14pt Hack Nerd Font, sans-serif",
   launcher_icon_size_multiplayer: 1.25,
+  height_mode: "full",
+  fancy_speed: 0.05,
   commands: {
     c: {
       type: "calc",
@@ -64,6 +68,8 @@ function loadConfig(): LauncherConfig {
         gaps_proportion: typeof parsed.gaps_proportion === "number" ? parsed.gaps_proportion : DEFAULT_CONFIG.gaps_proportion,
         launcher_font: typeof parsed.launcher_font === "string" ? parsed.launcher_font : DEFAULT_CONFIG.launcher_font,
         launcher_icon_size_multiplayer: typeof parsed.launcher_icon_size_multiplayer === "number" ? parsed.launcher_icon_size_multiplayer : DEFAULT_CONFIG.launcher_icon_size_multiplayer,
+        height_mode: typeof parsed.height_mode === "string" && (parsed.height_mode === "fancy" || parsed.height_mode === "full") ? parsed.height_mode : DEFAULT_CONFIG.height_mode,
+        fancy_speed: typeof parsed.fancy_speed === "number" ? parsed.fancy_speed : DEFAULT_CONFIG.fancy_speed,
         commands: parsed.commands && typeof parsed.commands === "object" ? parsed.commands : DEFAULT_CONFIG.commands
       }
     }
@@ -166,6 +172,8 @@ export function computeIconSize(font: string, multiplayer: number): number {
 }
 
 export let launcherIconSize = computeIconSize(launcherFont, launcherIconSizeMultiplayer)
+export let heightMode = configState.peek().height_mode
+export let fancySpeed = configState.peek().fancy_speed
 
 export function computeGaps(proportion: number): GapsOut {
   return {
@@ -186,6 +194,8 @@ configState.subscribe(() => {
   launcherIconSizeMultiplayer = newConfig.launcher_icon_size_multiplayer
   launcherIconSize = computeIconSize(launcherFont, launcherIconSizeMultiplayer)
   gaps = computeGaps(GAPS_PROPORTION)
+  heightMode = newConfig.height_mode
+  fancySpeed = newConfig.fancy_speed
 })
 
 export function createCornerWidget(

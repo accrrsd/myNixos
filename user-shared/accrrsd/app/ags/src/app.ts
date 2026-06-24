@@ -11,7 +11,16 @@ app.start({
 
     switch (request[0]) {
       case "toggle":
-        appLauncher.visible = !appLauncher.visible
+        const text = request.slice(1).join(" ")
+        if (text) {
+          if ((appLauncher as any).openWithText) {
+            (appLauncher as any).openWithText(text)
+          } else {
+            appLauncher.visible = true
+          }
+        } else {
+          appLauncher.visible = !appLauncher.visible
+        }
         return res("ok")
       default:
         return res("unknown command")

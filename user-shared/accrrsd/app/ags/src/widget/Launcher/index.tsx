@@ -13,8 +13,11 @@ import {
   launcherFont,
   launcherIconSize,
   configState,
-  CommandConfig
+  CommandConfig,
+  heightMode,
+  computeIconSize
 } from "../../settingsParser"
+import { appLauncherPlugins } from "./appLauncherPlugins"
 
 const { BOTTOM } = Astal.WindowAnchor
 
@@ -30,11 +33,37 @@ export default function Applauncher() {
   let contentbox: Gtk.Box
   let searchentry: Gtk.Entry
   let win: Astal.Window
-  let currentQueryId = 0
+  const currentQueryIdRef = { value: 0 }
 
   const apps = new AstalApps.Apps()
   const [list, setList] = createState(new Array<LauncherItem>())
   const [selectedIndex, setSelectedIndex] = createState(0)
+
+  // Derived state for the current page items (8 items per page)
+  const displayedList = createComputed(() => {
+    const matches = list()
+    const index = selectedIndex()
+    const page = Math.floor(index / 8)
+    return matches.slice(page * 8, (page + 1) * 8)
+  })
+
+  // Derived state for local selected index on the current page
+  const localSelectedIndex = createComputed(() => {
+    return selectedIndex() % 8
+  })
+
+  // Derived states for pagination indicator
+  const totalPages = createComputed(() => {
+    return Math.ceil(list().length / 8)
+  })
+
+  const currentPage = createComputed(() => {
+    return Math.floor(selectedIndex() / 8) + 1
+  })
+
+  const showPageIndicator = createComputed(() => {
+    return totalPages() > 1
+  })
 
   // Left fillet (concave corner)
   const leftFillet = createCornerWidget(
@@ -62,6 +91,10 @@ export default function Applauncher() {
     if (text === "") {
       setList([])
       setSelectedIndex(0)
+      if (configState.peek().height_mode === "compact" && win) {
+        win.set_default_size(-1, -1)
+        win.queue_resize()
+      }
       return
     }
 
@@ -92,88 +125,18 @@ export default function Applauncher() {
         return
       }
 
+      const queryId = ++currentQueryIdRef.value
       const cmd = commands[commandKey]
       if (cmd) {
-        if (cmd.type === "calc") {
-          const expr = args
-          let evalResult = ""
-
-          if (expr.trim()) {
-            const queryId = ++currentQueryId
-
-            execAsync(["qalc", "-terse", expr])
-              .then((stdout) => {
-                if (queryId === currentQueryId) {
-                  const res = stdout.trim()
-                  if (res) {
-                    evalResult = res
-                    const display = `${expr} = ${res}`
-                    const updatedItem: LauncherItem = {
-                      id: `calc-${commandKey}-${display}`,
-                      name: display,
-                      iconName: cmd.icon || "accessories-calculator",
-                      action: () => {
-                        execAsync(["wl-copy", res]).catch(console.error)
-                        win.visible = false
-                      }
-                    }
-                    setList([updatedItem])
-                  }
-                }
-              })
-              .catch(() => {
-                if (queryId === currentQueryId) {
-                  const updatedItem: LauncherItem = {
-                    id: `calc-${commandKey}-${expr}-err`,
-                    name: expr,
-                    iconName: cmd.icon || "accessories-calculator",
-                    action: () => {
-                      win.visible = false
-                    }
-                  }
-                  setList([updatedItem])
-                }
-              })
-          }
-
-          const item: LauncherItem = {
-            id: `calc-${commandKey}-${expr || "empty"}`,
-            name: expr.trim() ? expr : "Type expression...",
-            iconName: cmd.icon || "accessories-calculator",
-            action: () => {
-              if (evalResult) {
-                execAsync(["wl-copy", evalResult]).catch(console.error)
-              }
-              win.visible = false
-            }
-          }
-          setList([item])
-          setSelectedIndex(0)
-        } else if (cmd.type === "launch") {
-          let execStr = cmd.exec || ""
-          let commandToRun = execStr
-          const urlArgs = encodeURIComponent(args)
-
-          if (execStr.includes("{urlargs}")) {
-            commandToRun = execStr.replace("{urlargs}", urlArgs)
-          } else if (execStr.includes("{args}")) {
-            commandToRun = execStr.replace("{args}", args)
-          } else if (args) {
-            commandToRun = `${execStr} ${args}`
-          }
-
-          const item: LauncherItem = {
-            id: `launch-${commandKey}-${args || "empty"}`,
-            name: `${cmd.name || commandKey}${args ? ` (${args})` : ""}`,
-            iconName: cmd.icon || "system-run",
-            action: () => {
-              if (commandToRun) {
-                execAsync(commandToRun).catch(console.error)
-              }
-              win.visible = false
-            }
-          }
-          setList([item])
+        const plugin = appLauncherPlugins[cmd.type]
+        if (plugin) {
+          const items = plugin.execute(args, cmd, {
+            queryId,
+            currentQueryIdRef,
+            win,
+            setList
+          })
+          setList(items)
           setSelectedIndex(0)
         } else {
           setList([])
@@ -201,7 +164,7 @@ export default function Applauncher() {
         }
       }
     } else {
-      const appResults = apps.fuzzy_query(text).slice(0, 8)
+      const appResults = apps.fuzzy_query(text)
       const items: LauncherItem[] = appResults.map((app) => ({
         id: app.entry || app.name,
         name: app.name,
@@ -260,10 +223,14 @@ export default function Applauncher() {
     }
 
     if (mod === Gdk.ModifierType.ALT_MASK) {
-      for (const i of [1, 2, 3, 4, 5, 6, 7, 8, 9] as const) {
+      const page = Math.floor(selectedIndex.peek() / 8)
+      for (const i of [1, 2, 3, 4, 5, 6, 7, 8] as const) {
         if (keyval === Gdk[`KEY_${i}`]) {
-          launch(currentList[i - 1])
-          return true
+          const targetIndex = page * 8 + (i - 1)
+          if (targetIndex < currentList.length) {
+            launch(currentList[targetIndex])
+            return true
+          }
         }
       }
     }
@@ -282,7 +249,15 @@ export default function Applauncher() {
 
   return (
     <window
-      $={(ref) => (win = ref)}
+      $={(ref) => {
+        win = ref;
+        (ref as any).openWithText = (text: string) => {
+          ref.visible = true;
+          searchentry.set_text(text);
+          searchentry.set_position(-1);
+          searchentry.grab_focus();
+        };
+      }}
       name="launcher"
       class="launcher-window"
       namespace="launcher"
@@ -311,6 +286,14 @@ export default function Applauncher() {
           $={(ref) => (contentbox = ref)}
           name="launcher-content"
           orientation={Gtk.Orientation.VERTICAL}
+          heightRequest={createComputed(() => {
+            const cfg = configState()
+            if (cfg.height_mode === "full") {
+              const iconSize = computeIconSize(cfg.launcher_font, cfg.launcher_icon_size_multiplayer)
+              return 8 * (iconSize + 16) + 94
+            }
+            return -1
+          })}
           css={`
             border-top-left-radius: ${hyprRounding}px;
             border-top-right-radius: ${hyprRounding}px;
@@ -331,9 +314,9 @@ export default function Applauncher() {
           />
           <Gtk.Separator visible={list((l) => l.length > 0)} />
           <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
-            <For each={list} id={(item) => item.id}>
+            <For each={displayedList} id={(item) => item.id}>
               {(item, index) => {
-                const isActive = createComputed(() => selectedIndex() === index() ? "suggested" : "")
+                const isActive = createComputed(() => localSelectedIndex() === index() ? "suggested" : "")
                 return (
                   <button
                     onClicked={() => launch(item)}
@@ -347,6 +330,13 @@ export default function Applauncher() {
                 )
               }}
             </For>
+            <label
+              class="launcher-page-indicator"
+              visible={showPageIndicator}
+              label={createComputed(() => `Page ${currentPage()} of ${totalPages()}`)}
+              halign={Gtk.Align.CENTER}
+              css="font-size: 0.8em; opacity: 0.5; margin-top: 8px;"
+            />
           </box>
         </box>
         {rightFillet}

@@ -62,3 +62,5 @@ hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "smoothO
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "wind", style = "slide" })
 hl.animation({ leaf = "border", enabled = true, speed = 1, bezier = "liner" })
 hl.animation({ leaf = "fade", enabled = true, speed = 3, bezier = "smoothOut" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = 8, bezier = "easeOutExpo", style = "slide" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = 6, bezier = "easeOutExpo", style = "slide" })
