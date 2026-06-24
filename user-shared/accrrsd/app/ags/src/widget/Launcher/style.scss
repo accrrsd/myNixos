@@ -1,15 +1,144 @@
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
-$fg-color: #{"@theme_fg_color"};
-$bg-color: #{"@theme_bg_color"};
 
+// ==========================================
+// DEFAULT GTK COLORS (FALLBACKS)
+// ==========================================
+$default-fg: #{"@theme_fg_color"};
+$default-bg: #{"@theme_bg_color"};
+$default-select-bg: #{"@theme_selected_bg_color"};
+$default-select-fg: #{"@theme_selected_fg_color"};
+$default-entry-bg: #{"@theme_base_color"};
+$default-entry-fg: #{"@theme_text_color"};
+$default-border: #{"@theme_border_color"};
+
+// ==========================================
+// MATUGEN COLORS (ACTIVE THEME OVERRIDES)
+// ==========================================
+$matugen-accent: #{"@accent_color"};
+$matugen-select-bg: #{"@surface_container_high"};
+$matugen-select-fg: #{"@window_fg_color"};
+$matugen-entry-bg: #{"@outline_variant"};
+
+window.launcher-window,
 window#launcher {
+  background-color: transparent;
+  background-image: none;
   background: transparent;
-  color: $fg-color;
+  box-shadow: none;
+  border: none;
+  color: $default-fg;
+
+  box.launcher-window-box {
+    background-color: transparent;
+    background-image: none;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
 
   box#launcher-content {
-    background: $bg-color;
-    min-width: 400px;
-    border-radius: 12px;
-    padding: 6px;
+    background: $default-bg;
+    min-width: 680px;
+    /* Width matching the user's layout preferences */
+    padding: 16px;
+    box-shadow: none;
+    border: none;
+
+    entry {
+      background: $default-entry-bg;
+      background: $matugen-entry-bg;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      color: $default-entry-fg;
+      color: $default-bg;
+      font-size: 1.1em;
+      /* scales relative to inherited launcherFont setting */
+      caret-color: $default-entry-fg;
+      caret-color: $default-bg;
+
+      outline: none;
+      /* Disable default blue GTK focus outline */
+
+      &:focus {
+        border-color: $default-select-bg;
+        border-color: $matugen-accent;
+        outline: none;
+      }
+    }
+
+    separator {
+      background-color: rgba(255, 255, 255, 0.08);
+      margin: 8px 0;
+    }
+
+    box.vertical {
+      button {
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        min-height: 0;
+        margin: 0px;
+        padding: 0.5em 1em;
+        color: $default-fg;
+
+        outline: none;
+        /* Disable default blue GTK focus outline */
+
+        box {
+
+          /* Spacing between icon and label is now controlled dynamically in TSX */
+          label {
+            font-size: 1em;
+            /* scales relative to inherited launcherFont setting */
+            font-weight: 500;
+          }
+        }
+
+        &:hover,
+        &:focus {
+          background: transparent;
+          outline: none;
+        }
+
+        &.suggested {
+          /* Active item gets the theme selected background and text color */
+          background: $default-select-bg;
+          background: $matugen-select-bg;
+          color: $default-select-fg;
+          color: $matugen-select-fg;
+
+          /* Green focus border that moves with selection */
+          outline: 1px solid $default-select-bg;
+          outline: 1px solid $matugen-accent;
+          outline-offset: -1px;
+
+          label {
+            color: $default-select-fg;
+            color: $matugen-select-fg;
+          }
+        }
+      }
+    }
   }
+
+  .launcher-fillet-left,
+  .launcher-fillet-right {
+    color: $default-bg;
+  }
+}
+
+// Global backup rules for fillets color and transparency
+.launcher-fillet-left,
+.launcher-fillet-right {
+  color: $default-bg !important;
+}
+
+.launcher-window,
+#launcher {
+  background-color: transparent !important;
+  background-image: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }

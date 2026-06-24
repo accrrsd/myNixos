@@ -27,3 +27,8 @@ hl.window_rule({ match = { title = "^(AmneziaVPN)$" }, float = true, center = tr
 hl.layer_rule({ match = { namespace = "rofi" }, animation = "popin 90%" })
 hl.layer_rule({ match = { namespace = "rofi" }, blur = true })
 hl.layer_rule({ match = { namespace = "rofi" }, dim_around = true })
+
+
+-- make ags launcher slide bottom and blur
+hl.layer_rule({ match = { namespace = "launcher" }, animation = "slide bottom" })
+-- hl.layer_rule({ match = { namespace = "launcher" }, blur = true })
