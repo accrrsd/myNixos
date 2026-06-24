@@ -20,12 +20,18 @@ export interface CommandConfig {
   name?: string
 }
 
+export interface FancySettings {
+  speed: number
+  fold_type: "sequential" | "simultaneous" | "simultaneous-debounce"
+  transition_duration?: number | null
+}
+
 export interface LauncherConfig {
   gaps_proportion: number
   launcher_font: string
   launcher_icon_size_multiplayer: number
   height_mode: "fancy" | "full"
-  fancy_speed: number
+  fancy_settings: FancySettings
   commands: Record<string, CommandConfig>
 }
 
@@ -36,7 +42,11 @@ export const DEFAULT_CONFIG: LauncherConfig = {
   launcher_font: "14pt Hack Nerd Font, sans-serif",
   launcher_icon_size_multiplayer: 1.25,
   height_mode: "full",
-  fancy_speed: 0.05,
+  fancy_settings: {
+    speed: 0.05,
+    fold_type: "simultaneous-debounce",
+    transition_duration: null
+  },
   commands: {
     c: {
       type: "calc",
@@ -64,12 +74,21 @@ function loadConfig(): LauncherConfig {
     if (file.query_exists(null)) {
       const content = readFile(file)
       const parsed = JSON.parse(content)
+      const parsedFancy = parsed.fancy_settings || {}
+      const fancy_settings: FancySettings = {
+        speed: typeof parsedFancy.speed === "number" ? parsedFancy.speed : DEFAULT_CONFIG.fancy_settings.speed,
+        fold_type: typeof parsedFancy.fold_type === "string" && ["sequential", "simultaneous", "simultaneous-debounce"].includes(parsedFancy.fold_type)
+          ? parsedFancy.fold_type as any
+          : DEFAULT_CONFIG.fancy_settings.fold_type,
+        transition_duration: typeof parsedFancy.transition_duration === "number" ? parsedFancy.transition_duration : null
+      }
+
       return {
         gaps_proportion: typeof parsed.gaps_proportion === "number" ? parsed.gaps_proportion : DEFAULT_CONFIG.gaps_proportion,
         launcher_font: typeof parsed.launcher_font === "string" ? parsed.launcher_font : DEFAULT_CONFIG.launcher_font,
         launcher_icon_size_multiplayer: typeof parsed.launcher_icon_size_multiplayer === "number" ? parsed.launcher_icon_size_multiplayer : DEFAULT_CONFIG.launcher_icon_size_multiplayer,
         height_mode: typeof parsed.height_mode === "string" && (parsed.height_mode === "fancy" || parsed.height_mode === "full") ? parsed.height_mode : DEFAULT_CONFIG.height_mode,
-        fancy_speed: typeof parsed.fancy_speed === "number" ? parsed.fancy_speed : DEFAULT_CONFIG.fancy_speed,
+        fancy_settings,
         commands: parsed.commands && typeof parsed.commands === "object" ? parsed.commands : DEFAULT_CONFIG.commands
       }
     }
@@ -174,7 +193,8 @@ export function computeIconSize(font: string, multiplayer: number): number {
 
 export const launcherIconSize = computeIconSize(launcherFont, launcherIconSizeMultiplayer)
 export const heightMode = activeConfig.height_mode
-export const fancySpeed = activeConfig.fancy_speed
+export const fancySpeed = activeConfig.fancy_settings.speed
+export const fancySettings = activeConfig.fancy_settings
 
 export function computeGaps(proportion: number): GapsOut {
   return {

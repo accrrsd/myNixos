@@ -18,7 +18,8 @@ import {
   heightMode,
   computeIconSize,
   computeGaps,
-  fancySpeed
+  fancySpeed,
+  fancySettings
 } from "../../settingsParser"
 import { appLauncherPlugins } from "./appLauncherPlugins"
 
@@ -31,60 +32,81 @@ export interface LauncherItem {
   action: () => void
 }
 
-export default function Applauncher() {
-  app.apply_css(style)
-  let contentbox: Gtk.Box
-  let searchentry: Gtk.Entry
-  let win: Astal.Window
-  const currentQueryIdRef = { value: 0 }
+interface HeightModeStrategy {
+  updateList(
+    targetItems: LauncherItem[],
+    currentList: () => LauncherItem[],
+    setList: (items: LauncherItem[]) => void,
+    animationTimeoutIdRef: { value: number | null }
+  ): void
 
-  const apps = new AstalApps.Apps()
-  const [list, setList] = createState(new Array<LauncherItem>())
-  const [selectedIndex, setSelectedIndex] = createState(0)
+  getContentHeight(cfg: any): number
+}
 
-  let animationTimeoutId: number | null = null
+const FullHeightStrategy: HeightModeStrategy = {
+  updateList(targetItems, _, setList, animationTimeoutIdRef) {
+    if (animationTimeoutIdRef.value !== null) {
+      GLib.source_remove(animationTimeoutIdRef.value)
+      animationTimeoutIdRef.value = null
+    }
+    setList(targetItems)
+  },
 
-  function updateList(targetItems: LauncherItem[]) {
-    const config = configState.peek()
-    if (config.height_mode !== "fancy") {
-      if (animationTimeoutId !== null) {
-        GLib.source_remove(animationTimeoutId)
-        animationTimeoutId = null
-      }
-      setList(targetItems)
-      return
+  getContentHeight(cfg) {
+    const iconSize = computeIconSize(cfg.launcher_font, cfg.launcher_icon_size_multiplayer)
+    return 8 * (iconSize + 16) + 94
+  }
+}
+
+const FancyHeightStrategy: HeightModeStrategy = {
+  updateList(targetItems, currentList, setList, animationTimeoutIdRef) {
+    if (animationTimeoutIdRef.value !== null) {
+      GLib.source_remove(animationTimeoutIdRef.value)
+      animationTimeoutIdRef.value = null
     }
 
-    if (animationTimeoutId !== null) {
-      GLib.source_remove(animationTimeoutId)
-      animationTimeoutId = null
+    const cfg = configState.peek()
+    const settings = cfg.fancy_settings || { speed: 0.05, fold_type: "simultaneous-debounce", transition_duration: null }
+    const foldType = settings.fold_type || "simultaneous-debounce"
+    const speed = settings.speed ?? 0.05
+
+    if (targetItems.length === 0) {
+      if (foldType === "simultaneous") {
+        setList([])
+        return
+      } else if (foldType === "simultaneous-debounce") {
+        const delayMs = Math.round(speed * 4 * 1000)
+        animationTimeoutIdRef.value = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
+          setList([])
+          animationTimeoutIdRef.value = null
+          return GLib.SOURCE_REMOVE
+        })
+        return
+      }
+      // For "sequential", we do not return early, allowing it to fall through to the sequential loop below
     }
 
     const targetLength = targetItems.length
 
     function step() {
-      const current = list.peek()
+      const current = currentList()
       const currentLength = current.length
-      const speed = fancySpeed ?? 0.05
       const delayMs = Math.round(speed * 1000)
 
       if (currentLength < targetLength) {
-        // Grow: add next item
         const nextItem = targetItems[currentLength]
         setList([...current, nextItem])
-        animationTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
+        animationTimeoutIdRef.value = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
           step()
           return GLib.SOURCE_REMOVE
         })
       } else if (currentLength > targetLength) {
-        // Shrink: remove last item
         setList(current.slice(0, -1))
-        animationTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
+        animationTimeoutIdRef.value = GLib.timeout_add(GLib.PRIORITY_DEFAULT, delayMs, () => {
           step()
           return GLib.SOURCE_REMOVE
         })
       } else {
-        // Same length: update contents of any that changed
         let contentChanged = false
         for (let i = 0; i < currentLength; i++) {
           if (current[i].id !== targetItems[i].id) {
@@ -95,13 +117,11 @@ export default function Applauncher() {
         if (contentChanged) {
           setList(targetItems)
         }
-        animationTimeoutId = null
+        animationTimeoutIdRef.value = null
       }
     }
 
-    // Before starting the sequential grow/shrink loop, check if any currently visible items
-    // have changed content, and update them immediately so labels/icons change instantly
-    const current = list.peek()
+    const current = currentList()
     const minLen = Math.min(current.length, targetLength)
     let contentChanged = false
     for (let i = 0; i < minLen; i++) {
@@ -116,6 +136,49 @@ export default function Applauncher() {
     }
 
     step()
+  },
+
+  getContentHeight() {
+    return -1
+  }
+}
+
+export default function Applauncher() {
+  app.apply_css(style)
+  let contentbox: Gtk.Box
+  let searchentry: Gtk.Entry
+  let win: Astal.Window
+  const currentQueryIdRef = { value: 0 }
+
+  const apps = new AstalApps.Apps()
+  const [list, setList] = createState(new Array<LauncherItem>())
+  const [selectedIndex, setSelectedIndex] = createState(0)
+
+  const strategies = {
+    full: FullHeightStrategy,
+    fancy: FancyHeightStrategy,
+  }
+
+  const getStrategy = () => {
+    const mode = configState.peek().height_mode
+    return strategies[mode] || FullHeightStrategy
+  }
+
+  const animationTimeoutRef = { value: null as number | null }
+
+  const transitionDuration = createComputed(() => {
+    const cfg = configState()
+    const settings = cfg.fancy_settings || { speed: 0.05, fold_type: "simultaneous-debounce", transition_duration: null }
+    if (typeof settings.transition_duration === "number" && settings.transition_duration > 0) {
+      return settings.transition_duration
+    }
+    const speed = settings.speed ?? 0.05
+    return Math.round(speed * 8 * 1000)
+  })
+
+  function updateList(targetItems: LauncherItem[]) {
+    const strategy = getStrategy()
+    strategy.updateList(targetItems, () => list.peek(), setList, animationTimeoutRef)
   }
 
   // Derived state for the current page items (8 items per page)
@@ -358,9 +421,9 @@ export default function Applauncher() {
           searchentry.grab_focus()
           setSelectedIndex(0)
         } else {
-          if (animationTimeoutId !== null) {
-            GLib.source_remove(animationTimeoutId)
-            animationTimeoutId = null
+          if (animationTimeoutRef.value !== null) {
+            GLib.source_remove(animationTimeoutRef.value)
+            animationTimeoutRef.value = null
           }
           setList([])
           searchentry.set_text("")
@@ -383,11 +446,8 @@ export default function Applauncher() {
           orientation={Gtk.Orientation.VERTICAL}
           heightRequest={createComputed(() => {
             const cfg = configState()
-            if (cfg.height_mode === "full") {
-              const iconSize = computeIconSize(cfg.launcher_font, cfg.launcher_icon_size_multiplayer)
-              return 8 * (iconSize + 16) + 94
-            }
-            return -1
+            const strategy = strategies[cfg.height_mode] || FullHeightStrategy
+            return strategy.getContentHeight(cfg)
           })}
           css={`
             border-top-left-radius: ${hyprRounding}px;
@@ -437,7 +497,7 @@ export default function Applauncher() {
                 <Gtk.Revealer
                   revealChild={hasItem}
                   transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
-                  transitionDuration={200}
+                  transitionDuration={transitionDuration}
                 >
                   <button
                     onClicked={() => {
