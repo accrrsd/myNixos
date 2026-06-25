@@ -24,7 +24,7 @@ export const LaunchLauncherPlugin: AppLauncherPlugin = {
       iconName: cmd.icon || "system-run",
       action: () => {
         if (commandToRun) {
-          execAsync(["setsid", "-f", "sh", "-c", commandToRun]).catch(console.error)
+          execAsync(["sh", "-c", `(${commandToRun} >/dev/null 2>&1 &)`]).catch(console.error)
         }
         ctx.win.visible = false
       }

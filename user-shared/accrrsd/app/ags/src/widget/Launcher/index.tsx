@@ -315,9 +315,10 @@ export default function Applauncher() {
             iconName: app.iconName,
             action: () => {
               win.visible = false
-              if (app.entry) {
-                execAsync(["setsid", "-f", "gtk-launch", app.entry]).catch(err => {
-                  console.error(`[Launcher] Failed to launch via gtk-launch for ${app.entry}:`, err)
+              if (app.executable) {
+                const cleanExec = app.executable.replace(/%[uUfFkicd]/g, "").trim()
+                execAsync(["sh", "-c", `(${cleanExec} >/dev/null 2>&1 &)`]).catch(err => {
+                  console.error(`[Launcher] Failed to launch via shell double-fork for ${app.name}:`, err)
                   app.launch()
                 })
               } else {
