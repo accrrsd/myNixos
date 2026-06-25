@@ -1,6 +1,7 @@
 import app from "ags/gtk4/app"
 import ScreenBorder from "./widget/ScreenBorder"
 import Applauncher from "./widget/Launcher"
+import Notifications from "./widget/Notifications"
 import { Gtk } from "ags/gtk4"
 
 let appLauncher: Gtk.Window
@@ -30,6 +31,9 @@ app.start({
     appLauncher = Applauncher() as Gtk.Window
     app.add_window(appLauncher) 
     appLauncher.visible = false 
+
+    const notifications = Notifications() as Gtk.Window
+    app.add_window(notifications)
 
     app.get_monitors().map(monitor => {
       ScreenBorder(monitor)

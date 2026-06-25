@@ -41,5 +41,10 @@
         "icon": "applications-internet"
       }
     }
+  },
+  "notifications": {
+    "corner": "top-right",
+    "mode": "single",
+    "timeout": 5000
   }
 }

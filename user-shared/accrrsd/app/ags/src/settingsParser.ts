@@ -5,6 +5,7 @@ import { Gtk } from "ags/gtk4"
 import Cairo from "cairo"
 import GLib from "gi://GLib"
 import Gio from "gi://Gio"
+import app from "ags/gtk4/app"
 
 export interface GapsOut {
   top: number
@@ -35,8 +36,15 @@ export interface LauncherConfig {
   commands: Record<string, CommandConfig>
 }
 
+export interface NotificationsConfig {
+  corner: "top-left" | "top-right" | "bottom-left" | "bottom-right"
+  mode: "monolithic" | "single"
+  timeout: number
+}
+
 export interface AppConfig {
   app_launcher: LauncherConfig
+  notifications: NotificationsConfig
 }
 
 const configPath = `${GLib.get_home_dir()}/.config/ags-settings.json`
@@ -71,6 +79,11 @@ export const DEFAULT_CONFIG: AppConfig = {
         icon: "background"
       }
     }
+  },
+  notifications: {
+    corner: "top-right",
+    mode: "single",
+    timeout: 5000
   }
 }
 
@@ -90,6 +103,17 @@ function loadConfig(): AppConfig {
         transition_duration: typeof parsedFancy.transition_duration === "number" ? parsedFancy.transition_duration : null
       }
 
+      const parsedNotifs = parsed.notifications || {}
+      const notifications: NotificationsConfig = {
+        corner: typeof parsedNotifs.corner === "string" && ["top-left", "top-right", "bottom-left", "bottom-right"].includes(parsedNotifs.corner)
+          ? parsedNotifs.corner as any
+          : DEFAULT_CONFIG.notifications.corner,
+        mode: typeof parsedNotifs.mode === "string" && ["monolithic", "single"].includes(parsedNotifs.mode)
+          ? parsedNotifs.mode as any
+          : DEFAULT_CONFIG.notifications.mode,
+        timeout: typeof parsedNotifs.timeout === "number" ? parsedNotifs.timeout : DEFAULT_CONFIG.notifications.timeout
+      }
+
       return {
         app_launcher: {
           gaps_proportion: typeof parsedLauncher.gaps_proportion === "number" ? parsedLauncher.gaps_proportion : DEFAULT_CONFIG.app_launcher.gaps_proportion,
@@ -98,7 +122,8 @@ function loadConfig(): AppConfig {
           height_mode: typeof parsedLauncher.height_mode === "string" && (parsedLauncher.height_mode === "fancy" || parsedLauncher.height_mode === "full") ? parsedLauncher.height_mode : DEFAULT_CONFIG.app_launcher.height_mode,
           fancy_settings,
           commands: parsedLauncher.commands && typeof parsedLauncher.commands === "object" ? parsedLauncher.commands : DEFAULT_CONFIG.app_launcher.commands
-        }
+        },
+        notifications
       }
     }
   } catch (e) {
@@ -228,7 +253,7 @@ export function createCornerWidget(
   const da = new Gtk.DrawingArea()
   da.set_content_width(width)
   da.set_content_height(height)
-  da.get_style_context().add_class(className)
+  da.add_css_class(className)
   if (valign !== undefined) {
     da.valign = valign
   }
@@ -247,5 +272,34 @@ export function createCornerWidget(
     cr.fill()
   })
 
+  // Redraw on first show (picks up CSS if already applied)
+  da.connect("realize", () => {
+    GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+      da.queue_draw()
+      return GLib.SOURCE_REMOVE
+    })
+    // Second pass after a short delay — ensures the color is correct even when
+    // app.apply_css() is called after realize (GTK4 has no style-change signal)
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 50, () => {
+      da.queue_draw()
+      return GLib.SOURCE_REMOVE
+    })
+  })
+
+
   return da
+}
+
+export function applyStyle(styleCss: string) {
+  let colorsCss = ""
+  const path = `${GLib.get_home_dir()}/.config/gtk-4.0/colors.css`
+  try {
+    const file = Gio.File.new_for_path(path)
+    if (file.query_exists(null)) {
+      colorsCss = readFile(file)
+    }
+  } catch (e) {
+    console.error("[settingsParser] Error reading colors.css:", e)
+  }
+  app.apply_css(colorsCss + "\n" + styleCss)
 }

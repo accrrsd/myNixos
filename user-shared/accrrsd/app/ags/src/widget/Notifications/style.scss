@@ -1,0 +1,157 @@
+// ==========================================
+// DEFAULT GTK COLORS (FALLBACKS)
+// ==========================================
+$default-fg: #{"@window_fg_color"};
+$default-bg: #{"@window_bg_color"};
+$default-select-bg: #{"@accent_bg_color"};
+$default-select-fg: #{"@accent_fg_color"};
+$default-border: #{"@outline"};
+
+// ==========================================
+// MATUGEN COLORS (ACTIVE THEME OVERRIDES)
+// ==========================================
+$matugen-accent: #{"@accent_color"};
+$matugen-select-bg: #{"@surface_container_high"};
+$matugen-select-fg: #{"@window_fg_color"};
+
+window.notifications-window,
+window#notifications {
+  background-color: transparent;
+  background-image: none;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+
+  .notification-fillet {
+    color: $default-bg;
+  }
+}
+
+// Visual block of a single notification card
+.notification-card {
+  background: $default-bg;
+  color: $default-fg;
+  padding: 16px;
+  min-width: 360px;
+  box-shadow: none;
+  border: none;
+  margin: 0px; // Handled by box spacing
+
+  &.urgency-critical {
+    border-color: transparent;
+    box-shadow: none;
+
+    .app-name {
+      color: rgb(255, 90, 90);
+    }
+  }
+
+  .app-icon {
+    margin-right: 12px;
+    border-radius: 6px;
+  }
+
+  .app-name {
+    font-size: 0.82em;
+    opacity: 0.65;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .close-button {
+    background: transparent;
+    border: none;
+    color: $default-fg;
+    opacity: 0.45;
+    padding: 6px;
+    border-radius: 50%;
+    margin-left: 12px;
+    min-width: 28px;
+    min-height: 28px;
+
+    &:hover {
+      opacity: 0.9;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &:active {
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+
+  .summary-text {
+    font-size: 1.05em;
+    font-weight: 700;
+    margin-top: 6px;
+    margin-bottom: 4px;
+    color: $default-fg;
+  }
+
+  .body-text {
+    font-size: 0.92em;
+    opacity: 0.8;
+    line-height: 1.4;
+    color: $default-fg;
+  }
+
+  .actions-box {
+    margin-top: 12px;
+    
+    button {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: $default-fg;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.82em;
+      margin-right: 8px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+  }
+}
+
+// Monolithic container style
+.notifications-monolithic-container {
+  background: $default-bg;
+  border: none;
+  box-shadow: none;
+  padding: 8px;
+  min-width: 360px;
+
+  // Outer fillets and cards inside monolithic container
+  .notification-card {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    border-radius: 0px;
+    padding: 12px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  .empty-placeholder {
+    padding: 16px;
+    font-size: 0.9em;
+    opacity: 0.5;
+    font-weight: 500;
+  }
+}
+
+// Fillets color variables
+.notification-fillet {
+  color: $default-bg;
+  background-color: transparent;
+  background: transparent;
+}

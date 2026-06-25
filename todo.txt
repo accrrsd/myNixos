@@ -1,14 +1,9 @@
-Пофиксить openrgb + openrazer
+pkill ags убивает и все приложения, которые тот запускает
 
 Пофиксить маунт дельфина (нужно чтобы он автомаутил)
 Пофиксить application menu для qt
 
-Настроить AGS
 Сделать темы для разных приложений, вроде godot, steam, vscode, попробовать сделать тему для vk
-
-Так как сейчас plasma ломает мне кайф QT+GTK, то можно прочитать про это тут https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications
-
-Попробовать Niri (нужен нормальный конфиг, чтобы не пришлось перезаходить в сессию) Возможно Niri вылечит проблемы с godot и я пересяду туда.
 
 Возможно заменить стрелочку в zsh консоли на обычный слеш
 
@@ -17,18 +12,3 @@
 Настроить внешку sddm
 
 Попробовать сделать sleep
-
-Попробовать вынести настройки монитора в system-wide по типу:
-programs.hyprland.settings = {
-  monitor = ",preferred,auto,1";
-  general = {
-    gaps_in = 5;
-    gaps_out = 10;
-    border_size = 2;
-    "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-  };
-  input = {
-    kb_layout = "us";
-    follow_mouse = 1;
-  };
-};

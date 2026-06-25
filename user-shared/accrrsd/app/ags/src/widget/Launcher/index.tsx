@@ -19,7 +19,8 @@ import {
   computeIconSize,
   computeGaps,
   fancySpeed,
-  fancySettings
+  fancySettings,
+  applyStyle
 } from "../../settingsParser"
 import { appLauncherPlugins } from "./appLauncherPlugins"
 
@@ -144,7 +145,7 @@ const FancyHeightStrategy: HeightModeStrategy = {
 }
 
 export default function Applauncher() {
-  app.apply_css(style)
+  applyStyle(style)
   let contentbox: Gtk.Box
   let searchentry: Gtk.Entry
   let win: Astal.Window
@@ -317,8 +318,8 @@ export default function Applauncher() {
               win.visible = false
               if (app.executable) {
                 const cleanExec = app.executable.replace(/%[uUfFkicd]/g, "").trim()
-                execAsync(["sh", "-c", `(${cleanExec} >/dev/null 2>&1 &)`]).catch(err => {
-                  console.error(`[Launcher] Failed to launch via shell double-fork for ${app.name}:`, err)
+                execAsync(["setsid", "-f", "sh", "-c", `exec ${cleanExec} >/dev/null 2>&1`]).catch(err => {
+                  console.error(`[Launcher] Failed to launch via setsid for ${app.name}:`, err)
                   app.launch()
                 })
               } else {

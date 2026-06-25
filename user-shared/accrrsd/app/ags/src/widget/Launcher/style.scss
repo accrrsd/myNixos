@@ -3,13 +3,13 @@
 // ==========================================
 // DEFAULT GTK COLORS (FALLBACKS)
 // ==========================================
-$default-fg: #{"@theme_fg_color"};
-$default-bg: #{"@theme_bg_color"};
-$default-select-bg: #{"@theme_selected_bg_color"};
-$default-select-fg: #{"@theme_selected_fg_color"};
-$default-entry-bg: #{"@theme_base_color"};
-$default-entry-fg: #{"@theme_text_color"};
-$default-border: #{"@theme_border_color"};
+$default-fg: #{"@window_fg_color"};
+$default-bg: #{"@window_bg_color"};
+$default-select-bg: #{"@accent_bg_color"};
+$default-select-fg: #{"@accent_fg_color"};
+$default-entry-bg: #{"@view_bg_color"};
+$default-entry-fg: #{"@view_fg_color"};
+$default-border: #{"@outline"};
 
 // ==========================================
 // MATUGEN COLORS (ACTIVE THEME OVERRIDES)
@@ -57,13 +57,9 @@ window#launcher {
       caret-color: $default-entry-fg;
       caret-color: $default-bg;
 
-      outline: none;
-      /* Disable default blue GTK focus outline */
-
       &:focus {
         border-color: $default-select-bg;
         border-color: $matugen-accent;
-        outline: none;
       }
     }
 
@@ -82,8 +78,7 @@ window#launcher {
         padding: 0.5em 1em;
         color: $default-fg;
 
-        outline: none;
-        /* Disable default blue GTK focus outline */
+
 
         box {
 
@@ -98,7 +93,6 @@ window#launcher {
         &:hover,
         &:focus {
           background: transparent;
-          outline: none;
         }
 
         &.suggested {
@@ -109,9 +103,8 @@ window#launcher {
           color: $matugen-select-fg;
 
           /* Green focus border that moves with selection */
-          outline: 1px solid $default-select-bg;
-          outline: 1px solid $matugen-accent;
-          outline-offset: -1px;
+          box-shadow: inset 0 0 0 1px $default-select-bg;
+          box-shadow: inset 0 0 0 1px $matugen-accent;
 
           label {
             color: $default-select-fg;
@@ -131,14 +124,14 @@ window#launcher {
 // Global backup rules for fillets color and transparency
 .launcher-fillet-left,
 .launcher-fillet-right {
-  color: $default-bg !important;
+  color: $default-bg;
 }
 
 .launcher-window,
 #launcher {
-  background-color: transparent !important;
-  background-image: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
+  background-color: transparent;
+  background-image: none;
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
