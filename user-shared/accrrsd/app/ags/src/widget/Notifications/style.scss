@@ -22,8 +22,21 @@ window#notifications {
   box-shadow: none;
   border: none;
 
+  &.empty {
+    .notifications-monolithic-container {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+      padding: 0px !important;
+    }
+    .notification-fillet {
+      color: transparent !important;
+    }
+  }
+
   .notification-fillet {
     color: $default-bg;
+    transition: color 250ms ease-out;
   }
 }
 
@@ -32,10 +45,21 @@ window#notifications {
   background: $default-bg;
   color: $default-fg;
   padding: 16px;
+  width: 360px;
   min-width: 360px;
+  max-width: 360px;
   box-shadow: none;
   border: none;
   margin: 0px; // Handled by box spacing
+  transition: all 200ms ease-out;
+
+  &.collapsed {
+    padding: 10px 12px;
+  }
+
+  &.expanded {
+    padding: 16px;
+  }
 
   &.urgency-critical {
     border-color: transparent;
@@ -46,9 +70,10 @@ window#notifications {
     }
   }
 
-  .app-icon {
-    margin-right: 12px;
-    border-radius: 6px;
+  .app-icon-container {
+    .app-icon {
+      border-radius: 6px;
+    }
   }
 
   .app-name {
@@ -78,6 +103,16 @@ window#notifications {
     &:active {
       background: rgba(255, 255, 255, 0.04);
     }
+  }
+
+  .expand-arrow {
+    color: $default-fg;
+    opacity: 0.4;
+    transition: opacity 150ms ease;
+  }
+
+  &:hover .expand-arrow {
+    opacity: 0.7;
   }
 
   .summary-text {
@@ -130,14 +165,21 @@ window#notifications {
 
   // Outer fillets and cards inside monolithic container
   .notification-card {
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    border-radius: 0px;
-    padding: 12px;
+    background: $matugen-select-bg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px !important;
 
-    &:not(:last-child) {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    &.collapsed {
+      padding: 10px 12px;
+    }
+
+    &.expanded {
+      padding: 12px;
+    }
+
+    &:last-child {
+      margin-bottom: 0px;
     }
   }
 

@@ -110,9 +110,32 @@
           "minimum": 0,
           "default": 5000,
           "description": "Auto-dismiss timeout in milliseconds (0 to disable)"
+        },
+        "collapsed_by_default": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether notification cards are collapsed to a single line by default"
+        },
+        "summary_max_length": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 50,
+          "description": "Maximum character length of the summary title when collapsed"
+        },
+        "monolithic_spacing": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 6,
+          "description": "Spacing between notification cards in monolithic mode"
+        },
+        "icon_size": {
+          "type": "integer",
+          "minimum": 8,
+          "default": 44,
+          "description": "Size of the notification app/image icon in pixels"
         }
       },
-      "required": ["corner", "mode", "timeout"],
+      "required": ["corner", "mode", "timeout", "collapsed_by_default", "summary_max_length", "monolithic_spacing", "icon_size"],
       "additionalProperties": false
     }
   },

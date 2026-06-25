@@ -2,7 +2,9 @@ import { createState, createComputed, createEffect } from "ags"
 import { Astal, Gtk } from "ags/gtk4"
 import app from "ags/gtk4/app"
 import GLib from "gi://GLib"
+import Gio from "gi://Gio"
 import AstalNotifd from "gi://AstalNotifd"
+import Pango from "gi://Pango"
 import style from "./style.scss"
 import {
   gaps,
@@ -107,10 +109,10 @@ function getContentStyle(corner: string, isCorner: boolean): string {
  * the notification card visually "snaps into" the screen corner.
  */
 function wrapWithFillets(
-  contentWidget: Gtk.Widget,
+  contentWidget: any,
   corner: string,
   isCorner: boolean
-): Gtk.Widget {
+): any {
   if (isCorner) {
     switch (corner) {
       case "top-left": {
@@ -220,70 +222,216 @@ interface NotificationCardProps {
   notification: AstalNotifd.Notification
   corner: string
   isCorner: boolean
+  isNew?: boolean
 }
 
-function NotificationCard({ notification, corner, isCorner }: NotificationCardProps) {
+function getNotificationIcon(notification: AstalNotifd.Notification, collapsed: () => boolean): any {
   const isIconPath = (icon: string | null) =>
     icon && (icon.startsWith("/") || icon.startsWith("file://"))
 
   const iconFile = notification.image || (isIconPath(notification.app_icon) ? notification.app_icon : null)
-  const iconName = !iconFile ? (notification.app_icon || "dialog-information") : null
+  const valignBind = createComputed(() => collapsed() ? Gtk.Align.CENTER : Gtk.Align.START)
+
+  const getInnerImage = () => {
+    if (iconFile) {
+      return (
+        <image
+          file={iconFile}
+          widthRequest={44}
+          heightRequest={44}
+          halign={Gtk.Align.CENTER}
+          valign={Gtk.Align.CENTER}
+          class="app-icon"
+        />
+      )
+    }
+
+    const appIcon = notification.app_icon
+    if (appIcon && appIcon !== "dialog-information" && appIcon !== "dialog-information-symbolic" && appIcon.trim() !== "") {
+      return (
+        <image
+          iconName={appIcon}
+          pixelSize={44}
+          halign={Gtk.Align.CENTER}
+          valign={Gtk.Align.CENTER}
+          class="app-icon"
+        />
+      )
+    }
+
+    // Fallback to custom SVG icon loaded via Gio.FileIcon
+    try {
+      let fallbackPath = `${GLib.get_home_dir()}/.config/ags/assets/info-icon-svgrepo-com-symbolic.svg`
+      let file = Gio.File.new_for_path(fallbackPath)
+      if (!file.query_exists(null)) {
+        fallbackPath = `/nixos-config/user-shared/accrrsd/app/ags/src/assets/info-icon-svgrepo-com-symbolic.svg`
+        file = Gio.File.new_for_path(fallbackPath)
+      }
+
+      if (file.query_exists(null)) {
+        const gicon = Gio.FileIcon.new(file)
+        return (
+          <image
+            gicon={gicon}
+            pixelSize={44}
+            halign={Gtk.Align.CENTER}
+            valign={Gtk.Align.CENTER}
+            class="app-icon"
+          />
+        )
+      }
+    } catch (e) {
+      console.error("[Notifications] Failed to load custom fallback icon:", e)
+    }
+
+    return (
+      <image
+        iconName="dialog-information-symbolic"
+        pixelSize={44}
+        halign={Gtk.Align.CENTER}
+        valign={Gtk.Align.CENTER}
+        class="app-icon"
+      />
+    )
+  }
+
+  return (
+    <box
+      widthRequest={48}
+      heightRequest={48}
+      valign={valignBind}
+      halign={Gtk.Align.CENTER}
+      class="app-icon-container"
+    >
+      {getInnerImage()}
+    </box>
+  ) as any
+}
+
+function NotificationCard({ notification, corner, isCorner, isNew }: NotificationCardProps) {
+  const [collapsed, setCollapsed] = createState(configState.peek().notifications.collapsed_by_default ?? true)
+
+  let timerId: number | null = null
+
+  const startTimer = () => {
+    if (!isNew) return
+    const configTimeout = configState.peek().notifications.timeout ?? 5000
+    if (configTimeout > 0 && notification.urgency !== AstalNotifd.Urgency.CRITICAL) {
+      if (timerId === null) {
+        timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, configTimeout, () => {
+          notification.dismiss()
+          timerId = null
+          return GLib.SOURCE_REMOVE
+        })
+      }
+    }
+  }
+
+  const stopTimer = () => {
+    if (timerId !== null) {
+      GLib.source_remove(timerId)
+      timerId = null
+    }
+  }
+
+  // Handle local timer lifecycle reactively
+  createEffect(() => {
+    if (collapsed()) {
+      startTimer()
+    } else {
+      stopTimer()
+    }
+  })
+
+  const summaryText = createComputed(() => {
+    const raw = notification.summary || ""
+    if (collapsed()) {
+      const maxLen = configState().notifications.summary_max_length ?? 50
+      if (raw.length > maxLen) {
+        return raw.slice(0, maxLen).trim() + "..."
+      }
+    }
+    return raw
+  })
 
   const urgencyClass = (() => {
     switch (notification.urgency) {
-      case AstalNotifd.Urgency.LOW:      return "urgency-low"
+      case AstalNotifd.Urgency.LOW: return "urgency-low"
       case AstalNotifd.Urgency.CRITICAL: return "urgency-critical"
-      default:                           return "urgency-normal"
+      default: return "urgency-normal"
     }
   })()
 
   return (
     <box
-      class={`notification-card ${urgencyClass}`}
-      css={getContentStyle(corner, isCorner)}
+      $={(self) => {
+        self.connect("destroy", () => {
+          stopTimer()
+        })
+      }}
+      class={createComputed(() => `notification-card ${urgencyClass} ${collapsed() ? "collapsed" : "expanded"}`)}
+      css={`border-radius: ${hyprRounding}px;`}
       widthRequest={360}
     >
+      <Gtk.GestureClick onPressed={() => setCollapsed(!collapsed())} />
       <box orientation={Gtk.Orientation.HORIZONTAL} spacing={12} valign={Gtk.Align.START} hexpand>
         {/* Icon / avatar */}
-        {iconFile
-          ? <image file={iconFile} widthRequest={44} heightRequest={44} valign={Gtk.Align.START} class="app-icon" />
-          : <image iconName={iconName || "dialog-information"} pixelSize={44} valign={Gtk.Align.START} class="app-icon" />
-        }
+        {getNotificationIcon(notification, collapsed)}
 
         {/* Content */}
-        <box orientation={Gtk.Orientation.VERTICAL} hexpand>
-          <box orientation={Gtk.Orientation.HORIZONTAL} valign={Gtk.Align.CENTER}>
-            <label
-              label={notification.app_name || "Notification"}
-              class="app-name"
-              halign={Gtk.Align.START}
-              hexpand
-            />
-            <button
-              onClicked={() => notification.dismiss()}
-              class="close-button"
-              halign={Gtk.Align.END}
-            >
-              <image iconName="window-close-symbolic" />
-            </button>
-          </box>
+        <box orientation={Gtk.Orientation.VERTICAL} hexpand valign={Gtk.Align.CENTER}>
+          <label
+            label={notification.app_name || "Notification"}
+            class="app-name"
+            halign={Gtk.Align.START}
+            visible={createComputed(() => !collapsed())}
+          />
 
+          {/* Summary collapsed (single line, ellipsized) */}
+          <label
+            label={summaryText}
+            class="summary-text"
+            halign={Gtk.Align.START}
+            hexpand
+            xalign={0}
+            ellipsize={Pango.EllipsizeMode.END}
+            visible={collapsed}
+          />
+
+          {/* Summary expanded (multi-line, wrapped by word) */}
           <label
             label={notification.summary}
             class="summary-text"
             halign={Gtk.Align.START}
+            hexpand
+            xalign={0}
             wrap
+            wrapMode={Pango.WrapMode.WORD}
+            maxWidthChars={32}
+            visible={createComputed(() => !collapsed())}
           />
+
+          {/* Body expanded (multi-line, wrapped by word) */}
           <label
             label={notification.body}
             class="body-text"
             halign={Gtk.Align.START}
+            hexpand
+            xalign={0}
             wrap
+            wrapMode={Pango.WrapMode.WORD}
             useMarkup
+            maxWidthChars={32}
+            visible={createComputed(() => !collapsed() && !!notification.body)}
           />
 
           {notification.actions && notification.actions.length > 0 && (
-            <box orientation={Gtk.Orientation.HORIZONTAL} class="actions-box" spacing={8}>
+            <box
+              orientation={Gtk.Orientation.HORIZONTAL}
+              class="actions-box"
+              spacing={8}
+              visible={createComputed(() => !collapsed())}
+            >
               {notification.actions.map(action => (
                 <button onClicked={() => notification.invoke(action.id)}>
                   <label label={action.label} />
@@ -291,6 +439,25 @@ function NotificationCard({ notification, corner, isCorner }: NotificationCardPr
               ))}
             </box>
           )}
+        </box>
+
+        {/* Right controls (arrow and close button) */}
+        <box
+          orientation={Gtk.Orientation.HORIZONTAL}
+          spacing={6}
+          valign={createComputed(() => collapsed() ? Gtk.Align.CENTER : Gtk.Align.START)}
+          class="control-box"
+        >
+          <image
+            iconName={createComputed(() => collapsed() ? "pan-down-symbolic" : "pan-up-symbolic")}
+            class="expand-arrow"
+          />
+          <button
+            onClicked={() => notification.dismiss()}
+            class="close-button"
+          >
+            <image iconName="window-close-symbolic" />
+          </button>
         </box>
       </box>
     </box>
@@ -308,14 +475,16 @@ interface NotificationItemProps {
   isCorner: boolean
   transitionType: Gtk.RevealerTransitionType
   halign: Gtk.Align
+  isNew?: boolean
 }
 
-function NotificationItem({ notif, revealed, corner, isCorner, transitionType, halign }: NotificationItemProps) {
+function NotificationItem({ notif, revealed, corner, isCorner, transitionType, halign, isNew }: NotificationItemProps) {
   const card = (
     <NotificationCard
       notification={notif}
       corner={corner}
       isCorner={isCorner}
+      isNew={isNew}
     />
   )
   return (
@@ -340,11 +509,12 @@ export default function Notifications() {
   const notifd = AstalNotifd.get_default()
 
   const corner = createComputed(() => configState().notifications.corner || "top-right")
-  const mode   = createComputed(() => configState().notifications.mode   || "single")
+  const mode = createComputed(() => configState().notifications.mode || "single")
 
   // Seed with already-active notifications
-  const initialNotifs = notifd.get_notifications().map(n => ({ notif: n, revealed: true }))
+  const initialNotifs = notifd.get_notifications().map(n => ({ notif: n, revealed: true, isNew: false }))
   const [list, setList] = createState(initialNotifs)
+  const hasRevealed = createComputed(() => list().some(item => item.revealed))
 
   // -------------------------------------------------------------------------
   // Incoming notification
@@ -359,32 +529,20 @@ export default function Notifications() {
     if (existingIndex !== -1) {
       // Update existing entry in-place
       const updated = [...current]
-      updated[existingIndex] = { notif: n, revealed: true }
+      updated[existingIndex] = { notif: n, revealed: true, isNew: true }
       setList(updated)
     } else {
       // Insert with revealed=false, then flip to true on the next idle tick
       const isTop = corner.peek() === "top-left" || corner.peek() === "top-right"
       const next = isTop
-        ? [{ notif: n, revealed: false }, ...current]
-        : [...current, { notif: n, revealed: false }]
+        ? [{ notif: n, revealed: false, isNew: true }, ...current]
+        : [...current, { notif: n, revealed: false, isNew: true }]
       setList(next)
 
       GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
         setList(list.peek().map(item =>
-          item.notif.id === id ? { ...item, revealed: true } : item
+          item.notif.id === id ? { ...item, revealed: true, isNew: true } : item
         ))
-        return GLib.SOURCE_REMOVE
-      })
-    }
-
-    // Auto-dismiss timer for non-critical notifications
-    const configTimeout = configState.peek().notifications.timeout ?? 5000
-    if (configTimeout > 0 && n.urgency !== AstalNotifd.Urgency.CRITICAL) {
-      GLib.timeout_add(GLib.PRIORITY_DEFAULT, configTimeout, () => {
-        const currentNotif = notifd.get_notification(id)
-        if (currentNotif) {
-          currentNotif.dismiss()
-        }
         return GLib.SOURCE_REMOVE
       })
     }
@@ -420,26 +578,26 @@ export default function Notifications() {
     const c = corner()
     switch (c) {
       case "top-left":
-        return { valign: Gtk.Align.START, halign: Gtk.Align.START, marginTop: gaps.top,    marginBottom: 0,           marginStart: gaps.left,  marginEnd: 0 }
+        return { valign: Gtk.Align.START, halign: Gtk.Align.START, marginTop: gaps.top, marginBottom: 0, marginStart: gaps.left, marginEnd: 0 }
       case "top-right":
-        return { valign: Gtk.Align.START, halign: Gtk.Align.END,   marginTop: gaps.top,    marginBottom: 0,           marginStart: 0,          marginEnd: gaps.right }
+        return { valign: Gtk.Align.START, halign: Gtk.Align.END, marginTop: gaps.top, marginBottom: 0, marginStart: 0, marginEnd: gaps.right }
       case "bottom-left":
-        return { valign: Gtk.Align.END,   halign: Gtk.Align.START, marginTop: 0,           marginBottom: gaps.bottom, marginStart: gaps.left,  marginEnd: 0 }
+        return { valign: Gtk.Align.END, halign: Gtk.Align.START, marginTop: 0, marginBottom: gaps.bottom, marginStart: gaps.left, marginEnd: 0 }
       case "bottom-right":
-        return { valign: Gtk.Align.END,   halign: Gtk.Align.END,   marginTop: 0,           marginBottom: gaps.bottom, marginStart: 0,          marginEnd: gaps.right }
+        return { valign: Gtk.Align.END, halign: Gtk.Align.END, marginTop: 0, marginBottom: gaps.bottom, marginStart: 0, marginEnd: gaps.right }
       default:
-        return { valign: Gtk.Align.START, halign: Gtk.Align.END,   marginTop: gaps.top,    marginBottom: 0,           marginStart: 0,          marginEnd: gaps.right }
+        return { valign: Gtk.Align.START, halign: Gtk.Align.END, marginTop: gaps.top, marginBottom: 0, marginStart: 0, marginEnd: gaps.right }
     }
   })
 
   const windowAnchor = createComputed(() => {
     const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
     switch (corner()) {
-      case "top-left":    return TOP | LEFT
-      case "top-right":   return TOP | RIGHT
+      case "top-left": return TOP | LEFT
+      case "top-right": return TOP | RIGHT
       case "bottom-left": return BOTTOM | LEFT
-      case "bottom-right":return BOTTOM | RIGHT
-      default:            return TOP | RIGHT
+      case "bottom-right": return BOTTOM | RIGHT
+      default: return TOP | RIGHT
     }
   })
 
@@ -455,14 +613,14 @@ export default function Notifications() {
   // This executes inside Gnim's active effect tracking context, allowing proper
   // signal cleanup and preventing the "out of tracking context" warning.
   // -------------------------------------------------------------------------
-  const listBox = <box orientation={Gtk.Orientation.VERTICAL} spacing={8} />
+  const listBox = <box orientation={Gtk.Orientation.VERTICAL} spacing={8} /> as any
 
   createEffect(() => {
-    const currentList  = list()
+    const currentList = list()
     const activeCorner = corner()
-    const activeMode   = mode()
-    const tt           = transitionType()
-    const hal          = alignProps().halign
+    const activeMode = mode()
+    const tt = transitionType()
+    const hal = alignProps().halign
 
     // Clear existing children
     let child = listBox.get_first_child()
@@ -481,10 +639,11 @@ export default function Notifications() {
         <box
           orientation={Gtk.Orientation.VERTICAL}
           class="notifications-monolithic-container"
+          spacing={createComputed(() => configState().notifications.monolithic_spacing ?? 6)}
           css={getContentStyle(activeCorner, true)}
           widthRequest={360}
         >
-          {currentList.map(({ notif, revealed }) => (
+          {currentList.map(({ notif, revealed, isNew }) => (
             <Gtk.Revealer
               revealChild={revealed}
               transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
@@ -494,6 +653,7 @@ export default function Notifications() {
                 notification={notif}
                 corner={activeCorner}
                 isCorner={false}
+                isNew={isNew}
               />
             </Gtk.Revealer>
           ))}
@@ -505,7 +665,7 @@ export default function Notifications() {
       const isTop = activeCorner === "top-left" || activeCorner === "top-right"
       const singleBox = (
         <box orientation={Gtk.Orientation.VERTICAL} spacing={8}>
-          {currentList.map(({ notif, revealed }, idx) => {
+          {currentList.map(({ notif, revealed, isNew }, idx) => {
             const isCorner = isTop ? idx === 0 : idx === currentList.length - 1
             return (
               <NotificationItem
@@ -515,6 +675,7 @@ export default function Notifications() {
                 isCorner={isCorner}
                 transitionType={tt}
                 halign={hal}
+                isNew={isNew}
               />
             )
           })}
@@ -531,7 +692,7 @@ export default function Notifications() {
     <window
       visible={createComputed(() => list().length > 0)}
       name="notifications"
-      class="notifications-window"
+      class={createComputed(() => `notifications-window ${hasRevealed() ? "has-items" : "empty"}`)}
       namespace="notifications"
       anchor={windowAnchor}
       exclusivity={Astal.Exclusivity.IGNORE}

@@ -21,7 +21,6 @@
         "name": "Time & Date",
         "icon": "preferences-system-time"
       },
-
       "yi": {
         "type": "launch",
         "exec": "xdg-open \"https://yandex.ru/images/search?text={urlargs}\"",
@@ -44,7 +43,11 @@
   },
   "notifications": {
     "corner": "top-right",
-    "mode": "single",
-    "timeout": 5000
+    "mode": "monolithic",
+    "timeout": 5000,
+    "collapsed_by_default": true,
+    "summary_max_length": 50,
+    "monolithic_spacing": 6,
+    "icon_size": 44
   }
 }

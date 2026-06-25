@@ -9,7 +9,7 @@ $default-select-bg: #{"@accent_bg_color"};
 $default-select-fg: #{"@accent_fg_color"};
 $default-entry-bg: #{"@view_bg_color"};
 $default-entry-fg: #{"@view_fg_color"};
-$default-border: #{"@outline"};
+
 
 // ==========================================
 // MATUGEN COLORS (ACTIVE THEME OVERRIDES)
@@ -18,6 +18,7 @@ $matugen-accent: #{"@accent_color"};
 $matugen-select-bg: #{"@surface_container_high"};
 $matugen-select-fg: #{"@window_fg_color"};
 $matugen-entry-bg: #{"@outline_variant"};
+$matugen-border: #{"@outline"};
 
 window.launcher-window,
 window#launcher {
@@ -56,6 +57,7 @@ window#launcher {
       /* scales relative to inherited launcherFont setting */
       caret-color: $default-entry-fg;
       caret-color: $default-bg;
+      outline: none;
 
       &:focus {
         border-color: $default-select-bg;

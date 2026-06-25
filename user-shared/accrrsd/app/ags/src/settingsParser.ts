@@ -1,11 +1,22 @@
 import { createState } from "ags"
 import { readFile, monitorFile } from "ags/file"
 import { exec } from "ags/process"
-import { Gtk } from "ags/gtk4"
+import { Gdk, Gtk } from "ags/gtk4"
 import Cairo from "cairo"
 import GLib from "gi://GLib"
 import Gio from "gi://Gio"
 import app from "ags/gtk4/app"
+
+try {
+  const display = Gdk.Display.get_default()
+  if (display) {
+    const theme = Gtk.IconTheme.get_for_display(display)
+    theme.add_search_path(`${GLib.get_home_dir()}/.config/ags/assets`)
+    theme.add_search_path(`${GLib.get_home_dir()}/.config/ags/src/assets`)
+  }
+} catch (e) {
+  console.error("[settingsParser] Failed to add icon search path:", e)
+}
 
 export interface GapsOut {
   top: number
@@ -40,6 +51,10 @@ export interface NotificationsConfig {
   corner: "top-left" | "top-right" | "bottom-left" | "bottom-right"
   mode: "monolithic" | "single"
   timeout: number
+  collapsed_by_default: boolean
+  summary_max_length: number
+  monolithic_spacing: number
+  icon_size: number
 }
 
 export interface AppConfig {
@@ -83,7 +98,11 @@ export const DEFAULT_CONFIG: AppConfig = {
   notifications: {
     corner: "top-right",
     mode: "single",
-    timeout: 5000
+    timeout: 5000,
+    collapsed_by_default: true,
+    summary_max_length: 50,
+    monolithic_spacing: 6,
+    icon_size: 44
   }
 }
 
@@ -111,7 +130,19 @@ function loadConfig(): AppConfig {
         mode: typeof parsedNotifs.mode === "string" && ["monolithic", "single"].includes(parsedNotifs.mode)
           ? parsedNotifs.mode as any
           : DEFAULT_CONFIG.notifications.mode,
-        timeout: typeof parsedNotifs.timeout === "number" ? parsedNotifs.timeout : DEFAULT_CONFIG.notifications.timeout
+        timeout: typeof parsedNotifs.timeout === "number" ? parsedNotifs.timeout : DEFAULT_CONFIG.notifications.timeout,
+        collapsed_by_default: typeof parsedNotifs.collapsed_by_default === "boolean"
+          ? parsedNotifs.collapsed_by_default
+          : DEFAULT_CONFIG.notifications.collapsed_by_default,
+        summary_max_length: typeof parsedNotifs.summary_max_length === "number"
+          ? parsedNotifs.summary_max_length
+          : DEFAULT_CONFIG.notifications.summary_max_length,
+        monolithic_spacing: typeof parsedNotifs.monolithic_spacing === "number"
+          ? parsedNotifs.monolithic_spacing
+          : DEFAULT_CONFIG.notifications.monolithic_spacing,
+        icon_size: typeof parsedNotifs.icon_size === "number"
+          ? parsedNotifs.icon_size
+          : DEFAULT_CONFIG.notifications.icon_size
       }
 
       return {

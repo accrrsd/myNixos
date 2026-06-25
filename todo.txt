@@ -1,6 +1,15 @@
-pkill ags убивает и все приложения, которые тот запускает
+ags notification additions
 
-Пофиксить маунт дельфина (нужно чтобы он автомаутил)
+ags sound settings
+
+ags wallpaper swticher (with and ? without animation)
+
+ags clipboard history
+
+ags tray & time widget
+
+ags transparency and angle size
+
 Пофиксить application menu для qt
 
 Сделать темы для разных приложений, вроде godot, steam, vscode, попробовать сделать тему для vk
