@@ -25,13 +25,14 @@ hl.config({
   },
   general = {
     gaps_in = 14,
-    gaps_out = 30,
+    -- 30 + 4 as border size
+    gaps_out = 34,
     border_size = 4,
     resize_on_border = false,
     layout = "dwindle"
   },
   decoration = {
-    rounding = 10,
+    rounding = 20,
     active_opacity = 0.9,
     inactive_opacity = 0.9,
     dim_inactive = false,
