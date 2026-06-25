@@ -28,68 +28,77 @@ export interface FancySettings {
 
 export interface LauncherConfig {
   gaps_proportion: number
-  launcher_font: string
-  launcher_icon_size_multiplayer: number
+  "launcher.font": string
+  "launcher.icon_size_multiplayer": number
   height_mode: "fancy" | "full"
   fancy_settings: FancySettings
   commands: Record<string, CommandConfig>
 }
 
-const configPath = `${GLib.get_home_dir()}/.config/ags-launcher.json`
+export interface AppConfig {
+  app_launcher: LauncherConfig
+}
 
-export const DEFAULT_CONFIG: LauncherConfig = {
-  gaps_proportion: 0.33,
-  launcher_font: "14pt Hack Nerd Font, sans-serif",
-  launcher_icon_size_multiplayer: 1.25,
-  height_mode: "full",
-  fancy_settings: {
-    speed: 0.05,
-    fold_type: "simultaneous-debounce",
-    transition_duration: null
-  },
-  commands: {
-    c: {
-      type: "calc",
-      name: "Calculator",
-      icon: "accessories-calculator"
+const configPath = `${GLib.get_home_dir()}/.config/ags-settings.json`
+
+export const DEFAULT_CONFIG: AppConfig = {
+  app_launcher: {
+    gaps_proportion: 0.33,
+    "launcher.font": "14pt Hack Nerd Font, sans-serif",
+    "launcher.icon_size_multiplayer": 1.25,
+    height_mode: "full",
+    fancy_settings: {
+      speed: 0.05,
+      fold_type: "simultaneous-debounce",
+      transition_duration: null
     },
-    ym: {
-      type: "launch",
-      exec: "xdg-open https://music.yandex.ru",
-      name: "Yandex Music",
-      icon: "applications-internet"
-    },
-    w: {
-      type: "launch",
-      exec: "select-wallpaper",
-      name: "Wallpaper Selector",
-      icon: "background"
+    commands: {
+      c: {
+        type: "calc",
+        name: "Calculator",
+        icon: "accessories-calculator"
+      },
+      ym: {
+        type: "launch",
+        exec: "xdg-open https://music.yandex.ru",
+        name: "Yandex Music",
+        icon: "applications-internet"
+      },
+      w: {
+        type: "launch",
+        exec: "select-wallpaper",
+        name: "Wallpaper Selector",
+        icon: "background"
+      }
     }
   }
 }
 
-function loadConfig(): LauncherConfig {
+function loadConfig(): AppConfig {
   try {
     const file = Gio.File.new_for_path(configPath)
     if (file.query_exists(null)) {
       const content = readFile(file)
       const parsed = JSON.parse(content)
-      const parsedFancy = parsed.fancy_settings || {}
+      const parsedLauncher = parsed.app_launcher || {}
+      const parsedFancy = parsedLauncher.fancy_settings || {}
       const fancy_settings: FancySettings = {
-        speed: typeof parsedFancy.speed === "number" ? parsedFancy.speed : DEFAULT_CONFIG.fancy_settings.speed,
+        speed: typeof parsedFancy.speed === "number" ? parsedFancy.speed : DEFAULT_CONFIG.app_launcher.fancy_settings.speed,
         fold_type: typeof parsedFancy.fold_type === "string" && ["sequential", "simultaneous", "simultaneous-debounce"].includes(parsedFancy.fold_type)
           ? parsedFancy.fold_type as any
-          : DEFAULT_CONFIG.fancy_settings.fold_type,
+          : DEFAULT_CONFIG.app_launcher.fancy_settings.fold_type,
         transition_duration: typeof parsedFancy.transition_duration === "number" ? parsedFancy.transition_duration : null
       }
 
       return {
-        gaps_proportion: typeof parsed.gaps_proportion === "number" ? parsed.gaps_proportion : DEFAULT_CONFIG.gaps_proportion,
-        launcher_font: typeof parsed.launcher_font === "string" ? parsed.launcher_font : DEFAULT_CONFIG.launcher_font,
-        launcher_icon_size_multiplayer: typeof parsed.launcher_icon_size_multiplayer === "number" ? parsed.launcher_icon_size_multiplayer : DEFAULT_CONFIG.launcher_icon_size_multiplayer,
-        height_mode: typeof parsed.height_mode === "string" && (parsed.height_mode === "fancy" || parsed.height_mode === "full") ? parsed.height_mode : DEFAULT_CONFIG.height_mode,
-        fancy_settings,
-        commands: parsed.commands && typeof parsed.commands === "object" ? parsed.commands : DEFAULT_CONFIG.commands
+        app_launcher: {
+          gaps_proportion: typeof parsedLauncher.gaps_proportion === "number" ? parsedLauncher.gaps_proportion : DEFAULT_CONFIG.app_launcher.gaps_proportion,
+          "launcher.font": typeof parsedLauncher["launcher.font"] === "string" ? parsedLauncher["launcher.font"] : DEFAULT_CONFIG.app_launcher["launcher.font"],
+          "launcher.icon_size_multiplayer": typeof parsedLauncher["launcher.icon_size_multiplayer"] === "number" ? parsedLauncher["launcher.icon_size_multiplayer"] : DEFAULT_CONFIG.app_launcher["launcher.icon_size_multiplayer"],
+          height_mode: typeof parsedLauncher.height_mode === "string" && (parsedLauncher.height_mode === "fancy" || parsedLauncher.height_mode === "full") ? parsedLauncher.height_mode : DEFAULT_CONFIG.app_launcher.height_mode,
+          fancy_settings,
+          commands: parsedLauncher.commands && typeof parsedLauncher.commands === "object" ? parsedLauncher.commands : DEFAULT_CONFIG.app_launcher.commands
+        }
       }
     }
   } catch (e) {
@@ -175,10 +184,10 @@ export const hyprBorder = getHyprOption("general:border_size", 2)
 export const rawGaps = getHyprGapsOut()
 export const eraserRadius = hyprRounding + hyprBorder
 
-const activeConfig = configState.peek()
+const activeConfig = configState.peek().app_launcher
 export const GAPS_PROPORTION = activeConfig.gaps_proportion
-export const launcherFont = activeConfig.launcher_font
-export const launcherIconSizeMultiplayer = activeConfig.launcher_icon_size_multiplayer
+export const launcherFont = activeConfig["launcher.font"]
+export const launcherIconSizeMultiplayer = activeConfig["launcher.icon_size_multiplayer"]
 
 export function computeIconSize(font: string, multiplayer: number): number {
   const match = font.match(/(\d+)(pt|px)/)

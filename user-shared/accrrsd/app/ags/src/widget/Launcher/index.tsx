@@ -53,7 +53,7 @@ const FullHeightStrategy: HeightModeStrategy = {
   },
 
   getContentHeight(cfg) {
-    const iconSize = computeIconSize(cfg.launcher_font, cfg.launcher_icon_size_multiplayer)
+    const iconSize = computeIconSize(cfg["launcher.font"], cfg["launcher.icon_size_multiplayer"])
     return 8 * (iconSize + 16) + 94
   }
 }
@@ -65,7 +65,7 @@ const FancyHeightStrategy: HeightModeStrategy = {
       animationTimeoutIdRef.value = null
     }
 
-    const cfg = configState.peek()
+    const cfg = configState.peek().app_launcher
     const settings = cfg.fancy_settings || { speed: 0.05, fold_type: "simultaneous-debounce", transition_duration: null }
     const foldType = settings.fold_type || "simultaneous-debounce"
     const speed = settings.speed ?? 0.05
@@ -160,14 +160,14 @@ export default function Applauncher() {
   }
 
   const getStrategy = () => {
-    const mode = configState.peek().height_mode
+    const mode = configState.peek().app_launcher.height_mode
     return strategies[mode] || FullHeightStrategy
   }
 
   const animationTimeoutRef = { value: null as number | null }
 
   const transitionDuration = createComputed(() => {
-    const cfg = configState()
+    const cfg = configState().app_launcher
     const settings = cfg.fancy_settings || { speed: 0.05, fold_type: "simultaneous-debounce", transition_duration: null }
     if (typeof settings.transition_duration === "number" && settings.transition_duration > 0) {
       return settings.transition_duration
@@ -242,7 +242,7 @@ export default function Applauncher() {
       const commandKey = parts[0]
       const args = parts.slice(1).join(" ")
 
-      const config = configState.peek()
+      const config = configState.peek().app_launcher
       const commands = (config.commands || {}) as Record<string, CommandConfig>
 
       if (commandKey === "") {
@@ -315,7 +315,14 @@ export default function Applauncher() {
             iconName: app.iconName,
             action: () => {
               win.visible = false
-              app.launch()
+              if (app.entry) {
+                execAsync(["setsid", "-f", "gtk-launch", app.entry]).catch(err => {
+                  console.error(`[Launcher] Failed to launch via gtk-launch for ${app.entry}:`, err)
+                  app.launch()
+                })
+              } else {
+                app.launch()
+              }
             }
           })
         }
@@ -411,8 +418,8 @@ export default function Applauncher() {
       exclusivity={Astal.Exclusivity.IGNORE}
       keymode={Astal.Keymode.EXCLUSIVE}
       heightRequest={createComputed(() => {
-        const cfg = configState()
-        const iconSize = computeIconSize(cfg.launcher_font, cfg.launcher_icon_size_multiplayer)
+        const cfg = configState().app_launcher
+        const iconSize = computeIconSize(cfg["launcher.font"], cfg["launcher.icon_size_multiplayer"])
         const gapsOut = computeGaps(cfg.gaps_proportion)
         return 8 * (iconSize + 16) + 100 + gapsOut.bottom
       })}
@@ -445,7 +452,7 @@ export default function Applauncher() {
           name="launcher-content"
           orientation={Gtk.Orientation.VERTICAL}
           heightRequest={createComputed(() => {
-            const cfg = configState()
+            const cfg = configState().app_launcher
             const strategy = strategies[cfg.height_mode] || FullHeightStrategy
             return strategy.getContentHeight(cfg)
           })}

@@ -1,0 +1,45 @@
+{
+  "$schema": "./ags-settings.schema.json",
+  "app_launcher": {
+    "gaps_proportion": 0.33,
+    "launcher.font": "14pt Hack Nerd Font, sans-serif",
+    "launcher.icon_size_multiplayer": 1.25,
+    "height_mode": "fancy",
+    "fancy_settings": {
+      "speed": 0.02,
+      "fold_type": "sequential",
+      "transition_duration": null
+    },
+    "commands": {
+      "c": {
+        "type": "calc",
+        "name": "Calculator",
+        "icon": "accessories-calculator"
+      },
+      "t": {
+        "type": "time",
+        "name": "Time & Date",
+        "icon": "preferences-system-time"
+      },
+
+      "yi": {
+        "type": "launch",
+        "exec": "xdg-open \"https://yandex.ru/images/search?text={urlargs}\"",
+        "name": "Yandex Images",
+        "icon": "applications-internet"
+      },
+      "w": {
+        "type": "launch",
+        "exec": "select-wallpaper",
+        "name": "Wallpaper Selector",
+        "icon": "background"
+      },
+      "yt": {
+        "type": "launch",
+        "exec": "xdg-open \"https://www.youtube.com/results?search_query={urlargs}\"",
+        "name": "Youtube",
+        "icon": "applications-internet"
+      }
+    }
+  }
+}

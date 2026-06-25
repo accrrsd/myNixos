@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AGS Configuration Schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "app_launcher": {
+      "type": "object",
+      "properties": {
+        "gaps_proportion": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Proportion of gaps from Hyprland config (0.0 to 1.0)"
+        },
+        "launcher.font": {
+          "type": "string",
+          "description": "Font style used in the launcher"
+        },
+        "launcher.icon_size_multiplayer": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Icon size multiplier relative to font size"
+        },
+        "height_mode": {
+          "type": "string",
+          "enum": ["fancy", "full"],
+          "description": "Height mode of the window: 'fancy' (dynamic size) or 'full' (static size for exactly 8 search items)"
+        },
+        "fancy_settings": {
+          "type": "object",
+          "properties": {
+            "speed": {
+              "type": "number",
+              "minimum": 0.0,
+              "description": "Time delay in seconds between stagger reveal steps (e.g. 0.02 for 20ms)"
+            },
+            "fold_type": {
+              "type": "string",
+              "enum": ["sequential", "simultaneous", "simultaneous-debounce"],
+              "description": "Folding behavior when clearing search query"
+            },
+            "transition_duration": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Transition duration in milliseconds for the Gtk.Revealer slide animation"
+            }
+          },
+          "required": ["speed", "fold_type", "transition_duration"],
+          "additionalProperties": false
+        },
+        "commands": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["calc", "time", "launch"],
+                "description": "Type of the command plugin"
+              },
+              "name": {
+                "type": "string",
+                "description": "Display name of the command"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Icon name of the command"
+              },
+              "exec": {
+                "type": "string",
+                "description": "Execution command pattern (use {args} or {urlargs})"
+              }
+            },
+            "required": ["type", "name", "icon"],
+            "additionalProperties": false
+          },
+          "description": "Custom launcher prefix commands (triggered by typing '>')"
+        }
+      },
+      "required": [
+        "gaps_proportion",
+        "launcher.font",
+        "launcher.icon_size_multiplayer",
+        "height_mode",
+        "fancy_settings",
+        "commands"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": ["app_launcher"],
+  "additionalProperties": false
+}
