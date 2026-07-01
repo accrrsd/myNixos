@@ -2,6 +2,9 @@ local gaming_key = "F19"
 local is_gaming_mode = false
 local last_toggle_time = 0
 
+hl.bind("CTRL + mouse:272", hl.dsp.window.drag(), { mouse = true })
+hl.bind("CTRL + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
 local function toggle_gaming_mode()
     local current_time = os.clock()
     if (current_time - last_toggle_time) < 0.2 then return end
@@ -9,21 +12,15 @@ local function toggle_gaming_mode()
 
     if not is_gaming_mode then
         is_gaming_mode = true
-        hl.dispatch(hl.dsp.submap("gaming"))
+        hl.unbind("CTRL + mouse:272")
+        hl.unbind("CTRL + mouse:273")
         hl.dispatch(hl.dsp.exec_cmd('notify-send "Block Window Mouse"'))
     else
         is_gaming_mode = false
-        hl.dispatch(hl.dsp.submap("reset"))
+        hl.bind("CTRL + mouse:272", hl.dsp.window.drag(), { mouse = true })
+        hl.bind("CTRL + mouse:273", hl.dsp.window.resize(), { mouse = true })
         hl.dispatch(hl.dsp.exec_cmd('notify-send "Unblock Window Mouse"'))
     end
 end
 
 hl.bind(gaming_key, toggle_gaming_mode)
-
-hl.define_submap("gaming", function()
-    dofile(os.getenv("HOME") .. "/.config/hypr/config-files/lua/binds.lua")
-    hl.bind(gaming_key, toggle_gaming_mode)
-end)
-
-hl.bind("CTRL + mouse:272", hl.dsp.window.drag(), { mouse = true })
-hl.bind("CTRL + mouse:273", hl.dsp.window.resize(), { mouse = true })

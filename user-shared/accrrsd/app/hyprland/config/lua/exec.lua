@@ -17,7 +17,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("awww-daemon")
     
     -- blue light filter — starts daemon and sets temperature after 2s delay
-    hl.exec_cmd("sh -c 'wl-gammarelay-rs & sleep 2; busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 5000'")
+    hl.exec_cmd("sh -c 'wl-gammarelay-rs & sleep 2; busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 4500'")
     
     -- clipboard
     hl.exec_cmd("wl-clip-persist --clipboard regular --display wayland-1")

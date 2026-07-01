@@ -9,7 +9,7 @@
   home.packages = with pkgs; [
     hyprshot
     wofi
-    dunst
+    mako
     wlsunset
     kitty
     brightnessctl

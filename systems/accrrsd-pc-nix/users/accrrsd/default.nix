@@ -86,8 +86,6 @@
 
     # allows live tunneling, for exapmle - use local ai proxi 
     ngrok
-    # notify daemon
-    mako
 
     # ai stuff
       sillytavern

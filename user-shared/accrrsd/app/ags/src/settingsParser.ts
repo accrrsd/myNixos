@@ -323,7 +323,7 @@ export function createCornerWidget(
 
 export function applyStyle(styleCss: string) {
   let colorsCss = ""
-  const path = `${GLib.get_home_dir()}/.config/gtk-4.0/colors.css`
+  const path = `${GLib.get_home_dir()}/.cache/matugen/colors-gtk4.css`
   try {
     const file = Gio.File.new_for_path(path)
     if (file.query_exists(null)) {

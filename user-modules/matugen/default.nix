@@ -28,8 +28,8 @@
 
   gtk = {
     enable = true;
-    gtk3.extraCss = ''@import "colors.css";'';
-    gtk4.extraCss = ''@import "colors.css";'';
+    gtk3.extraCss = ''@import url("file://${config.home.homeDirectory}/.cache/matugen/colors-gtk3.css");'';
+    gtk4.extraCss = ''@import url("file://${config.home.homeDirectory}/.cache/matugen/colors-gtk4.css");'';
   };
 
   qt = {

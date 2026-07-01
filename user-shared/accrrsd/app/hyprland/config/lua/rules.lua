@@ -28,6 +28,9 @@ hl.layer_rule({ match = { namespace = "rofi" }, animation = "popin 90%" })
 hl.layer_rule({ match = { namespace = "rofi" }, blur = true })
 hl.layer_rule({ match = { namespace = "rofi" }, dim_around = true })
 
+-- Disable animations on screenshot selection layers to prevent selection border in screenshots
+hl.layer_rule({ match = { namespace = "selection" }, no_anim = true })
+hl.layer_rule({ match = { namespace = "slurp" }, no_anim = true })
 
 -- make ags launcher slide bottom and blur
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "slide bottom" })
