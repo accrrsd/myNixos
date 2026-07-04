@@ -35,3 +35,11 @@ hl.layer_rule({ match = { namespace = "slurp" }, no_anim = true })
 -- make ags launcher slide bottom and blur
 hl.layer_rule({ match = { namespace = "launcher" }, animation = "slide bottom" })
 -- hl.layer_rule({ match = { namespace = "launcher" }, blur = true })
+
+-- Godot debug run window floating rule
+hl.window_rule({
+    match = {
+        title = "^(.*\\(DEBUG\\))$"
+    },
+    float = true
+})

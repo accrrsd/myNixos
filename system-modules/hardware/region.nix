@@ -16,4 +16,6 @@
   };
   services.timesyncd.enable = true;
   time.hardwareClockInLocalTime = true;
+
+  boot.initrd.kernelModules = [ "rtc_cmos" ];
 }
