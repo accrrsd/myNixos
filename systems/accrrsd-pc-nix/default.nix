@@ -85,10 +85,25 @@
   programs.amnezia-vpn.enable = true;
 
   environment.systemPackages = with pkgs; [
+    liquidctl
   ];
 
+  systemd.services.liquidctl = {
+    description = "Initialize liquidctl and set pump speed to 60%";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = [
+        "${pkgs.liquidctl}/bin/liquidctl initialize all"
+        "${pkgs.liquidctl}/bin/liquidctl set pump speed 60"
+      ];
+      RemainAfterExit = true;
+    };
+  };
 
-  # ? also can be used as $HOME/zapret-configs/install.sh
+
+  # also can be used as $HOME/zapret-configs/install.sh
   services.zapret-discord-youtube = {
     enable = true;
     configName = "general(ALT)";
