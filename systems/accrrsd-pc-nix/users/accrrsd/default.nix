@@ -97,4 +97,16 @@
   services.flatpak.packages = [
     "org.prismlauncher.PrismLauncher"
   ];
+
+  services.flatpak.overrides = {
+    "org.prismlauncher.PrismLauncher" = {
+      Context = {
+        filesystems = [
+          # or just "host"
+          # "/mnt/hdd1:create"
+          "host"
+        ];
+      };
+    };
+  };
 }

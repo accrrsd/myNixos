@@ -15,6 +15,14 @@
         lcdfilter = "default";
       };
 
+      localConf = ''
+        <?xml version="1.0"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <dir>/run/current-system/sw/share/fonts</dir>
+        </fontconfig>
+      '';
+
       defaultFonts = {
         serif = [ "Noto Serif" "Source Serif Pro" ];
         sansSerif = [ "Inter" "Lexend" ];

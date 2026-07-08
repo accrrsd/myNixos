@@ -55,9 +55,5 @@ in
         };
       })
     );
-
-      # environment.systemPackages = with pkgs; [
-      #   ntfs3g
-      # ];
   };
 }

@@ -48,21 +48,27 @@
   # with windows dualboot sometimes disk can be locked. You can unlock it with:
   # sudo umount /mnt/hdd1 && sudo ntfsfix -d /dev/sda1 && sudo systemctl restart mnt-hdd1.automount
 
-  system-modules.diskMount = {
+system-modules.diskMount = {
     enable = true;
     disks = [
       {
         uuid = "0670796770795DFD";
         mountPoint = "/mnt/hdd1";
-        fsType = "ntfs";
+        fsType = "ntfs3"; 
         options = [ 
           "nofail" 
           "x-systemd.automount"
+          "nohidden"
+          "gid=100"       
+          "fmask=0000"    
+          "dmask=0000"
         ];
       }
     ];
   };
 
+  # Declarative bluetooth for dualboot
+  hardware.bluetooth.syncWithWindows.regFile = ./bluetooth.reg;
 
   # for newer cards is better to have open, but if it cause errors - can be disabled to false (default)
   hardware.nvidia.open = true;
@@ -112,7 +118,7 @@
     listGeneral = [ "example.com" "test.org" "mysite.net" ];
     listExclude = [ "ubisoft.com" "origin.com" ];
     ipsetAll = [ "192.168.1.0/24" "10.0.0.1" ];
-    ipsetExclude = [ "203.0.113.0/24" ];
+    ipsetExclude = [ "203.0.113.0/24" "127.0.0.1/8" ];
   };
 
   # use flake flatpak for declarative packages

@@ -20,6 +20,8 @@ ags clipboard history
 
 ags tray & time widget
 
+ags song picker ?
+
 ags transparency and angle size
 
 Пофиксить application menu для qt
@@ -27,8 +29,6 @@ ags transparency and angle size
 Сделать темы для разных приложений, вроде godot, steam, vscode, попробовать сделать тему для vk
 
 Возможно заменить стрелочку в zsh консоли на обычный слеш
-
-
 
 Настроить внешку sddm
 

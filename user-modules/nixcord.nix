@@ -3,7 +3,7 @@
 { inputs, lib, ... }: {
   imports = [ inputs.nixcord.homeModules.nixcord ];
   programs.nixcord.enable = true;
-
+  programs.nixcord.discord.vencord.enable = true;
   # try to use theme
   programs.nixcord.config.enabledThemes = lib.mkDefault ["midnight-discord.css"];
 }
