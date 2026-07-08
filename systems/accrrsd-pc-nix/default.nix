@@ -118,7 +118,7 @@ system-modules.diskMount = {
     listGeneral = [ "example.com" "test.org" "mysite.net" ];
     listExclude = [ "ubisoft.com" "origin.com" ];
     ipsetAll = [ "192.168.1.0/24" "10.0.0.1" ];
-    ipsetExclude = [ "203.0.113.0/24" "127.0.0.1/8" ];
+    ipsetExclude = [ "203.0.113.0/24" ];
   };
 
   # use flake flatpak for declarative packages
