@@ -112,7 +112,7 @@ system-modules.diskMount = {
   # also can be used as $HOME/zapret-configs/install.sh
   services.zapret-discord-youtube = {
     enable = true;
-    configName = "general(ALT)";
+    configName = "general(ALT3)";
     gameFilter = "null";
     
     listGeneral = [ "example.com" "test.org" "mysite.net" ];
