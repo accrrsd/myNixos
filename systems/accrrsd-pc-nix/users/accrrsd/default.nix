@@ -66,6 +66,7 @@
     vlc
     yt-dlp
     activitywatch
+    audacity
 
     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
 
