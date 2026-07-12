@@ -26,4 +26,7 @@ hl.on("hyprland.start", function ()
 
     -- ags
     hl.exec_cmd("ags run")
+
+    -- steam
+    hl.exec_cmd("steam -silent")
 end)
