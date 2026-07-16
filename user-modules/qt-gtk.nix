@@ -70,16 +70,16 @@
   # also needed as home pkgs
   xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
 
-  xdg.configFile."kded5rc".text = ''
-    [Module-browserintegrationreminder]
-    autoload=false
+  # xdg.configFile."kded5rc".text = ''
+  #   [Module-browserintegrationreminder]
+  #   autoload=false
 
-    [Module-device_automounter]
-    autoload=false
+  #   [Module-device_automounter]
+  #   autoload=false
 
-    [Module-gtkconfig]
-    autoload=false
-  '';
+  #   [Module-gtkconfig]
+  #   autoload=false
+  # '';
 
   xdg.configFile."kded6rc".text = ''
     [PlasmaBrowserIntegration]
