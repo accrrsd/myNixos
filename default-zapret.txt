@@ -1,0 +1,393 @@
+
+
+---
+### 📄 /etc/nixos/zapret2/users.nix
+
+````{ config, pkgs, lib, ... }:
+
+{
+  # Фиксированные UID/GID, уже занятые в системе.
+  # NixOS не переназначит их при добавлении новых сервисов.
+  users.groups.zapret = {
+    gid = 988;
+  };
+
+  users.users.zapret = {
+    uid = 987;
+    group = "zapret";
+    isSystemUser = true;
+    home = "/var/lib/zapret2";
+    createHome = false;
+    shell = "${pkgs.shadow}/bin/nologin";
+    description = "Zapret2 DPI bypass daemon";
+  };
+}
+
+````
+
+
+---
+### 📄 /etc/nixos/zapret2/firewall.nix
+
+````# /etc/nixos/zapret2/firewall.nix
+{ config, pkgs, lib, ... }:
+
+let
+  # =============================================================================
+  # КОНСТАНТЫ (должны совпадать с другими файлами модуля)
+  # =============================================================================
+  zapretUid = 987;
+  nfqQueueNum = 2171;
+  targetPort = 443;
+
+  # Локальные сети (исключения)
+  localIPv4 = [ "127.0.0.0/8" "10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16" ];
+  localIPv6 = [ "::1/128" "fe80::/10" "fc00::/7" ];
+
+  # DNSCrypt/DoH резолверы (исключения — их трафик не должен попадать в очередь)
+  dnsResolversV4 = [ "1.1.1.1" "1.0.0.1" "9.9.9.9" "149.112.112.112" ];
+  dnsResolversV6 = [
+    "2606:4700:4700::1111" "2606:4700:4700::1001"
+    "2620:fe::fe" "2620:fe::9"
+  ];
+in
+{
+  ########################################################################
+  # NFTABLES: ПРАВИЛА ПЕРЕХВАТА ТРАФИКА
+  #
+  # Цепочка output hook mangle — перехватывает исходящие пакеты
+  # ДО маршрутизации, но ПОСЛЕ формирования payload.
+  #
+  # Порядок правил важен: первое совпадение выигрывает.
+  ########################################################################
+
+  networking.nftables.enable = true;
+
+  networking.nftables.tables.zapret = {
+    family = "inet";
+    content = ''
+      chain output {
+        type route hook output priority mangle; policy accept;
+
+        # 1. Локальный трафик — пропускаем без обработки
+        oifname "lo" accept
+        ip daddr { ${lib.concatStringsSep ", " localIPv4} } accept
+        ip6 daddr { ${lib.concatStringsSep ", " localIPv6} } accept
+
+        # 2. Защита от петли: трафик скачивальщика списков не перенаправляется
+        #    (иначе curl не сможет скачать списки — уйдёт в NFQUEUE)
+        meta skuid ${toString zapretUid} accept
+
+        # 3. WHITELIST: DoH/DNSCrypt resolver IPs
+        #    Трафик к резолверам не должен модифицироваться
+        ip daddr { ${lib.concatStringsSep ", " dnsResolversV4} } accept
+        ip6 daddr { ${lib.concatStringsSep ", " dnsResolversV6} } accept
+
+        # 4. Блокировка QUIC (UDP 443)
+        #    Без этого браузер уходит в HTTP/3 (QUIC), минуя TCP-обход.
+        #    Дроп заставляет браузер откатиться на TCP.
+        udp dport ${toString targetPort} reject
+
+        # 5. TCP MSS clamping
+        #    Фикс дропов после ~16KB при использовании фрагментации.
+        #    Уменьшаем MSS до 1300, чтобы пакеты не превышали MTU после модификации.
+        tcp flags syn tcp option maxseg size set 1300
+
+        # 6. ПЕРЕХВАТ: отправка TCP 443 в NFQUEUE для обработки nfqws2
+        #
+        #    КРИТИЧНО: НЕТ ограничения "ct original packets <= 5"!
+        #    wssize модифицирует TCP Window Size в КАЖДОМ пакете потока.
+        #    Если ограничить 5 пакетами — wssid перестанет работать после 5-го,
+        #    ТСПУ увидит нормальное окно и реассемблит поток → RST.
+        tcp dport ${toString targetPort} queue num ${toString nfqQueueNum} bypass
+      }
+    '';
+  };
+}
+
+````
+
+
+---
+### 📄 /etc/nixos/zapret2/fetch.nix
+
+````{ config, pkgs, lib, ... }:
+
+let
+  zapretUser = "zapret";
+  stateDir   = "/var/lib/zapret2";
+
+  fetchScript = pkgs.writeShellScript "zapret-fetch" ''
+    set -euo pipefail
+    TIMESTAMP=$(date +%Y-%m-%dT%H-%M-%S)
+    TMP=$(mktemp)
+    NEW=$(mktemp)
+    trap 'rm -f "$TMP" "$NEW"' EXIT
+
+    echo "[$TIMESTAMP] Начинаем обновление списков РКН..."
+
+    if ! ${pkgs.curl}/bin/curl -fsSL --connect-timeout 15 --retry 3 \
+        -o "$TMP" "https://antifilter.download/list/domains.lst"; then
+      echo "[$TIMESTAMP] Ошибка скачивания основного списка. Пробуем резервный URL..."
+      if ! ${pkgs.curl}/bin/curl -fsSL --connect-timeout 15 --retry 3 \
+          -o "$TMP" "https://antifilter.download/list/allyouneed.lst"; then
+        echo "[$TIMESTAMP] КРИТИЧНО: Оба сервера недоступны. Оставляем старый список." >&2
+        exit 0
+      fi
+    fi
+
+    if [ ! -s "$TMP" ] || [ "$(${pkgs.coreutils}/bin/wc -c < "$TMP")" -lt 1024 ]; then
+      echo "[$TIMESTAMP] КРИТИЧНО: Скачанный файл пуст или поврежден (размер < 1KB). Оставляем старый список." >&2
+      exit 0
+    fi
+
+    ${pkgs.gnugrep}/bin/grep -vE '^#|^$|^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}' "$TMP" | \
+      ${pkgs.gnused}/bin/sed 's/[[:space:]].*//; s/^\*\.//' | \
+      ${pkgs.coreutils}/bin/sort -u > "$NEW" || true
+
+    if [ -s "$NEW" ]; then
+      mv -f "$NEW" ${stateDir}/downloaded.txt
+      echo "[$TIMESTAMP] Успех: $(wc -l < ${stateDir}/downloaded.txt) доменов загружено."
+    else
+      echo "[$TIMESTAMP] КРИТИЧНО: После фильтрации список оказался пустым. Оставляем старый список." >&2
+      exit 0
+    fi
+  '';
+in
+{
+  systemd.services.zapret2-fetch = {
+    description = "Fetch Zapret Blocked Hostlists";
+    after       = [ "network-online.target" ];
+    wants       = [ "network-online.target" ];
+    wantedBy    = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type      = "oneshot";
+      ExecStart = fetchScript;
+      User  = zapretUser;
+      Group = zapretUser;
+      ProtectSystem = "strict";
+      ProtectHome   = true;
+      PrivateTmp    = true;
+      ReadWritePaths = [ stateDir ];
+      NoNewPrivileges = true;
+      TimeoutStartSec = "300";
+    };
+  };
+
+  systemd.timers.zapret2-fetch = {
+    description = "Zapret Hostlists Update Timer";
+    wantedBy    = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec          = "1min";
+      OnUnitActiveSec    = "6h";
+      RandomizedDelaySec = "15min";
+      Persistent         = true;
+    };
+  };
+}
+
+````
+
+
+---
+### 📄 /etc/nixos/zapret2/service.nix
+
+````{ config, pkgs, lib, ... }:
+
+let
+  zapretUser = "zapret";
+  stateDir   = "/var/lib/zapret2";
+  
+  nfqQueueNum = 2171;
+  targetPort  = 443;
+  
+  userHostlistContent = ''
+    youtube.com
+    googlevideo.com
+    youtu.be
+    ytimg.com
+    ggpht.com
+    instagram.com
+    cdninstagram.com
+    rutracker.org
+    rutracker.cr
+  '';
+  
+  userExcludeContent = ''
+    github.com
+    githubusercontent.com
+    nixos.org
+    cache.nixos.org
+    zed.dev
+    digitaloceanspaces.com
+  '';
+  
+  
+  nfqwsArgs = lib.concatStringsSep " " [
+  "--qnum=${toString nfqQueueNum}"
+  "--filter-tcp=${toString targetPort}"
+  "--hostlist=${stateDir}/downloaded.txt"
+  "--hostlist=${stateDir}/user-hostlist.txt"
+  "--hostlist-exclude=${stateDir}/user-exclude.txt"
+  "--hostlist-auto=${stateDir}/autohostlist.txt"
+  "--hostlist-auto-fail-threshold=5"
+  "--hostlist-auto-fail-time=120"
+  "--hostlist-auto-debug=${stateDir}/auto-debug.log"
+  "--user=${zapretUser}"
+  "--payload=tls_client_hello"
+  "--lua-init=@${pkgs.zapret2}/share/zapret2/lua/zapret-lib.lua"
+  "--lua-init=@${pkgs.zapret2}/share/zapret2/lua/zapret-antidpi.lua"
+  "--lua-desync=wssize:wsize=1:scale=6"
+  "--lua-desync=multidisorder:pos=midsld"
+	];
+
+  initScript = pkgs.writeShellScript "zapret-init" ''
+    set -euo pipefail
+    mkdir -p ${stateDir}
+    
+    for f in downloaded.txt autohostlist.txt auto-debug.log; do
+      [ -f "${stateDir}/$f" ] || touch "${stateDir}/$f"
+    done
+    
+    [ -f "${stateDir}/user-hostlist.txt" ] || {
+      cat > "${stateDir}/user-hostlist.txt" <<'EOF'
+${userHostlistContent}EOF
+    }
+    
+    [ -f "${stateDir}/user-exclude.txt" ] || {
+      cat > "${stateDir}/user-exclude.txt" <<'EOF'
+${userExcludeContent}EOF
+    }
+    
+    chown -R ${zapretUser}:${zapretUser} ${stateDir}
+    chmod 0750 ${stateDir}
+    chmod 0640 ${stateDir}/downloaded.txt
+    chmod 0660 ${stateDir}/autohostlist.txt
+    chmod 0660 ${stateDir}/auto-debug.log
+    chmod 0640 ${stateDir}/user-hostlist.txt
+    chmod 0640 ${stateDir}/user-exclude.txt
+  '';
+in
+{
+  systemd.tmpfiles.rules = [
+    "d ${stateDir} 0750 ${zapretUser} ${zapretUser} -"
+    "f ${stateDir}/downloaded.txt 0640 ${zapretUser} ${zapretUser} -"
+    "f ${stateDir}/autohostlist.txt 0660 ${zapretUser} ${zapretUser} -"
+    "f ${stateDir}/auto-debug.log 0660 ${zapretUser} ${zapretUser} -"
+    "f ${stateDir}/user-hostlist.txt 0640 ${zapretUser} ${zapretUser} -"
+    "f ${stateDir}/user-exclude.txt 0640 ${zapretUser} ${zapretUser} -"
+  ];
+
+  systemd.services.zapret2 = {
+    description = "Zapret2 DPI Bypass (nfqws2)";
+    after       = [ "network-online.target" "nftables.service" "zapret2-fetch.service" ];
+    wants       = [ "network-online.target" "zapret2-fetch.service" ];
+    wantedBy    = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "simple";
+      
+      ExecStartPre = [
+        "+${initScript}"
+      ];
+      
+      ExecStart = "${pkgs.zapret2}/bin/nfqws2 ${nfqwsArgs}";
+
+      User = "root";
+      Group = "root";
+
+      Environment = [
+        "ZAPRET_BASE=${pkgs.zapret2}/share/zapret2"
+        "ZAPRET_RW=${stateDir}"
+      ];
+
+      CapabilityBoundingSet = [
+        "CAP_NET_ADMIN"
+        "CAP_NET_RAW"
+        "CAP_SETPCAP"
+        "CAP_SETUID"
+        "CAP_SETGID"
+        "CAP_DAC_OVERRIDE"
+        "CAP_CHOWN"
+        "CAP_FOWNER"
+      ];
+      
+      NoNewPrivileges = false;
+
+      ProtectHome = true;
+      PrivateTmp = true;
+      PrivateDevices = true;
+
+      ReadWritePaths = [ stateDir ];
+
+      Restart    = "on-failure";
+      RestartSec = "5s";
+    };
+  };
+}
+
+````
+
+
+---
+### 📄 /etc/nixos/zapret2/default.nix
+
+````# /etc/nixos/zapret2/default.nix
+#
+# Точка входа модуля Zapret2.
+# Импортирует все подмодули. Константы (UID, GID, queue num)
+# дублируются в каждом файле намеренно — это устраняет
+# зависимости между файлами и позволяет менять один файл
+# не ломая остальные.
+#
+# Зоны ответственности:
+#   users.nix    → Пользователь zapret (UID 987, GID 988)
+#   service.nix  → systemd-сервис nfqws2, скрипт initFiles, аргументы демона
+#   fetch.nix    → Скачивание списков РКН (таймер + oneshot-сервис)
+#   firewall.nix → nftables: QUIC drop, MSS clamp, NFQUEUE routing
+#
+
+# =============================================================================
+# AI ASSISTANT INSTRUCTION: ZAPRET2 MODULE STATUS
+# =============================================================================
+#
+# This file defines the zapret2 module. However, it may or may not be ACTIVE
+# in the current system configuration.
+#
+# To determine if this module is actually enabled, check the `imports` list
+# in /etc/nixos/configuration.nix (or any other NixOS config that includes it).
+# Look for a line like `./zapret2/default.nix` or `./zapret2`.
+# - If that line is present and NOT commented out, the module is ACTIVE.
+# - If that line is absent or commented out, the module is DISABLED.
+#
+# RULES FOR AI ASSISTANT:
+# =======================
+# 1. Before mentioning zapret2, nfqws2, or any DPI bypass functionality as
+#    a possible cause of any system issue, you MUST first verify whether
+#    this module is actually enabled (see above).
+# 2. If the module is DISABLED, you MUST NOT reference it in any diagnostic
+#    or troubleshooting advice, unless the user explicitly asks about it.
+# 3. If the module is ACTIVE, you may consider it as a potential factor,
+#    but only if the issue is network-related.
+# 4. The user will not explicitly tell you the status; you must infer it
+#    by examining the configuration files provided in the context.
+#
+# Exception:
+# ----------
+# If the user directly mentions "zapret", "DPI bypass", "nfqws", or asks
+# about this specific module, you are allowed to discuss it regardless of
+# its activation status.
+#
+# =============================================================================
+
+{
+  imports = [
+    ./users.nix
+    ./service.nix
+    ./fetch.nix
+    ./firewall.nix
+  ];
+}
+
+````

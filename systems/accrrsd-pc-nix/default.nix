@@ -22,6 +22,7 @@
 
     ../../system-modules/app/hyprland.nix
     ../../system-modules/app/niri.nix
+    ../../system-modules/app/zapret.nix
 
     ../../system-modules/hardware/smooth-fonts.nix
   ];
@@ -94,6 +95,9 @@ system-modules.diskMount = {
     liquidctl
   ];
 
+  # disable firewall for debug and coding stuff
+  networking.firewall.enable = false;
+
   systemd.services.liquidctl = {
     description = "Initialize liquidctl and set pump speed to 60%";
     wantedBy = [ "multi-user.target" ];
@@ -109,16 +113,12 @@ system-modules.diskMount = {
   };
 
 
-  # also can be used as $HOME/zapret-configs/install.sh
-  services.zapret-discord-youtube = {
+  services.zapret2 = {
     enable = true;
-    configName = "general(ALT3)";
-    gameFilter = "null";
-    
-    listGeneral = [ "example.com" "test.org" "mysite.net" ];
-    listExclude = [ "ubisoft.com" "origin.com" ];
-    ipsetAll = [ "192.168.1.0/24" "10.0.0.1" ];
-    ipsetExclude = [ "203.0.113.0/24" ];
+    # Домены для обхода DPI (можно дополнять нужными доменами)
+    # userHostlist = [ ... ];
+    # Домены-исключения (не обрабатываются запретом)
+    # userExclude = [ ... ];
   };
 
   # use flake flatpak for declarative packages

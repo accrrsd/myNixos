@@ -10,7 +10,6 @@
     };
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,7 +44,6 @@
         # nixos module version of HM
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-flatpak.nixosModules.nix-flatpak
-        inputs.zapret-discord-youtube.nixosModules.default
         {
           nixpkgs.overlays = [ overlay-unstable overlay-old ];
           nixpkgs.config.allowUnfree = true;
