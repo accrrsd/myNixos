@@ -324,7 +324,8 @@
         "nixcord": "nixcord",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-old": "nixpkgs-old",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "zapret-src": "zapret-src"
       }
     },
     "systems": {
@@ -339,6 +340,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "zapret-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784295159,
+        "narHash": "sha256-XM+rZOaNtgcHn3KvdH7D8Z60eP70BARiYQN/PRTLYsM=",
+        "owner": "Sergeydigl3",
+        "repo": "zapret-discord-youtube-linux",
+        "rev": "7df1a94462c2b0ad230902a8f72f8909cace259e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sergeydigl3",
+        "repo": "zapret-discord-youtube-linux",
         "type": "github"
       }
     }

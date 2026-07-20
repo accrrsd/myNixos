@@ -22,7 +22,8 @@
 
     ../../system-modules/app/hyprland.nix
     ../../system-modules/app/niri.nix
-    ../../system-modules/app/zapret.nix
+    # ../../system-modules/app/zapret-container.nix
+    ../../system-modules/app/zapret2.nix
 
     ../../system-modules/hardware/smooth-fonts.nix
   ];
@@ -112,13 +113,16 @@ system-modules.diskMount = {
     };
   };
 
+  # services.zapret-container = {
+  #   enable = true;
+  # };
 
   services.zapret2 = {
     enable = true;
-    # Домены для обхода DPI (можно дополнять нужными доменами)
-    # userHostlist = [ ... ];
-    # Домены-исключения (не обрабатываются запретом)
-    # userExclude = [ ... ];
+    # change desync profile
+    luaDesync = ["multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"];
+    # change domenlist
+    # userHostlist = [ "youtube.com" "discord.com" ];
   };
 
   # use flake flatpak for declarative packages
