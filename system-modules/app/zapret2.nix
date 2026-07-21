@@ -3,21 +3,24 @@
 
 # usage example (same for v1 version i think)
 
-# 1. stop zapret2 before check:
+# 1. Stop zapret2 before check:
 # sudo systemctl stop zapret2
-# 2. use blockcheck:
+
+# 2. Use blockcheck to find working desync strategy:
 # sudo nix-shell -p zapret2 nftables --command blockcheck2
-# paste str after --lua-desync
-# same for v1 verison, just stop zapret and use command blockcheck (without 2)
-# example: curl_test_https_tls12 ipv4 discordapp.com : nfqws2 --payload=tls_client_hello --lua-desync=multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1
-# you paste  "multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"
+# Paste string after --lua-desync
+# Example output line: curl_test_https_tls12 ipv4 discordapp.com : nfqws2 --payload=tls_client_hello --lua-desync=multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1
+# You paste: "multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"
 
+# 3. Manually download/update blocked domain lists (antifilter):
+# sudo systemctl start zapret2-fetch
 
+# Configuration example in default.nix:
 # services.zapret2 = {
 #   enable = true;
 #   # change desync profile
 #   luaDesync = ["multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"];
-#   # change domenlist
+#   # change domain list
 #   # userHostlist = [ "youtube.com" "discord.com" ];
 # };
 
@@ -220,7 +223,7 @@ in
     autoUpdate = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = "Enable periodic fetching of blocked hostlists from antifilter.";
       };
 
@@ -298,12 +301,11 @@ in
       "f ${stateDir}/auto-debug.log 0660 ${zapretUser} ${zapretUser} -"
     ];
 
-    # Hostlist Fetch Service & Timer
-    systemd.services.zapret2-fetch = lib.mkIf cfg.autoUpdate.enable {
+    # Hostlist Fetch Service (Manual update service)
+    systemd.services.zapret2-fetch = {
       description = "Fetch Zapret Blocked Hostlists";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         Type = "oneshot";
@@ -333,10 +335,8 @@ in
     # Main Zapret2 Service (nfqws2)
     systemd.services.zapret2 = {
       description = "Zapret2 DPI Bypass (nfqws2)";
-      after = [ "network-online.target" "nftables.service" ]
-        ++ lib.optional cfg.autoUpdate.enable "zapret2-fetch.service";
-      wants = [ "network-online.target" ]
-        ++ lib.optional cfg.autoUpdate.enable "zapret2-fetch.service";
+      after = [ "network-online.target" "nftables.service" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
