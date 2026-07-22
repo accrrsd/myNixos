@@ -18,7 +18,7 @@ hl.bind(mod .. " + SHIFT + PRINT", hl.dsp.exec_cmd("hyprshot -m output --clipboa
 hl.bind("ALT + SHIFT + Alt_L", hl.dsp.exec_cmd("hyprctl switchxkblayout all next"), { release = true, locked = true, dont_inhibit = true })
 
 -- Window manipulation
-hl.bind(mod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
+hl.bind(mod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 hl.bind(mod .. " + P", hl.dsp.window.pin())
 hl.bind(mod .. " + Y", hl.dsp.layout("togglesplit"))
 
