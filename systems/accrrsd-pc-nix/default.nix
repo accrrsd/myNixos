@@ -48,7 +48,7 @@
   #nixpkgs.config.cudaSupport = true;
 
   # with windows dualboot sometimes disk can be locked. You can unlock it with:
-  # sudo umount /mnt/hdd1 && sudo ntfsfix -d /dev/sda1 && sudo systemctl restart mnt-hdd1.automount
+  # sudo umount /mnt/hdd1 && sudo ntfsfix -d /dev/sdb1 (OR OTHER DISK STUFF) && sudo systemctl restart mnt-hdd1.automount
 
 system-modules.diskMount = {
     enable = true;
