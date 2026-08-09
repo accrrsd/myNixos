@@ -1,8 +1,8 @@
 {pkgs, lib, ...}:
 
 {
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.dates = "weekly";
+  # system.autoUpgrade.enable = true;
+  # system.autoUpgrade.dates = "weekly";
 
   # nix.settings = {
   #   keep-outputs = true;
