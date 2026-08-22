@@ -19,7 +19,7 @@
     ../system-modules/hardware/systemd.nix
     ../system-modules/hardware/sddm.nix
     ../system-modules/hardware/plasma.nix
-    ../system-modules/hardware/autoclean.nix
+    # ../system-modules/hardware/autoclean.nix
     ../system-modules/hardware/keyboard-layout.nix
   ];
 

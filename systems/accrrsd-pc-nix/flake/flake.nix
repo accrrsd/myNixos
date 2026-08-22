@@ -21,6 +21,7 @@
     nixcord.url = "github:FlameFlag/nixcord";
     astal.url = "github:aylur/astal";
     ags.url = "github:aylur/ags";
+    zapret-discord-youtube.url = "github:kartavkun/zapret-discord-youtube";
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-old, home-manager, ... }@inputs:

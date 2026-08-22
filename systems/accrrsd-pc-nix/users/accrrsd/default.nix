@@ -23,7 +23,7 @@
     ../../../../user-modules/rofi
     ../../../../user-modules/qt-gtk.nix
 
-    ../../../../user-modules/nixcord.nix
+    # ../../../../user-modules/nixcord.nix
 
     # ../../../../user-modules/neovim.nix
     ../../../../user-modules/wayland-utils.nix
@@ -69,6 +69,9 @@
     audacity
     lazygit
     ffmpeg
+    # video editor
+    kdePackages.kdenlive
+    discord
 
     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
 

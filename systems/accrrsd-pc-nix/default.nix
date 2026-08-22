@@ -23,7 +23,8 @@
     ../../system-modules/app/hyprland.nix
     ../../system-modules/app/niri.nix
     # ../../system-modules/app/zapret-container.nix
-    ../../system-modules/app/zapret2.nix
+    # ../../system-modules/app/zapret2.nix
+    ../../system-modules/app/zapret-discord-youtube.nix
 
     ../../system-modules/hardware/smooth-fonts.nix
   ];
@@ -48,7 +49,9 @@
   #nixpkgs.config.cudaSupport = true;
 
   # with windows dualboot sometimes disk can be locked. You can unlock it with:
-  # sudo umount /mnt/hdd1 && sudo ntfsfix -d /dev/sdb1 (OR OTHER DISK STUFF) && sudo systemctl restart mnt-hdd1.automount
+  # instead of /dev/sdb1 can be OR OTHER DISK STUFF
+  # check disks through lsbik -f
+  # nix-shell -p ntfs3g --run "sudo umount /dev/sda1; sudo ntfsfix -d /dev/sda1; sudo systemctl restart mnt-hdd1.automount"
 
 system-modules.diskMount = {
     enable = true;
@@ -61,6 +64,7 @@ system-modules.diskMount = {
           "nofail" 
           "x-systemd.automount"
           "nohidden"
+          "force"
           "gid=100"       
           "fmask=0000"    
           "dmask=0000"
@@ -117,13 +121,13 @@ system-modules.diskMount = {
   #   enable = true;
   # };
 
-  services.zapret2 = {
-    enable = true;
-    # change desync profile
-    luaDesync = ["multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"];
-    # change domenlist
-    # userHostlist = [ "youtube.com" "discord.com" ];
-  };
+  # services.zapret2 = {
+  #   enable = true;
+  #   # change desync profile
+  #   luaDesync = ["multidisorder:pos=1,sniext+1,host+1,midsld-2,midsld,midsld+2,endhost-1"];
+  #   # change domenlist
+  #   # userHostlist = [ "youtube.com" "discord.com" ];
+  # };
 
   # use flake flatpak for declarative packages
   services.flatpak.packages = [
