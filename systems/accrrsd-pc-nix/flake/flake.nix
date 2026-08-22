@@ -10,10 +10,6 @@
     };
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    zapret-src = {
-      url = "github:Sergeydigl3/zapret-discord-youtube-linux";
-      flake = false;
-    };
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,7 +56,7 @@
       ];
     };
 
-    # standalone (hswitch) verison of HM
+    # standalone (hswitch) verison of HM. Works as preview, but do not save changes with reboot.
     homeConfigurations = {
       accrrsd = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {

@@ -1,9 +1,11 @@
 # ! to use this module, you should create your own niri config, check user-shared/accrrsd/app/niri/config/ for example
 { pkgs, lib, ... }:
 {
+  imports = [
+    ./utils/wayland-utils.nix
+  ];
+
   home.packages = with pkgs; [
-    brightnessctl
-    wl-gammarelay-rs
     alacritty
   ];
 

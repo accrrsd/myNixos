@@ -23,6 +23,7 @@ in
   environment.systemPackages = with pkgs; [
     kitty
     hyprpolkitagent
+    hyprshot
     # i dont really understand needed it or not. For now its commented.
     # glib
     # gsettings-desktop-schemas

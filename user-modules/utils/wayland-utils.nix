@@ -6,6 +6,5 @@
     brightnessctl
     wl-gammarelay-rs
     awww
-    hyprshot
   ];
 }

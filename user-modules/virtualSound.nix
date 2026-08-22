@@ -15,7 +15,7 @@ in {
 
     hrtfPath = lib.mkOption {
       type = lib.types.path;
-      default = ../src/sound/oal_dflt.wav;
+      default = ../src/sound-3d/oal_dflt.wav;
       description = "Path to hrtf .wav file, used for virtual 7.1";
     };
   };

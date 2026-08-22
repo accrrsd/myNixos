@@ -17,6 +17,10 @@
 
     ipsetAll = [ "192.168.1.0/24" "10.0.0.1" ];
     ipsetExclude = [ "203.0.113.0/24" ];
+
+    nfqwsAppend = [
+      ''--filter-udp=50000-65000 --dpi-desync=fake --dpi-desync-repeats=6''
+    ];
   };
 }
 

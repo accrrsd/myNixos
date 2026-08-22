@@ -12,8 +12,7 @@
     ../../../../user-modules/wezterm.nix
 
     ../../../../user-modules/neovim.nix
-    ../../../../user-modules/wayland-utils.nix
-    ../../../../user-modules/general-packages.nix
+    ../../../../user-modules/utils/general-packages.nix
   ];
 
   home = {

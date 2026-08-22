@@ -8,11 +8,11 @@
   imports = [
     ../../../../user-shared/accrrsd/settings.nix
 
-    ../../../../user-modules/hyprland
-    ../../../../user-modules/niri
+    ../../../../user-modules/hyprland.nix
+    ../../../../user-modules/niri.nix
     ../../../../user-modules/zsh
     ../../../../user-modules/kitty.nix
-    ../../../../user-modules/ags
+    ../../../../user-modules/ags.nix
 
     ../../../../user-shared/accrrsd/app/ssh.nix
     ../../../../user-shared/accrrsd/app/hyprland
@@ -23,11 +23,10 @@
     ../../../../user-modules/rofi
     ../../../../user-modules/qt-gtk.nix
 
-    # ../../../../user-modules/nixcord.nix
+    ../../../../user-modules/nixcord.nix
 
     # ../../../../user-modules/neovim.nix
-    ../../../../user-modules/wayland-utils.nix
-    ../../../../user-modules/general-packages.nix
+    ../../../../user-modules/utils/general-packages.nix
   ];
 
   # hyprland
@@ -71,7 +70,6 @@
     ffmpeg
     # video editor
     kdePackages.kdenlive
-    discord
 
     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
 

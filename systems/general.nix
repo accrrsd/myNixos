@@ -11,15 +11,12 @@
     ../system-modules/hardware/region.nix
     ../system-modules/hardware/sound.nix
     ../system-modules/hardware/networking.nix
-    ../system-modules/hardware/opengl.nix
     ../system-modules/hardware/automount.nix
     ../system-modules/hardware/printing.nix
     ../system-modules/hardware/bluetooth.nix
     ../system-modules/hardware/virtualization.nix
     ../system-modules/hardware/systemd.nix
     ../system-modules/hardware/sddm.nix
-    ../system-modules/hardware/plasma.nix
-    # ../system-modules/hardware/autoclean.nix
     ../system-modules/hardware/keyboard-layout.nix
   ];
 
@@ -55,6 +52,12 @@
     killall
     nix-index
   ];
+
+  # Default DE
+  services.desktopManager.plasma6.enable = lib.mkDefault true;
+  
+  # OpenGL
+  hardware.graphics.enable = true;
 
   # create nixos-editors group, must have to work with /nixos-config without sudo
   users.groups.nixos-editors = { };

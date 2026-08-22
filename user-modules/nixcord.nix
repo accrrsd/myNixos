@@ -1,5 +1,6 @@
-# REQUIRES Flake nixcord.url = "github:FlameFlag/nixcord";
-# config etc can be found here: https://github.com/FlameFlag/nixcord
+# DESC: Discord with vencord and declarative config.
+# REQUIRES: Flake nixcord.url = "github:FlameFlag/nixcord";
+# NOTE: config etc can be found here: https://github.com/FlameFlag/nixcord
 { inputs, lib, ... }: {
   imports = [ inputs.nixcord.homeModules.nixcord ];
   programs.nixcord.enable = true;
