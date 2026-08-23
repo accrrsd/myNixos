@@ -79,6 +79,11 @@ system-modules.diskMount = {
   # for newer cards is better to have open, but if it cause errors - can be disabled to false (default)
   hardware.nvidia.open = true;
 
+  # clash vpn
+  programs.clash-verge.enable = true;
+  # programs.clash-verge.tunMode = true;
+  programs.clash-verge.serviceMode = true;
+
   # app image stuff
   programs.appimage.enable = true;
   programs.appimage.binfmt = true;
