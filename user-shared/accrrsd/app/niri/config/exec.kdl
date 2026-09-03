@@ -11,7 +11,7 @@ spawn-at-startup "pywalfox" "start"
 spawn-at-startup "awww-daemon"
 
 // blue light filter
-spawn-at-startup "sh" "-c" "wl-gammarelay-rs & sleep 2; busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 5000"
+spawn-at-startup "sh" "-c" "wl-gammarelay-rs & sleep 2; busctl --user -- set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 3850"
 
 // clipboard
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular" "--display" "wayland-1"
