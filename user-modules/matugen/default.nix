@@ -14,7 +14,7 @@
       if [ -f "$HOME/.cache/matugen/openrgb" ]; then
         source "$HOME/.cache/matugen/openrgb"
         # inverse_primary because of hyprland style
-        color=$(pastel darken 0.2 "$inverse_primary" 2>/dev/null | pastel format hex 2>/dev/null)
+        color=$(pastel format rgb-float "$inverse_primary" | awk -F'[,()]' '{printf "#%02x%02x%02x\n", $2*255*0.15, $3*255*0.15, $4*255*0.15}')
         script -q -c "openrgb -c ''${color#\#}" /dev/null
       fi
     '';
