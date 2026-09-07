@@ -50,7 +50,7 @@
 
   # with windows dualboot sometimes disk can be locked. You can unlock it with:
   # instead of /dev/sdb1 can be OR OTHER DISK STUFF
-  # check disks through lsbik -f
+  # check disks through lsblk -f
   # nix-shell -p ntfs3g --run "sudo umount /dev/sda1; sudo ntfsfix -d /dev/sda1; sudo systemctl restart mnt-hdd1.automount"
 
 system-modules.diskMount = {
@@ -59,7 +59,8 @@ system-modules.diskMount = {
       {
         uuid = "0670796770795DFD";
         mountPoint = "/mnt/hdd1";
-        fsType = "ntfs3"; 
+        # without dual boot better use "ntfs3"
+        fsType = "ntfs-3g"; 
         options = [ 
           "nofail" 
           "x-systemd.automount"
