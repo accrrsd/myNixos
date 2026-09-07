@@ -95,6 +95,9 @@
       sillytavern
       lmstudio
       (pkgs.llama-cpp.override { cudaSupport = true; })
+
+    # vector editor
+    inkscape
   ];
 
   # example of flatpack usage
