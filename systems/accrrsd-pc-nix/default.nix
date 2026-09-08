@@ -102,8 +102,12 @@ system-modules.diskMount = {
   # vpn
   programs.amnezia-vpn.enable = true;
 
+  # virtual machine
+  virtualisation.vmware.host.enable = true;
+
   environment.systemPackages = with pkgs; [
-    liquidctl
+    vmware-workstation # virtual machine manager
+    liquidctl # liquid pump controller 
   ];
 
   # disable firewall for debug and coding stuff

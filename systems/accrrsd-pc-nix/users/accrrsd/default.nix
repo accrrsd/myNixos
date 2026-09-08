@@ -96,7 +96,6 @@
 
 
     # no category
-      vmware-workstation # virtual machine manager
       qbittorrent # torrent
       linux-wallpaperengine # live wallpaper 
   ];
