@@ -10,10 +10,6 @@
     };
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixcord.url = "github:FlameFlag/nixcord";
     astal.url = "github:aylur/astal";
     ags.url = "github:aylur/ags";

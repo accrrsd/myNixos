@@ -54,50 +54,51 @@
   home.stateVersion = "25.11";
 
   home.packages = with pkgs; [
-    telegram-desktop
-    google-chrome
-    nodejs
-    htop
-    qbittorrent
-    linux-wallpaperengine
-    emote
-    obsidian
-    vlc
-    yt-dlp
-    activitywatch
-    audacity
-    lazygit
-    ffmpeg
-    # video editor
-    kdePackages.kdenlive
 
-    inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
+    # libs
+      nodejs
+      (python3.withPackages (
+        ps: with ps; [
+          # pip - maybe not needed, because imperative stuff.
+          requests
+          numpy
+        ]
+      ))
+      jdk # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
 
-    (python3.withPackages (
-      ps: with ps; [
-        pip
-        requests
-        numpy
-      ]
-    ))
+
+    # audio, video, image
+      ffmpeg
+      vlc
+      yt-dlp
+      audacity # audio editor
+      kdePackages.kdenlive # video editor
+      inkscape # vector editor
+
+    # desktop apps
+      telegram-desktop
+      google-chrome
+      obsidian
+
+    # tech stuff
+      lazygit
+      htop
+      ngrok # allows live tunneling, for example - use local ai proxi 
 
     # gaming
     wineWow64Packages.stable
     protonup-qt
-
-    # to fix java app (like minecraft) with alsoft err, pass java args with -Dorg.lwjgl.openal.libname=/usr/lib/libopenal.so (you can find lib with nix-index, use nix-locate, then await, then nix-locate libopenal.so)
-    jdk
-
-    # allows live tunneling, for exapmle - use local ai proxi 
-    ngrok
 
     # ai stuff
       sillytavern
       lmstudio
       (pkgs.llama-cpp.override { cudaSupport = true; })
 
-    # vector editor
-    inkscape
+
+    # no category
+      vmware-workstation # virtual machine manager
+      qbittorrent # torrent
+      linux-wallpaperengine # live wallpaper 
   ];
 
   # example of flatpack usage
