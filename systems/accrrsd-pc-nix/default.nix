@@ -53,22 +53,26 @@
   # check disks through lsblk -f
   # nix-shell -p ntfs3g --run "sudo umount /dev/sda1; sudo ntfsfix -d /dev/sda1; sudo systemctl restart mnt-hdd1.automount"
 
-system-modules.diskMount = {
+
+  # for ntfs-3g "force" called "remove_hiberfile"
+
+  system-modules.diskMount = {
     enable = true;
     disks = [
       {
         uuid = "0670796770795DFD";
         mountPoint = "/mnt/hdd1";
-        # without dual boot better use "ntfs3"
-        fsType = "ntfs-3g"; 
+        fsType = "ntfs3"; 
         options = [ 
           "nofail" 
           "x-systemd.automount"
           "nohidden"
           "force"
           "gid=100"       
+          "uid=1000"
           "fmask=0000"    
           "dmask=0000"
+          "iocharset=utf8"
         ];
       }
     ];
