@@ -52,7 +52,7 @@
   # instead of /dev/sdb1 can be OR OTHER DISK STUFF
   # check disks through lsblk -f
   # nix-shell -p ntfs3g --run "sudo umount /dev/sda1; sudo ntfsfix -d /dev/sda1; sudo systemctl restart mnt-hdd1.automount"
-
+  # if busy - do sudo nix-shell -p psmisc --run "fuser -v /dev/sda1;" and 
 
   # for ntfs-3g "force" called "remove_hiberfile"
 
